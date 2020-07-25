@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/creativetimofficial/argon-dashboard-react/issues"
   },
-  "homepage": "https://kokrokoo.herokuapp.com/",
+  "homepage": "https://kokrokoo-media.herokuapp.com/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
