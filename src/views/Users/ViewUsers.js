@@ -58,11 +58,6 @@ function ViewUsers({history}) {
     const [users, setUsers] = React.useState([]);
 
     React.useEffect(()=>{
-        axios.get("https://media-kokrokooad.herokuapp.com/api/super-admin/get-all/staff",
-        {headers:{ 'Authorization':`Bearer ${user}`}})
-        .then(res=>{
-            console.log(res.data)
-        });
         getUsers();
     },[])
 

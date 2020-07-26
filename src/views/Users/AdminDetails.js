@@ -50,12 +50,14 @@ class AdminDetails extends React.Component{
         user:[],
         popoverOpen:false,
         popover2Open:false,
+        popover3Open:false,
         iActive:false,
         isActive:""
     }
     
        toggle = () => this.setState({popoverOpen:!this.state.popoverOpen});
        toggle2 = ()=> this.setState({popover2Open:!this.state.popover2Open});
+       toggle3 = ()=> this.setState({popover3Open:!this.state.popover3Open});
     
     componentDidMount(){
         let all_data = JSON.parse(localStorage.getItem('storageData'));
@@ -102,6 +104,23 @@ class AdminDetails extends React.Component{
             console.log(res.data);
             this.setState({popover2Open:false});
             window.location.href("/")
+        })
+        .catch(error=>{
+            console.log(error)
+        })
+    }
+
+    handleDelete=()=>{
+        let all_data = JSON.parse(localStorage.getItem('storageData'));
+        
+        var  user = all_data[0]
+
+        axios.delete("https://media-kokrokooad.herokuapp.com/api/super-admin/delete/"+this.props.location.state.admin_id+"",
+        {headers:{ 'Authorization':`Bearer ${user}`}})
+        .then(res=>{
+            console.log(res.data);
+            this.setState({popover3Open:false});
+            this.props.history.push("/media/view-users");
         })
         .catch(error=>{
             console.log(error)
@@ -189,6 +208,20 @@ class AdminDetails extends React.Component{
             </Popover>
             </div>}
             
+            </Col>
+            <Col>
+            <Button
+            color="danger"
+            id="unblock"
+            >
+            delete
+            </Button>   
+            <Popover placement="bottom" isOpen={this.state.popover3Open} target="unblock" toggle={()=>this.toggle3()}>
+                <PopoverHeader>Delete User?</PopoverHeader>
+                <PopoverBody>
+                    <Button color="danger" onClick={()=>this.handleDelete()}>yes</Button> <Button color="info" onClick={()=>this.toggle3()}>no</Button>
+                </PopoverBody>
+            </Popover>
             </Col> 
             </Row>
 
