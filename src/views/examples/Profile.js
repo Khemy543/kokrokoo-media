@@ -49,7 +49,7 @@ if(all_data !== null){
 class Profile extends React.Component {
 
   state={
-    username:"",
+    name:"",
     email:"",
     phone1:"",
     phone2:"",
@@ -66,7 +66,7 @@ componentDidMount(){
         console.log(res.data)
         if(res.data.user !== null){
           this.setState({
-            username:res.data.user.name, 
+            name:res.data.user.name, 
             email:res.data.user.email,
             phone1:res.data.user.phone1,
             phone2:res.data.user.phone2,
@@ -85,14 +85,14 @@ handleSubmit=(e)=>{
   e.preventDefault();
   console.log(e);
   console.log(this.state.id)
-  axios.post("https://kokrokooad.herokuapp.com/api/"+this.state.id+"/client/update",{ _method:"PATCH",
-  username:this.state.username, email:this.state.email,phone1:this.state.phone1,phone1:this.state.phone2,title:this.state.title},{
+  axios.patch("https://media-kokrokooad.herokuapp.com/api/update/"+this.state.id+"",{
+  name:this.state.name, email:this.state.email,phone1:this.state.phone1,phone1:this.state.phone2,title:this.state.title},{
     headers:{ 'Authorization':`Bearer ${user}`}})
   .then(res=>{
     console.log(res.data)
   })
   .catch(error=>{
-    console.log(error)
+    console.log(error.response.data)
   })
 }
 
@@ -178,11 +178,11 @@ handleSubmit=(e)=>{
                             </label>
                             <Input
                               className="form-control-alternative"
-                              value={this.state.username}
+                              value={this.state.name}
                               id="input-username"
                               placeholder="Username"
                               type="text"
-                              onChange={e=>this.setState({username:e.target.value})}
+                              onChange={e=>this.setState({name:e.target.value})}
                             />
                           </FormGroup>
                         </Col>

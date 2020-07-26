@@ -30,13 +30,17 @@ import {
   Input,
   Button,
   CardTitle,
-  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label
+  Nav,NavItem,NavLink,TabContent,TabPane
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
+import UserCard from "../../components/Cards/UserCard.js";
 import LoadingOverlay from "react-loading-overlay";
 import BounceLoader from "react-spinners/BounceLoader";
 import axios from "axios";
+import Pagination from "react-js-pagination";
+//require("bootstrap/less/bootstrap.less");
+
 
 let user =1;
 let loggedin_data = false;
@@ -49,35 +53,61 @@ if(all_data !== null){
   console.log("user:",user);
 }
 
-function CreateFromExisting(props) {
+function ViewUsers({history}) {
     const [isActive, setIsActive] = React.useState(false);
-    const [titles, setTitles] = React.useState([]);
-    const [title,setTitle] =React.useState("");
-
+    const [users, setUsers] = React.useState([]);
 
     React.useEffect(()=>{
-        axios.get("https://media-kokrokooad.herokuapp.com/api/ratecard/get-existing-titles",
+        axios.get("https://media-kokrokooad.herokuapp.com/api/super-admin/get-all/staff",
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
-            console.log(res.data);
-        })
-        .catch(error=>{
-            console.log(error.response.data)
-        })
-    })
+            console.log(res.data)
+        });
+        getUsers();
+    },[])
 
-    const handleSubmit=()=>{
-        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/1/create-from-existing",title,
-        {headers:{ 'Authorization':`Bearer ${user}`}})
-        .then(res=>{
-            console.log(res.data);
-        })
-        .catch(error=>{
-            console.log(error)
-        })
+    function getUsers(pageNumber=1){
+        setIsActive(true);
+      axios.get("http://media-kokrokooad.herokuapp.com/api/super-admin/get-all/staff?page="+pageNumber+"",
+      {headers:{ 'Authorization':`Bearer ${user}`}})
+      .then(res=>{
+          setUsers(res.data);
+          setIsActive(false)
+      })
+      .catch(error=>{
+      });
     }
-    
 
+    function renderUsers(){
+        const {data, meta} = users;
+        return(
+        <React.Fragment>
+        <Row>
+            {console.log("data:",data)}
+            {data && data.map(user=>{
+            return<UserCard key={user.id} user={user} history={history}/>
+        })}
+        </Row>
+        
+        <Row style={{marginTop:'20px'}}>
+        <Col md="10" className="ml-auto mr-auto">    
+        <Pagination
+        totalItemsCount={meta&&meta.total}
+        activePage={meta&&meta.current_page}
+        itemsCountPerPage={meta&&meta.per_page}
+        onChange={(pageNumber)=>getUsers(pageNumber)}
+        itemClass="page-item"
+        linkClass="page-link"
+        firstPageText="First"
+        lastPageText = "Last"
+        />
+        </Col>
+        </Row>
+        </React.Fragment>
+    )
+
+    }
+  
     
     return (
       <>
@@ -86,34 +116,11 @@ function CreateFromExisting(props) {
       spinner={<BounceLoader color={'#4071e1'}/>}
       >
       <Header/>
-        <Container className=" mt--8" fluid>
+        <Container className=" mt--7" fluid>
             
           <Row>
             <Col md="10">
-            <Card className="shadow">
-            <CardHeader className=" bg-transparent">
-                  <h3 className=" mb-0">SELECT RATE CARD TITLE</h3>
-            </CardHeader>
-
-            <CardBody>
-            <Row>
-                <Col md="12">
-                <Input type="select" value={title} onChange={e=>setTitle(e.target.value)}>
-                {titles.map((value,key)=>(
-                    <option></option>
-                ))}
-                </Input>
-                    <Button
-                    style={{marginTop:"20px",color:"white",backgroundColor:"#404E67"}}
-                    type="submit"
-                    onClick={handleSubmit}
-                    >
-                    Next
-                    </Button>
-                    </Col>
-                </Row>
-            </CardBody>    
-            </Card>    
+            {users && renderUsers()}
             </Col>
             </Row>
         </Container>
@@ -123,4 +130,4 @@ function CreateFromExisting(props) {
   }
 
 
-export default CreateFromExisting;
+export default ViewUsers;

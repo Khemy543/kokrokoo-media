@@ -30,7 +30,7 @@ import {
   Input,
   Button,
   CardTitle,
-  Nav,NavItem,NavLink,TabContent,TabPane
+  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -51,21 +51,44 @@ if(all_data !== null){
 
 function CreateRateCard(props) {
     const [isActive, setIsActive] = React.useState(false);
-    const [title, setTitle] = React.useState("");
+    const [rate_card_title, setTitle] = React.useState("");
+    const [service_description,setDescription] = React.useState("");
+    const [file_types,setFile_types] = React.useState([]);
 
+
+    const pushType=(value,checked)=>{
+        if(checked){
+            file_types.push(value);
+        }
+        else{
+           let tempArray = file_types;
+           let index = tempArray.indexOf(value);
+           if(index!==-1){
+               tempArray.splice(index,1);
+               setFile_types(tempArray)
+           }
+        }
+    }
 
     const handlTitleSubmit=(e)=>{
         e.preventDefault();
+        setIsActive(true)
         console.log(e);
+        console.log("file_types:",file_types)
     
-        axios.post("",title,
-        {headers:{}}
+        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/new-title",{rate_card_title,service_description,file_types},
+        {headers:{ 'Authorization':`Bearer ${user}`}}
         )
         .then(res=>{
-            console.log(res.data)
+            console.log(res.data);
+            if(res.data.status === "success"){
+            props.history.push("/media/rate-details",{rate_id:res.data.ratecard_title.id, rate_title:res.data.ratecard_title.title})
+            setIsActive(false)
+            }
         })
         .catch(error=>{
-            console.log(error)
+            console.log(error);
+            setIsActive(false)
         })
     }
 
@@ -87,20 +110,52 @@ function CreateRateCard(props) {
             </CardHeader>
 
             <CardBody>
-            <Row className=" icon-examples">
-                    
-                    <Input type="input" placeholder="Enter Rate Card Title" value={title} onChange={e=>setTitle(e.target.value)}/>
-                <br/>
-                <br/>
-                <br/>
+            <Row>
+                <Col md="12">
+                    <Form onSubmit={handlTitleSubmit}>
+                    <FormGroup>
+                    <Input type="input" placeholder="Enter Rate Card Title" value={rate_card_title} onChange={e=>setTitle(e.target.value)}/>
+                    </FormGroup>
+                    <br/>    
+                    <FormGroup>
+                    <Input type="textarea" placeholder="Enter Description" value={service_description} onChange={e=>setDescription(e.target.value)}/>
+                    </FormGroup>
+                    <Label>File Type</Label>
+                    <FormGroup check>
+                        <Label check>
+                        <Input type="checkbox" value="video" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
+                        Video
+                        </Label>
+                    </FormGroup>
+                    <FormGroup check>
+                        <Label check>
+                        <Input type="checkbox" value="audio" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
+                        Audio
+                        </Label>
+                    </FormGroup>
+                    <FormGroup check>
+                        <Label check>
+                        <Input type="checkbox" value="document" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
+                        Document
+                        </Label>
+                    </FormGroup>
+                    <FormGroup check>
+                        <Label check>
+                        <Input type="checkbox"value="image" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
+                        Image
+                        </Label>
+                    </FormGroup>
+      
+
                     <Button
-                    color="info"
+                    style={{marginTop:"20px",color:"white",backgroundColor:"#404E67"}}
                     type="submit"
                     onClick={handlTitleSubmit}
                     >
                     Next
                     </Button>
-                    
+                    </Form>
+                </Col>    
                 </Row>
             </CardBody>    
             </Card>    

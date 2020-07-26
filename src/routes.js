@@ -19,6 +19,12 @@ import Index from "views/Index.js";
 import Profile from "views/examples/Profile.js";
 import CreateRateCard from "views/Rate/CreateRateCard.js";
 import RateCardDetails from "views/Rate/RateCardDetails.js";
+import CreateUser from "views/Users/CreateUser.js";
+import ViewUser from "views/Users/ViewUsers.js";
+import CreateFromExisting from "views/Rate/CreateFromExisting.js";
+import AdminDetails from "views/Users/AdminDetails.js";
+import EditUser from "views/Users/EditUsers.js";
+
 
 
 import Maps from "views/examples/Maps.js";
@@ -57,10 +63,10 @@ var routes = [
     layout: "/media"
   },
   {
-    path: "/view-ratecards",
+    path: "/create-from-existing",
     name: "Create From Existing",
     header:"rate",
-    component: Subscription,
+    component: CreateFromExisting,
     layout: "/media"
   },
   {
@@ -100,17 +106,17 @@ var routes = [
     layout: "/media"
   },
   {
-    path: "/published-companies",
+    path: "/view-users",
     name: "View Users",
     header:"user",
-    component: PublishedCompanies,
+    component: ViewUser,
     layout: "/media"
   },
   {
-    path: "/rate-cards",
+    path: "/create-user",
     name: "Create New Users",
     header:"user",
-    component: RateCards,
+    component: CreateUser,
     layout: "/media"
   },
   {
@@ -118,6 +124,18 @@ var routes = [
     name: "Users Activities",
     header:"user",
     component: CreateRateCards,
+    layout: "/media"
+  },{
+    path: "/admin-details",
+    name: "Admin Details",
+    invisible:true,
+    component: AdminDetails,
+    layout: "/media"
+  },{
+    path: "/edit-admin",
+    name: "Admin Details",
+    invisible:true,
+    component: EditUser,
     layout: "/media"
   },
   {

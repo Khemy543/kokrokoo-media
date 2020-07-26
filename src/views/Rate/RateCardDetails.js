@@ -56,6 +56,18 @@ class RateCardDetails extends React.Component{
         newSlot:[],
         activeTab:"1",
         slotValue:1,
+        startTime:"",
+        days:[],
+        units:[],
+        title:this.props.location.state.rate_title
+    }
+
+    componentDidMount(){
+        axios.get("https://media-kokrokooad.herokuapp.com/api/fetch-days-and-units")
+        .then(res=>{
+            console.log(res.data)
+            this.setState({days:res.data.days, units:res.data.units})
+        })
     }
     
     toggle = tab => {
@@ -78,6 +90,10 @@ class RateCardDetails extends React.Component{
         console.log("temp",newArray)
     }
 
+    handleSubmit=()=>{
+        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.rate_id+"/add-details")
+    }
+
     
     render(){
     return (
@@ -97,58 +113,29 @@ class RateCardDetails extends React.Component{
             </CardHeader>
 
             <CardBody>
-            <Row className=" icon-examples">
+            <Row>
             <Col md="12" lg="12" sm="12" xs="12">
+            <Col sm="12" md="12" xs="12" style={{marginBottom:"30px"}}>
+                        <Input type="text" placeholder="Enter Rate Card Title" value={this.state.title} onChange={e=>this.setState({title:e.target.value})}/>
+            </Col>
             <Nav tabs>
-                <NavItem>
+                {this.state.days.map(value=>(
+                <NavItem key={value.id}>
                 <NavLink
-                    className={classnames({ active: this.state.activeTab === '1' })}
-                    onClick={() => { this.toggle('1'); }}
+                    className={classnames({ active: this.state.activeTab === `${value.id}` })}
+                    onClick={() => { this.toggle(`${value.id}`); }}
                 >
-                    Monday
+                    {value.day}
                 </NavLink>
                 </NavItem>
-                <NavItem>
-                <NavLink
-                    className={classnames({ active: this.state.activeTab === '2' })}
-                    onClick={() => { this.toggle('2'); }}
-                >
-                    Tuesday
-                </NavLink>
-                </NavItem>
-                <NavItem>
-                <NavLink
-                    className={classnames({ active: this.state.activeTab === '3' })}
-                    onClick={() => { this.toggle('3'); }}
-                >
-                    Wednesday
-                </NavLink>
-                </NavItem>
-                <NavItem>
-                <NavLink
-                    className={classnames({ active: this.state.activeTab === '4' })}
-                    onClick={() => { this.toggle('4'); }}
-                >
-                    Thursday
-                </NavLink>
-                </NavItem>
-                <NavItem>
-                <NavLink
-                    className={classnames({ active: this.state.activeTab === '5' })}
-                    onClick={() => { this.toggle('5'); }}
-                >
-                    Friday
-                </NavLink>
-                </NavItem>
+            ))}
             </Nav>
             {/* Tab Details */}
             <TabContent activeTab={this.state.activeTab}>
                 <TabPane tabId="1">
                  <Container>   
                     <Row>
-                    <Col sm="12" md="12" xs="12" style={{marginTop:"20px"}}>
-                        <Input type="text" placeholder="Enter Rate Card Title"/>
-                    </Col>
+                    
                     <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                     <FormGroup>
                         <Label for="exampleTime">Start Time</Label>
@@ -157,6 +144,8 @@ class RateCardDetails extends React.Component{
                         name="time"
                         id="exampleTime"
                         placeholder="time placeholder"
+                        value={this.state.startTime}
+                        onChange={e=>console.log(e.target.value)}
                         />
                     </FormGroup>
                     </Col>
@@ -180,9 +169,7 @@ class RateCardDetails extends React.Component{
                         <Col md="3" sm="3" xs="3" lg="3">
                         <Label>Unit</Label>
                         <Input type="select">
-                            <option>Secs</option>
-                            <option>Mins</option>
-                            <option>Hr</option>
+                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
                         </Input>
                         </Col>
                         <Col md="4" sm="4" xs="4" lg="4">
@@ -191,9 +178,8 @@ class RateCardDetails extends React.Component{
                         </Col>
                         <Col md="2" sm="2" xs="2" lg="2" className="text-center">
                         <Button
-                        color="info"
                         onClick={()=>this.AddSlot()}
-                        style={{marginTop:"30px"}}
+                        style={{marginTop:"30px",backgroundColor:"#404E67",color:"white"}}
                         >
                         <i className="fa fa-plus"/>
                         </Button>
@@ -240,9 +226,556 @@ class RateCardDetails extends React.Component{
                 </Container>
                 </TabPane>
                 <TabPane tabId="2">
-                <Row>
-                    
-                </Row>
+                <Container>   
+                   <Row>
+                   <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
+                   <FormGroup>
+                       <Label for="exampleTime">Start Time</Label>
+                       <Input
+                       type="time"
+                       name="time"
+                       id="exampleTime"
+                       placeholder="time placeholder"
+                       value={this.state.startTime}
+                       onChange={e=>console.log(e.target.value)}
+                       />
+                   </FormGroup>
+                   </Col>
+                   <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
+                   <FormGroup>
+                       <Label for="exampleTime">End Time</Label>
+                       <Input
+                       type="time"
+                       name="time"
+                       id="exampleTime"
+                       placeholder="time placeholder"
+                       />
+                   </FormGroup>
+                   </Col> 
+                   </Row>
+                   <Row>
+                       <Col md="3" sm="3" xs="3" lg="3">
+                       <Label>Duration</Label>
+                       <Input type="number" min="0"/>
+                       </Col>
+                       <Col md="3" sm="3" xs="3" lg="3">
+                       <Label>Unit</Label>
+                       <Input type="select">
+                           {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                       </Input>
+                       </Col>
+                       <Col md="4" sm="4" xs="4" lg="4">
+                       <Label>Rate</Label>
+                       <Input type="number" min="0"/>
+                       </Col>
+                       <Col md="2" sm="2" xs="2" lg="2" className="text-center">
+                       <Button
+                       onClick={()=>this.AddSlot()}
+                       style={{marginTop:"30px",backgroundColor:"#404E67",color:"white"}}
+                       >
+                       <i className="fa fa-plus"/>
+                       </Button>
+                       </Col>
+                   </Row>
+                   {this.state.newSlot.map((value,index)=>(
+                       <Row key={index} style={{marginTop:"10px"}}>
+                           <Col md="3" sm="3" xs="3" lg="3">
+                           <Input type="number"/>
+                           </Col>
+                           <Col md="3" sm="3" xs="3" lg="3">
+                           <Input type="select">
+                           <option>Secs</option>
+                           <option>Mins</option>
+                           <option>Hr</option>
+                           </Input>
+                           </Col>
+                           <Col md="4" sm="4" xs="4" lg="4">
+                           <Input type="number"/>
+                           </Col>
+                           <Col md="2" sm="2" xs="2" lg="2" className="text-center">
+
+                           <i className="fa fa-trash" style={{color:"red",fontSize:"20px",marginTop:"15px",cursor:"pointer"}} onClick={()=>this.handleDelete(value.id)}/>
+                           </Col>
+                       </Row>
+                   ))}
+
+                   <Row style={{marginTop:"20px"}}>
+                       <Col md="6"sm="6"lg="6"xs="6">
+                           <Button
+                           color="danger"
+                           >
+                               Submit
+                           </Button>    
+                       </Col>
+                       <Col md="6"sm="6"lg="6"xs="6">
+                           <Button
+                           color="info"
+                           >
+                               Review
+                           </Button>    
+                       </Col>
+                   </Row>    
+               </Container>
+               </TabPane>
+               <TabPane tabId="3">
+                 <Container>   
+                    <Row>
+                    <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
+                    <FormGroup>
+                        <Label for="exampleTime">Start Time</Label>
+                        <Input
+                        type="time"
+                        name="time"
+                        id="exampleTime"
+                        placeholder="time placeholder"
+                        value={this.state.startTime}
+                        onChange={e=>console.log(e.target.value)}
+                        />
+                    </FormGroup>
+                    </Col>
+                    <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
+                    <FormGroup>
+                        <Label for="exampleTime">End Time</Label>
+                        <Input
+                        type="time"
+                        name="time"
+                        id="exampleTime"
+                        placeholder="time placeholder"
+                        />
+                    </FormGroup>
+                    </Col> 
+                    </Row>
+                    <Row>
+                        <Col md="3" sm="3" xs="3" lg="3">
+                        <Label>Duration</Label>
+                        <Input type="number" min="0"/>
+                        </Col>
+                        <Col md="3" sm="3" xs="3" lg="3">
+                        <Label>Unit</Label>
+                        <Input type="select">
+                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                        </Input>
+                        </Col>
+                        <Col md="4" sm="4" xs="4" lg="4">
+                        <Label>Rate</Label>
+                        <Input type="number" min="0"/>
+                        </Col>
+                        <Col md="2" sm="2" xs="2" lg="2" className="text-center">
+                        <Button
+                        onClick={()=>this.AddSlot()}
+                        style={{marginTop:"30px",backgroundColor:"#404E67",color:"white"}}
+                        >
+                        <i className="fa fa-plus"/>
+                        </Button>
+                        </Col>
+                    </Row>
+                    {this.state.newSlot.map((value,index)=>(
+                        <Row key={index} style={{marginTop:"10px"}}>
+                            <Col md="3" sm="3" xs="3" lg="3">
+                            <Input type="number"/>
+                            </Col>
+                            <Col md="3" sm="3" xs="3" lg="3">
+                            <Input type="select">
+                            <option>Secs</option>
+                            <option>Mins</option>
+                            <option>Hr</option>
+                            </Input>
+                            </Col>
+                            <Col md="4" sm="4" xs="4" lg="4">
+                            <Input type="number"/>
+                            </Col>
+                            <Col md="2" sm="2" xs="2" lg="2" className="text-center">
+
+                            <i className="fa fa-trash" style={{color:"red",fontSize:"20px",marginTop:"15px",cursor:"pointer"}} onClick={()=>this.handleDelete(value.id)}/>
+                            </Col>
+                        </Row>
+                    ))}
+
+                    <Row style={{marginTop:"20px"}}>
+                        <Col md="6"sm="6"lg="6"xs="6">
+                            <Button
+                            color="danger"
+                            >
+                                Submit
+                            </Button>    
+                        </Col>
+                        <Col md="6"sm="6"lg="6"xs="6">
+                            <Button
+                            color="info"
+                            >
+                                Review
+                            </Button>    
+                        </Col>
+                    </Row>    
+                </Container>
+                </TabPane>
+                <TabPane tabId="4">
+                 <Container>   
+                    <Row>
+                    <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
+                    <FormGroup>
+                        <Label for="exampleTime">Start Time</Label>
+                        <Input
+                        type="time"
+                        name="time"
+                        id="exampleTime"
+                        placeholder="time placeholder"
+                        value={this.state.startTime}
+                        onChange={e=>console.log(e.target.value)}
+                        />
+                    </FormGroup>
+                    </Col>
+                    <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
+                    <FormGroup>
+                        <Label for="exampleTime">End Time</Label>
+                        <Input
+                        type="time"
+                        name="time"
+                        id="exampleTime"
+                        placeholder="time placeholder"
+                        />
+                    </FormGroup>
+                    </Col> 
+                    </Row>
+                    <Row>
+                        <Col md="3" sm="3" xs="3" lg="3">
+                        <Label>Duration</Label>
+                        <Input type="number" min="0"/>
+                        </Col>
+                        <Col md="3" sm="3" xs="3" lg="3">
+                        <Label>Unit</Label>
+                        <Input type="select">
+                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                        </Input>
+                        </Col>
+                        <Col md="4" sm="4" xs="4" lg="4">
+                        <Label>Rate</Label>
+                        <Input type="number" min="0"/>
+                        </Col>
+                        <Col md="2" sm="2" xs="2" lg="2" className="text-center">
+                        <Button
+                        onClick={()=>this.AddSlot()}
+                        style={{marginTop:"30px",backgroundColor:"#404E67",color:"white"}}
+                        >
+                        <i className="fa fa-plus"/>
+                        </Button>
+                        </Col>
+                    </Row>
+                    {this.state.newSlot.map((value,index)=>(
+                        <Row key={index} style={{marginTop:"10px"}}>
+                            <Col md="3" sm="3" xs="3" lg="3">
+                            <Input type="number"/>
+                            </Col>
+                            <Col md="3" sm="3" xs="3" lg="3">
+                            <Input type="select">
+                            <option>Secs</option>
+                            <option>Mins</option>
+                            <option>Hr</option>
+                            </Input>
+                            </Col>
+                            <Col md="4" sm="4" xs="4" lg="4">
+                            <Input type="number"/>
+                            </Col>
+                            <Col md="2" sm="2" xs="2" lg="2" className="text-center">
+
+                            <i className="fa fa-trash" style={{color:"red",fontSize:"20px",marginTop:"15px",cursor:"pointer"}} onClick={()=>this.handleDelete(value.id)}/>
+                            </Col>
+                        </Row>
+                    ))}
+
+                    <Row style={{marginTop:"20px"}}>
+                        <Col md="6"sm="6"lg="6"xs="6">
+                            <Button
+                            color="danger"
+                            >
+                                Submit
+                            </Button>    
+                        </Col>
+                        <Col md="6"sm="6"lg="6"xs="6">
+                            <Button
+                            color="info"
+                            >
+                                Review
+                            </Button>    
+                        </Col>
+                    </Row>    
+                </Container>
+                </TabPane>
+                <TabPane tabId="5">
+                 <Container>   
+                    <Row>
+                    <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
+                    <FormGroup>
+                        <Label for="exampleTime">Start Time</Label>
+                        <Input
+                        type="time"
+                        name="time"
+                        id="exampleTime"
+                        placeholder="time placeholder"
+                        value={this.state.startTime}
+                        onChange={e=>console.log(e.target.value)}
+                        />
+                    </FormGroup>
+                    </Col>
+                    <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
+                    <FormGroup>
+                        <Label for="exampleTime">End Time</Label>
+                        <Input
+                        type="time"
+                        name="time"
+                        id="exampleTime"
+                        placeholder="time placeholder"
+                        />
+                    </FormGroup>
+                    </Col> 
+                    </Row>
+                    <Row>
+                        <Col md="3" sm="3" xs="3" lg="3">
+                        <Label>Duration</Label>
+                        <Input type="number" min="0"/>
+                        </Col>
+                        <Col md="3" sm="3" xs="3" lg="3">
+                        <Label>Unit</Label>
+                        <Input type="select">
+                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                        </Input>
+                        </Col>
+                        <Col md="4" sm="4" xs="4" lg="4">
+                        <Label>Rate</Label>
+                        <Input type="number" min="0"/>
+                        </Col>
+                        <Col md="2" sm="2" xs="2" lg="2" className="text-center">
+                        <Button
+                        onClick={()=>this.AddSlot()}
+                        style={{marginTop:"30px",backgroundColor:"#404E67",color:"white"}}
+                        >
+                        <i className="fa fa-plus"/>
+                        </Button>
+                        </Col>
+                    </Row>
+                    {this.state.newSlot.map((value,index)=>(
+                        <Row key={index} style={{marginTop:"10px"}}>
+                            <Col md="3" sm="3" xs="3" lg="3">
+                            <Input type="number"/>
+                            </Col>
+                            <Col md="3" sm="3" xs="3" lg="3">
+                            <Input type="select">
+                            <option>Secs</option>
+                            <option>Mins</option>
+                            <option>Hr</option>
+                            </Input>
+                            </Col>
+                            <Col md="4" sm="4" xs="4" lg="4">
+                            <Input type="number"/>
+                            </Col>
+                            <Col md="2" sm="2" xs="2" lg="2" className="text-center">
+
+                            <i className="fa fa-trash" style={{color:"red",fontSize:"20px",marginTop:"15px",cursor:"pointer"}} onClick={()=>this.handleDelete(value.id)}/>
+                            </Col>
+                        </Row>
+                    ))}
+
+                    <Row style={{marginTop:"20px"}}>
+                        <Col md="6"sm="6"lg="6"xs="6">
+                            <Button
+                            color="danger"
+                            >
+                                Submit
+                            </Button>    
+                        </Col>
+                        <Col md="6"sm="6"lg="6"xs="6">
+                            <Button
+                            color="info"
+                            >
+                                Review
+                            </Button>    
+                        </Col>
+                    </Row>    
+                </Container>
+                </TabPane>
+                <TabPane tabId="6">
+                 <Container>   
+                    <Row>
+                    <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
+                    <FormGroup>
+                        <Label for="exampleTime">Start Time</Label>
+                        <Input
+                        type="time"
+                        name="time"
+                        id="exampleTime"
+                        placeholder="time placeholder"
+                        value={this.state.startTime}
+                        onChange={e=>console.log(e.target.value)}
+                        />
+                    </FormGroup>
+                    </Col>
+                    <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
+                    <FormGroup>
+                        <Label for="exampleTime">End Time</Label>
+                        <Input
+                        type="time"
+                        name="time"
+                        id="exampleTime"
+                        placeholder="time placeholder"
+                        />
+                    </FormGroup>
+                    </Col> 
+                    </Row>
+                    <Row>
+                        <Col md="3" sm="3" xs="3" lg="3">
+                        <Label>Duration</Label>
+                        <Input type="number" min="0"/>
+                        </Col>
+                        <Col md="3" sm="3" xs="3" lg="3">
+                        <Label>Unit</Label>
+                        <Input type="select">
+                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                        </Input>
+                        </Col>
+                        <Col md="4" sm="4" xs="4" lg="4">
+                        <Label>Rate</Label>
+                        <Input type="number" min="0"/>
+                        </Col>
+                        <Col md="2" sm="2" xs="2" lg="2" className="text-center">
+                        <Button
+                        onClick={()=>this.AddSlot()}
+                        style={{marginTop:"30px",backgroundColor:"#404E67",color:"white"}}
+                        >
+                        <i className="fa fa-plus"/>
+                        </Button>
+                        </Col>
+                    </Row>
+                    {this.state.newSlot.map((value,index)=>(
+                        <Row key={index} style={{marginTop:"10px"}}>
+                            <Col md="3" sm="3" xs="3" lg="3">
+                            <Input type="number"/>
+                            </Col>
+                            <Col md="3" sm="3" xs="3" lg="3">
+                            <Input type="select">
+                            <option>Secs</option>
+                            <option>Mins</option>
+                            <option>Hr</option>
+                            </Input>
+                            </Col>
+                            <Col md="4" sm="4" xs="4" lg="4">
+                            <Input type="number"/>
+                            </Col>
+                            <Col md="2" sm="2" xs="2" lg="2" className="text-center">
+
+                            <i className="fa fa-trash" style={{color:"red",fontSize:"20px",marginTop:"15px",cursor:"pointer"}} onClick={()=>this.handleDelete(value.id)}/>
+                            </Col>
+                        </Row>
+                    ))}
+
+                    <Row style={{marginTop:"20px"}}>
+                        <Col md="6"sm="6"lg="6"xs="6">
+                            <Button
+                            color="danger"
+                            >
+                                Submit
+                            </Button>    
+                        </Col>
+                        <Col md="6"sm="6"lg="6"xs="6">
+                            <Button
+                            color="info"
+                            >
+                                Review
+                            </Button>    
+                        </Col>
+                    </Row>    
+                </Container>
+                </TabPane>
+                <TabPane tabId="7">
+                 <Container>   
+                    <Row>
+                    <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
+                    <FormGroup>
+                        <Label for="exampleTime">Start Time</Label>
+                        <Input
+                        type="time"
+                        name="time"
+                        id="exampleTime"
+                        placeholder="time placeholder"
+                        value={this.state.startTime}
+                        onChange={e=>console.log(e.target.value)}
+                        />
+                    </FormGroup>
+                    </Col>
+                    <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
+                    <FormGroup>
+                        <Label for="exampleTime">End Time</Label>
+                        <Input
+                        type="time"
+                        name="time"
+                        id="exampleTime"
+                        placeholder="time placeholder"
+                        />
+                    </FormGroup>
+                    </Col> 
+                    </Row>
+                    <Row>
+                        <Col md="3" sm="3" xs="3" lg="3">
+                        <Label>Duration</Label>
+                        <Input type="number" min="0"/>
+                        </Col>
+                        <Col md="3" sm="3" xs="3" lg="3">
+                        <Label>Unit</Label>
+                        <Input type="select">
+                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                        </Input>
+                        </Col>
+                        <Col md="4" sm="4" xs="4" lg="4">
+                        <Label>Rate</Label>
+                        <Input type="number" min="0"/>
+                        </Col>
+                        <Col md="2" sm="2" xs="2" lg="2" className="text-center">
+                        <Button
+                        onClick={()=>this.AddSlot()}
+                        style={{marginTop:"30px",backgroundColor:"#404E67",color:"white"}}
+                        >
+                        <i className="fa fa-plus"/>
+                        </Button>
+                        </Col>
+                    </Row>
+                    {this.state.newSlot.map((value,index)=>(
+                        <Row key={index} style={{marginTop:"10px"}}>
+                            <Col md="3" sm="3" xs="3" lg="3">
+                            <Input type="number"/>
+                            </Col>
+                            <Col md="3" sm="3" xs="3" lg="3">
+                            <Input type="select">
+                            <option>Secs</option>
+                            <option>Mins</option>
+                            <option>Hr</option>
+                            </Input>
+                            </Col>
+                            <Col md="4" sm="4" xs="4" lg="4">
+                            <Input type="number"/>
+                            </Col>
+                            <Col md="2" sm="2" xs="2" lg="2" className="text-center">
+
+                            <i className="fa fa-trash" style={{color:"red",fontSize:"20px",marginTop:"15px",cursor:"pointer"}} onClick={()=>this.handleDelete(value.id)}/>
+                            </Col>
+                        </Row>
+                    ))}
+
+                    <Row style={{marginTop:"20px"}}>
+                        <Col md="6"sm="6"lg="6"xs="6">
+                            <Button
+                            color="danger"
+                            >
+                                Submit
+                            </Button>    
+                        </Col>
+                        <Col md="6"sm="6"lg="6"xs="6">
+                            <Button
+                            color="info"
+                            >
+                                Review
+                            </Button>    
+                        </Col>
+                    </Row>    
+                </Container>
                 </TabPane>
             </TabContent>
             </Col>

@@ -52,7 +52,7 @@ function Login({history}){
     axios.post("https://media-kokrokooad.herokuapp.com/oauth/token",{
       grant_type: "password",
       client_id: 1,
-      client_secret:"4AsiEW6jSyq1nC2b9xM2qkyLfSVu4bJbGU8sG1qu",
+      client_secret:"MQNFC4AiKPBHOqbXDORuXiUdzs8LUZNjcO4kLbC7",
       username: username,
       password: password,
       provider: "users",
@@ -72,7 +72,7 @@ function Login({history}){
       }
     })
     .catch(error=>{
-      console.log(error.response.data)
+      console.log(error)
       setIsActive(false);
     })
   }
