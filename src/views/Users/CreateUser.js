@@ -30,7 +30,7 @@ import {
   Input,
   Button,
   CardTitle,
-  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label
+  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label,Modal,ModalBody
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -57,9 +57,12 @@ function CreateUser(props) {
     const [phone2, setPhone2] = React.useState("");
     const [title, setTitle] = React.useState("");
     const [role, setRole] = React.useState("");
+    const [modal, setModal]= React.useState(false);
 
 
+    const toggleModal=()=>setModal(!modal);
     const handleSubmit=(e)=>{
+        setIsActive(true);
         e.preventDefault();
         console.log(e);
         console.log(user)
@@ -68,7 +71,17 @@ function CreateUser(props) {
         {headers:{ 'Authorization':`Bearer ${user}`}}
         )
         .then(res=>{
-            console.log(res.data)
+            console.log(res.data);
+            if(res.data.status === "success"){
+                setModal(true);
+                setTimeout(
+                    function(){
+                        setModal(false);
+                        props.history.push("/media/view-users");
+                    },1500
+                )
+                
+            }
         })
         .catch(error=>{
             console.log(error.response.data)
@@ -125,6 +138,11 @@ function CreateUser(props) {
             </Col>
             </Row>
         </Container>
+        <Modal isOpen={modal} toggle={toggleModal} style={{maxHeight:"40px", maxWidth:"300px",backgroundColor:"#404E67"}} className="alert-modal">
+            <ModalBody>
+            <h4 style={{textAlign:"center", marginTop:"-3%", fontWeight:"500", color:"white"}}>NEW ADMIN CREATED</h4>
+            </ModalBody>
+        </Modal>
         </LoadingOverlay>
       </>
     );

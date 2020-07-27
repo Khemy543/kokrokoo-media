@@ -30,7 +30,7 @@ import {
   Input,
   Button,
   CardTitle,
-  Nav,NavItem,NavLink,TabContent,TabPane,Form
+  Nav,NavItem,NavLink,TabContent,TabPane,Form,Modal,ModalBody
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -52,11 +52,15 @@ function EditUsers(props) {
     const [phone2, setPhone2] = React.useState("");
     const [title, setTitle] = React.useState("");
     const [role, setRole] = React.useState("");
+    const [modal, setModal] = React.useState(false);
+
+    const toggleModal=()=>setModal(!modal);
     
     React.useEffect(()=>{
         let all_data = JSON.parse(localStorage.getItem('storageData'));
         
         var  user = all_data[0];
+        setIsActive(true)
         axios.get("https://media-kokrokooad.herokuapp.com/api/super-admin/get/"+props.location.state.admin_id+"/details",
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
@@ -67,6 +71,7 @@ function EditUsers(props) {
             setPhone2(res.data.phone2);
             setTitle(res.data.title);
             setRole(res.data.role);
+            setIsActive(false)
         })
         .catch(error=>{
             console.log(error)
@@ -77,12 +82,22 @@ function EditUsers(props) {
         let all_data = JSON.parse(localStorage.getItem('storageData'));
         
         var  user = all_data[0];
+        setIsActive(true)
         e.preventDefault();
         console.log(e)
         axios.patch("https://media-kokrokooad.herokuapp.com/api/super-admin/update/"+props.location.state.admin_id+"/details",{
             name,email,phone1,phone2,role,title},{headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
+            if(res.data.status === "success"){
+                setModal(true)
+            setTimeout(
+                function(){
+                    setModal(false);
+                    setIsActive(false)
+                },2000)
+            }
+                
         })
         .catch(error=>{
             console.log(error)
@@ -132,6 +147,11 @@ function EditUsers(props) {
             </Col>
             </Row>
         </Container>
+        <Modal isOpen={modal} toggle={toggleModal} style={{maxHeight:"40px", maxWidth:"300px",backgroundColor:"#404E67"}} className="alert-modal">
+            <ModalBody>
+            <h4 style={{textAlign:"center", marginTop:"-3%", fontWeight:"500", color:"white"}}>UPDATED!!</h4>
+            </ModalBody>
+        </Modal>
         </LoadingOverlay>
       </>
     );

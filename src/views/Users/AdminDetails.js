@@ -31,7 +31,7 @@ import {
   Input,
   Button,
   CardTitle,
-  Nav,NavItem,NavLink,TabContent,TabPane,FormGroup,Label,Popover, PopoverHeader, PopoverBody
+  Nav,NavItem,NavLink,TabContent,TabPane,FormGroup,Label,Popover, PopoverHeader, PopoverBody,Modal,ModalBody
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -52,22 +52,26 @@ class AdminDetails extends React.Component{
         popover2Open:false,
         popover3Open:false,
         iActive:false,
-        isActive:""
+        isActive:"",
+        message:"",
+        modal:false
     }
     
        toggle = () => this.setState({popoverOpen:!this.state.popoverOpen});
        toggle2 = ()=> this.setState({popover2Open:!this.state.popover2Open});
        toggle3 = ()=> this.setState({popover3Open:!this.state.popover3Open});
+       toggleModal = ()=>this.setState({modal:!this.state.modal})
     
     componentDidMount(){
         let all_data = JSON.parse(localStorage.getItem('storageData'));
         
         var  user = all_data[0];
+        this.setState({iActive:true})
         axios.get("https://media-kokrokooad.herokuapp.com/api/super-admin/get/"+this.props.location.state.admin_id+"/details",
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
-            this.setState({user:res.data,isActive:res.data.isActive});
+            this.setState({user:res.data,isActive:res.data.isActive,iActive:false});
         })
         .catch(error=>{
             console.log(error)
@@ -79,13 +83,25 @@ class AdminDetails extends React.Component{
         let all_data = JSON.parse(localStorage.getItem('storageData'));
         
         var  user = all_data[0];
+        this.setState({iActive:true})
         console.log(e);
         axios.post("https://media-kokrokooad.herokuapp.com/api/super-admin/block/"+this.props.location.state.admin_id+"",null,
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
-            this.setState({popoverOpen:false});
-            window.location.href("/")
+            if(res.data.status === "user blocked"){
+                this.setState({popoverOpen:false});
+                setTimeout(
+                    function(){
+                        this.setState({message:"USER BLOCKED!!", modal:true,iActive:false})
+                        window.location.reload("/")
+                    }
+                    .bind(this),
+                    2000
+                )
+            }
+            
+           
 
         })
         .catch(error=>{
@@ -97,13 +113,23 @@ class AdminDetails extends React.Component{
         let all_data = JSON.parse(localStorage.getItem('storageData'));
         
         var  user = all_data[0]
+        this.setState({iActive:true})
         console.log(e)
         axios.post("https://media-kokrokooad.herokuapp.com/api/super-admin/unblock/"+this.props.location.state.admin_id+"",null,
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
-            this.setState({popover2Open:false});
-            window.location.href("/")
+            if(res.data.status === "user unblocked"){
+                this.setState({popover2Open:false});
+                setTimeout(
+                    function(){
+                        this.setState({message:"USER UNBLOCKED!!", modal:true,iActive:false})
+                        window.location.reload("/")
+                    }
+                    .bind(this),
+                    2000
+                )
+            }
         })
         .catch(error=>{
             console.log(error)
@@ -114,13 +140,22 @@ class AdminDetails extends React.Component{
         let all_data = JSON.parse(localStorage.getItem('storageData'));
         
         var  user = all_data[0]
-
+        this.setState({iActive:true})
         axios.delete("https://media-kokrokooad.herokuapp.com/api/super-admin/delete/"+this.props.location.state.admin_id+"",
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
-            this.setState({popover3Open:false});
-            this.props.history.push("/media/view-users");
+            if(res.data.status === "user deleted"){
+                this.setState({popover3Open:false});
+                setTimeout(
+                    function(){
+                        this.setState({message:"USER DELETED!!", modal:true,iActive:false})
+                        this.props.history.push("/media/view-users");
+                    }
+                    .bind(this),
+                    2000
+                )
+            }
         })
         .catch(error=>{
             console.log(error)
@@ -169,22 +204,24 @@ class AdminDetails extends React.Component{
                 </CardBody>
             </Card>
             <Row style={{marginTop:"20px"}}>
+            <Col md="9">
+            <Row>   
             <Col>
             <Button
             style={{backgroundColor:"#404E67", color:"white"}}
             onClick={()=>{this.props.history.push("/media/edit-admin",{admin_id:this.props.location.state.admin_id})}}
             >
-                Edit details
+                EDIT DETAILS
             </Button>
             </Col>
             <Col>
             {this.state.isActive==="active"?
             <div>
             <Button
-            color="danger"
+            color="warning"
             id="block"
             >
-            block
+            BLOCK
             </Button>   
             <Popover placement="bottom" isOpen={this.state.popoverOpen} target="block" toggle={()=>this.toggle()}>
                 <PopoverHeader>Block User?</PopoverHeader>
@@ -198,7 +235,7 @@ class AdminDetails extends React.Component{
             color="success"
             id="unblock"
             >
-            unblock
+            UNBLOCK
             </Button>   
             <Popover placement="bottom" isOpen={this.state.popover2Open} target="unblock" toggle={()=>this.toggle2()}>
                 <PopoverHeader>Unblock User?</PopoverHeader>
@@ -212,22 +249,29 @@ class AdminDetails extends React.Component{
             <Col>
             <Button
             color="danger"
-            id="unblock"
+            id="delete"
             >
-            delete
+            DELETE
             </Button>   
-            <Popover placement="bottom" isOpen={this.state.popover3Open} target="unblock" toggle={()=>this.toggle3()}>
+            <Popover placement="bottom" isOpen={this.state.popover3Open} target="delete" toggle={()=>this.toggle3()}>
                 <PopoverHeader>Delete User?</PopoverHeader>
                 <PopoverBody>
                     <Button color="danger" onClick={()=>this.handleDelete()}>yes</Button> <Button color="info" onClick={()=>this.toggle3()}>no</Button>
                 </PopoverBody>
             </Popover>
-            </Col> 
+            </Col>
+            </Row> 
+            </Col>
             </Row>
 
             </Col>
             </Row>
         </Container>
+        <Modal isOpen={this.state.modal} toggle={()=>this.toggleModal} style={{maxHeight:"40px", maxWidth:"300px",backgroundColor:"#404E67"}} className="alert-modal">
+            <ModalBody>
+            <h4 style={{textAlign:"center", marginTop:"-3%", fontWeight:"500", color:"white"}}>{this.state.message}</h4>
+            </ModalBody>
+        </Modal>
         </LoadingOverlay>
       </>
     );

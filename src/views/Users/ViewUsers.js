@@ -58,6 +58,7 @@ function ViewUsers({history}) {
     const [users, setUsers] = React.useState([]);
 
     React.useEffect(()=>{
+
         getUsers();
     },[])
 
