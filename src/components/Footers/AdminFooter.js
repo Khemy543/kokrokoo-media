@@ -56,7 +56,7 @@ class Footer extends React.Component {
               <NavItem>
                 <NavLink
                 className="text-uppercase"
-                  href="https://www.creative-tim.com/presentation?ref=adr-admin-footer "
+                  href={require("../../assets/img/brand/about.pdf")}
                   rel="noopener noreferrer"
                   target="_blank"
                 >

@@ -25,21 +25,8 @@ import CreateFromExisting from "views/Rate/CreateFromExisting.js";
 import AdminDetails from "views/Users/AdminDetails.js";
 import EditUser from "views/Users/EditUsers.js";
 import ViewRateCards from "views/Rate/ViewRateCard.js";
-
-
-
-import Maps from "views/examples/Maps.js";
+import ViewSubscription from 'views/Subscription/ViewSubscription.js';
 import Login from "views/examples/Login.js";
-import Tables from "views/examples/Tables.js";
-import Subscription from "views/examples/Subscription.js";
-import PublishedCompanies from "./views/PublishedCompanies.js";
-import RateCards from "./views/RateCards.js";
-import CreateSubscription from "views/createSubscription/CreateSubscription.js";
-import CreateRateCards from "views/createSubscription/CreateSubRateCardDetails.js";
-import UploadFile from "views/createSubscription/UploadMediaFile.js";
-import CreatePublishedCompanies from "views/createSubscription/CreatePublishedCompanies.js";
-import Calender from "views/createSubscription/calender.js";
-import Cart from "views/Cart";
 
 var routes = [
   {
@@ -79,31 +66,31 @@ var routes = [
   },
   {
     
-    path: "/my-subscription",
+    path: "/view-subscription",
     name: "View Subscriptions",
     header:"subscriptions",
-    component: Cart,
+    component: ViewSubscription,
     layout: "/media"
   },
   {
-    path: "/maps",
+    path: "/transactions",
     name: "Transactions",
     header:"transactions",
-    component: Maps,
+    component: Index,
     layout: "/media"
   }, 
   {
-    path: "/cart",
+    path: "/daily-reports",
     name: "Daily Reports",
     header:"report",
-    component: Cart,
+    component: Index,
     layout: "/media"
   },
   {
-    path: "/user-profile",
+    path: "/general-report",
     name: "General Report",
     header:"report",
-    component: Profile,
+    component: Index,
     layout: "/media"
   },
   {
@@ -121,12 +108,13 @@ var routes = [
     layout: "/media"
   },
   {
-    path: "/create-sub-rate-cards",
+    path: "/user-activities",
     name: "Users Activities",
     header:"user",
-    component: CreateRateCards,
+    component: Index,
     layout: "/media"
-  },{
+  },
+  {
     path: "/admin-details",
     name: "Admin Details",
     invisible:true,
@@ -144,27 +132,6 @@ var routes = [
     name:"Profile",
     header:"profile",
     component: RateCardDetails,
-    layout: "/media"
-  },
-  {
-    path: "/upload-file",
-    name: "File Upload",
-    invisible:true,
-    component: UploadFile,
-    layout: "/media"
-  },
-  {
-    path: "/published-companies-create",
-    name: "Media Houses",
-    invisible:true,
-    component: CreatePublishedCompanies,
-    layout: "/media"
-  },
-  {
-    path: "/calender",
-    name: "Calender",
-    invisible:true,
-    component: Calender,
     layout: "/media"
   }
 ];

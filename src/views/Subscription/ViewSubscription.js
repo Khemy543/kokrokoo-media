@@ -48,7 +48,7 @@ import {
 
 import Header from "components/Headers/Header.js";
 
-function Index (props){
+function ViewSubscription (props){
 
     return (
       <>
@@ -56,52 +56,8 @@ function Index (props){
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
-            <Col className="mb-5 mb-xl-0" lg="11">
-            <Row>
-              <Col md="4" className="mb-4">
-              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
-                <CardHeader>
-                  DASHBOARD
-                </CardHeader>  
-                <CardBody>
-                  all
-                </CardBody>  
-              </Card>  
-              </Col>
-
-              <Col md="4" className="mb-4">
-              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
-                <CardHeader>
-                  DASHBOARD
-                </CardHeader>  
-                <CardBody>
-                  all
-                </CardBody>  
-              </Card>  
-              </Col>
-
-              <Col md="4" className="mb-4">
-              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
-                <CardHeader>
-                  DASHBOARD
-                </CardHeader>  
-                <CardBody>
-                  all
-                </CardBody>  
-              </Card>  
-              </Col>
-
-              <Col md="4" className="mb-4">
-              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
-                <CardHeader>
-                  DASHBOARD
-                </CardHeader>  
-                <CardBody>
-                  all
-                </CardBody>  
-              </Card>  
-              </Col>
-            </Row>    
+            <Col className="mb-5 mb-xl-0" lg="10">
+            
             </Col>
           </Row>
         </Container>
@@ -109,4 +65,4 @@ function Index (props){
     );
   }
 
-export default Index;
+export default ViewSubscription;

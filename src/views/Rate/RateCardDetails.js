@@ -192,15 +192,15 @@ class RateCardDetails extends React.Component{
         console.log("id:",id)
         var tempSlot = [...this.state.newSlot];
         let newArray = tempSlot.filter(item=>item.id !== id);
-        return(this.setState({newSlot:newArray}))
         console.log("temp",newArray)
+        return(this.setState({newSlot:newArray}))
     }
 
     handleSubmit=(e)=>{/* 
         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.rate_id+"/add-details") */
        console.log("start submitting");
        let tempSlot = [...this.state.newSlot];
-       tempSlot.push({id:1,duration:this.state.duration,unit:this.state.unit,rate:this.state.rate});
+       tempSlot.unshift({id:1,duration:this.state.duration,unit:this.state.unit,rate:this.state.rate});
         console.log(tempSlot);
         let data = [{
             title_id:this.props.location.state.title_id,
@@ -730,17 +730,15 @@ class RateCardDetails extends React.Component{
                     {this.state.newSlot.map((value,index)=>(
                         <Row key={index} style={{marginTop:"10px"}}>
                             <Col md="3" sm="3" xs="3" lg="3">
-                            <Input type="number" onChange={(e)=>this.handleDurationChange(value.id, e.target.value)}/>
+                            <Input type="number" value={this.state.newSlot[index].duration} onChange={(e)=>this.handleDurationChange(value.id, e.target.value)}/>
                             </Col>
                             <Col md="3" sm="3" xs="3" lg="3">
-                            <Input type="select" onChange={(e)=>this.handleUnitChange(value.id, e.target.value)}>
-                            <option>Secs</option>
-                            <option>Mins</option>
-                            <option>Hr</option>
+                            <Input type="select" value={this.state.newSlot.unit} onChange={(e)=>this.handleUnitChange(value.id, e.target.value)}>
+                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
                             </Input>
                             </Col>
                             <Col md="4" sm="4" xs="4" lg="4">
-                            <Input type="number" onChange={(e)=>this.handleRateChange(value.id,e.target.value)}/>
+                            <Input type="number" value={this.state.newSlot[index].rate} onChange={(e)=>this.handleRateChange(value.id,e.target.value)}/>
                             </Col>
                             <Col md="2" sm="2" xs="2" lg="2" className="text-center">
 
@@ -841,15 +839,15 @@ class RateCardDetails extends React.Component{
                    {this.state.newSlotTues.map((value,index)=>(
                        <Row key={index} style={{marginTop:"10px"}}>
                            <Col md="3" sm="3" xs="3" lg="3">
-                           <Input type="number" onChange ={e=>this.handleDurationChangeTues(value.id,e.target.value)}/>
+                           <Input type="number" value={this.state.newSlotTues[index].duration} onChange ={e=>this.handleDurationChangeTues(value.id,e.target.value)}/>
                            </Col>
                            <Col md="3" sm="3" xs="3" lg="3">
-                           <Input type="select" onChange={e=>this.handleUnitChangeTues(value.id,e.target.value)}>
+                           <Input type="select" value={this.state.newSlotTues[index].unit} onChange={e=>this.handleUnitChangeTues(value.id,e.target.value)}>
                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
                            </Input>
                            </Col>
                            <Col md="4" sm="4" xs="4" lg="4">
-                           <Input type="number" onChange={e=>this.handleRateChangeTues(value.id, e.target.value)}/>
+                           <Input type="number" value={this.state.newSlotTues[index].rate} onChange={e=>this.handleRateChangeTues(value.id, e.target.value)}/>
                            </Col>
                            <Col md="2" sm="2" xs="2" lg="2" className="text-center">
 
@@ -948,15 +946,15 @@ class RateCardDetails extends React.Component{
                     {this.state.newSlotWed.map((value,index)=>(
                         <Row key={index} style={{marginTop:"10px"}}>
                             <Col md="3" sm="3" xs="3" lg="3">
-                            <Input type="number" onChange={e=>this.handleDurationChangeWed(value.id, e.target.value)}/>
+                            <Input type="number" value={this.state.newSlotWed[index].duration} onChange={e=>this.handleDurationChangeWed(value.id, e.target.value)}/>
                             </Col>
                             <Col md="3" sm="3" xs="3" lg="3">
-                            <Input type="select" onChange={e=>this.handleUnitChangeWed(value.id,e.target.value)}>
+                            <Input type="select" value={this.state.newSlotWed[index].unit} onChange={e=>this.handleUnitChangeWed(value.id,e.target.value)}>
                             {this.state.newSlotWed.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
                             </Input>
                             </Col>
                             <Col md="4" sm="4" xs="4" lg="4">
-                            <Input type="number" onChange={e=>this.handleRateChangeWed(value.id,e.target.value)}/>
+                            <Input type="number" value={this.state.newSlotWed[index].rate} onChange={e=>this.handleRateChangeWed(value.id,e.target.value)}/>
                             </Col>
                             <Col md="2" sm="2" xs="2" lg="2" className="text-center">
 
@@ -1055,15 +1053,15 @@ class RateCardDetails extends React.Component{
                     {this.state.newSlotThurs.map((value,index)=>(
                         <Row key={index} style={{marginTop:"10px"}}>
                             <Col md="3" sm="3" xs="3" lg="3">
-                            <Input type="number" onChange={e=>this.handleDurationChangeThurs(value.id,e.target.value)}/>
+                            <Input type="number" value={this.state.newSlotThurs[index].duration} onChange={e=>this.handleDurationChangeThurs(value.id,e.target.value)}/>
                             </Col>
                             <Col md="3" sm="3" xs="3" lg="3">
-                            <Input type="select" onChange={e=>this.handleUnitChangeThurs(value.id, e.target.value)}>
+                            <Input type="select" value={this.state.newSlotThurs[index].unit} onChange={e=>this.handleUnitChangeThurs(value.id, e.target.value)}>
                             {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
                             </Input>
                             </Col>
                             <Col md="4" sm="4" xs="4" lg="4">
-                            <Input type="number" onChange={e=>this.handleRateChangeThurs(value.id, e.target.value)}/>
+                            <Input type="number" value={this.state.newSlotThurs[index].rate} onChange={e=>this.handleRateChangeThurs(value.id, e.target.value)}/>
                             </Col>
                             <Col md="2" sm="2" xs="2" lg="2" className="text-center">
 
@@ -1162,15 +1160,15 @@ class RateCardDetails extends React.Component{
                     {this.state.newSlotFri.map((value,index)=>(
                         <Row key={index} style={{marginTop:"10px"}}>
                             <Col md="3" sm="3" xs="3" lg="3">
-                            <Input type="number" onChange={e=>this.handleDurationChangeFri(value.id,e.target.value)}/>
+                            <Input type="number" value={this.state.newSlotFri[index].duration} onChange={e=>this.handleDurationChangeFri(value.id,e.target.value)}/>
                             </Col>
                             <Col md="3" sm="3" xs="3" lg="3">
-                            <Input type="select" onChange={e=>this.handleUnitChangeFri(value.id,e.target.value)}>
+                            <Input type="select" value={this.state.newSlotFri[index].unit} onChange={e=>this.handleUnitChangeFri(value.id,e.target.value)}>
                             {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
                             </Input>
                             </Col>
                             <Col md="4" sm="4" xs="4" lg="4">
-                            <Input type="number" onChange={e=>this.handleRateChangeFri(value.id,e.target.value)}/>
+                            <Input type="number" value={this.state.newSlotFri[index].rate} onChange={e=>this.handleRateChangeFri(value.id,e.target.value)}/>
                             </Col>
                             <Col md="2" sm="2" xs="2" lg="2" className="text-center">
 
@@ -1269,15 +1267,15 @@ class RateCardDetails extends React.Component{
                     {this.state.newSlotSat.map((value,index)=>(
                         <Row key={index} style={{marginTop:"10px"}}>
                             <Col md="3" sm="3" xs="3" lg="3">
-                            <Input type="number" onChange={e=>this.handleDurationChangeSat(value.id,e.target.value)}/>
+                            <Input type="number" value={this.state.newSlotSat[index].duration} onChange={e=>this.handleDurationChangeSat(value.id,e.target.value)}/>
                             </Col>
                             <Col md="3" sm="3" xs="3" lg="3">
-                            <Input type="select" onChange={e=>this.handleUnitChangeSat(value.id,e.target.value)}>
+                            <Input type="select" value={this.state.newSlotSat[index].unit} onChange={e=>this.handleUnitChangeSat(value.id,e.target.value)}>
                             {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
                             </Input>
                             </Col>
                             <Col md="4" sm="4" xs="4" lg="4">
-                            <Input type="number"onChange={e=>this.handleRateChangeSat(value.id,e.target.value)}/>
+                            <Input type="number" value={this.state.newSlotSat[index].rate} onChange={e=>this.handleRateChangeSat(value.id,e.target.value)}/>
                             </Col>
                             <Col md="2" sm="2" xs="2" lg="2" className="text-center">
 
@@ -1376,15 +1374,15 @@ class RateCardDetails extends React.Component{
                     {this.state.newSlotSun.map((value,index)=>(
                         <Row key={index} style={{marginTop:"10px"}}>
                             <Col md="3" sm="3" xs="3" lg="3">
-                            <Input type="number" onChange={e=>this.handleDurationChangeSun(value.id,e.target.value)}/>
+                            <Input type="number" value={this.state.newSlotSun[index].duration} onChange={e=>this.handleDurationChangeSun(value.id,e.target.value)}/>
                             </Col>
                             <Col md="3" sm="3" xs="3" lg="3">
-                            <Input type="select" onChange={e=>this.handleUnitChangeSun(value.id,e.target.value)}>
+                            <Input type="select" value={this.state.newSlotSun[index].unit} onChange={e=>this.handleUnitChangeSun(value.id,e.target.value)}>
                             {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
                             </Input>
                             </Col>
                             <Col md="4" sm="4" xs="4" lg="4">
-                            <Input type="number" onChange={e=>this.handleRateChangeSun(value.id,e.target.value)}/>
+                            <Input type="number" value={this.state.newSlotSun[index].rate} onChange={e=>this.handleRateChangeSun(value.id,e.target.value)}/>
                             </Col>
                             <Col md="2" sm="2" xs="2" lg="2" className="text-center">
 
