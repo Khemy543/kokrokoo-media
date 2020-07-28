@@ -15,7 +15,7 @@ function UserCard(props){
             <CardBody onClick={()=>{props.history.push("/media/admin-details",{admin_id:id})}}> 
                 <Row>
                 <Col md="8" sm="8" lg="8" xs="8">
-                <h3>{name}</h3>
+                <h3 style={{textTransform:"uppercase"}}>{name}</h3>
                 <h4>{email}</h4>
                 <h4>{phone1}</h4>
                 <h4>{phone2}</h4>

@@ -24,6 +24,7 @@ import ViewUser from "views/Users/ViewUsers.js";
 import CreateFromExisting from "views/Rate/CreateFromExisting.js";
 import AdminDetails from "views/Users/AdminDetails.js";
 import EditUser from "views/Users/EditUsers.js";
+import ViewRateCards from "views/Rate/ViewRateCard.js";
 
 
 
@@ -59,7 +60,7 @@ var routes = [
     path: "/view-ratecards",
     name: "View RateCards",
     header:"rate",
-    component: Subscription,
+    component: ViewRateCards,
     layout: "/media"
   },
   {

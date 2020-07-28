@@ -36,7 +36,7 @@ import classnames from 'classnames';
 // core components
 import Header from "components/Headers/Header.js";
 import LoadingOverlay from "react-loading-overlay";
-import BounceLoader from "react-spinners/BounceLoader";
+import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
 let user =1;
@@ -196,8 +196,23 @@ class RateCardDetails extends React.Component{
         console.log("temp",newArray)
     }
 
-    handleSubmit=()=>{
-        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.rate_id+"/add-details")
+    handleSubmit=(e)=>{/* 
+        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.rate_id+"/add-details") */
+       console.log("start submitting");
+       let tempSlot = [...this.state.newSlot];
+       tempSlot.push({id:1,duration:this.state.duration,unit:this.state.unit,rate:this.state.rate});
+        console.log(tempSlot);
+        let data = [{
+            title_id:this.props.location.state.title_id,
+            title:this.state.title,
+            slotNumber:this.state.slotNumber,
+            startTime:this.state.startTime,
+            EndTime:this.state.EndTime,
+            day_id:1,
+            duration:tempSlot
+        }];
+        console.log(data);
+
     }
 
     /* tab 2 */
@@ -610,14 +625,14 @@ class RateCardDetails extends React.Component{
       <>
       <LoadingOverlay 
       active = {this.state.isActive}
-      spinner={<BounceLoader color={'#4071e1'}/>}
+      spinner={<FadeLoader color={'#4071e1'}/>}
       >
       <Header/>
         <Container className=" mt--8" fluid>
             
           <Row>
             <Col md="10">
-            <Card className="shadow">
+            <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
             <CardHeader className=" bg-transparent">
                   <h3 className=" mb-0">ENTER RATE CARD DETAILS</h3>
             </CardHeader>
@@ -632,7 +647,7 @@ class RateCardDetails extends React.Component{
                 {this.state.days.map(value=>(
                 <NavItem key={value.id}>
                 <NavLink
-                style={{cursor:"pointer"}}
+                style={{cursor:"pointer",textTransform:"uppercase"}}
                     className={classnames({ active: this.state.activeTab === `${value.id}` })}
                     onClick={() => { this.toggle(`${value.id}`); }}
                 >
@@ -695,7 +710,7 @@ class RateCardDetails extends React.Component{
                         </Col>
                         <Col md="3" sm="3" xs="3" lg="3">
                         <Label>Unit</Label>
-                        <Input type="select" value={this.state.unit} onChange={e=>this.setState({unit:e.target.unit})}>
+                        <Input type="select" value={this.state.unit} onChange={e=>this.setState({unit:e.target.value})}>
                             {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
                         </Input>
                         </Col>
@@ -738,15 +753,16 @@ class RateCardDetails extends React.Component{
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="danger"
+                            onClick={()=>this.handleSubmit()}
                             >
-                                Submit
+                                SUBMIT
                             </Button>    
                         </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="info"
                             >
-                                Review
+                                PREVIEW
                             </Button>    
                         </Col>
                     </Row>    
@@ -847,14 +863,14 @@ class RateCardDetails extends React.Component{
                            <Button
                            color="danger"
                            >
-                               Submit
+                               SUBMIT
                            </Button>    
                        </Col>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="info"
                            >
-                               Review
+                               PREVIEW
                            </Button>    
                        </Col>
                    </Row>    
@@ -954,14 +970,14 @@ class RateCardDetails extends React.Component{
                             <Button
                             color="danger"
                             >
-                                Submit
+                                SUBMIT
                             </Button>    
                         </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="info"
                             >
-                                Review
+                                PREVIEW
                             </Button>    
                         </Col>
                     </Row>    
@@ -1061,14 +1077,14 @@ class RateCardDetails extends React.Component{
                             <Button
                             color="danger"
                             >
-                                Submit
+                                SUBMIT
                             </Button>    
                         </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="info"
                             >
-                                Review
+                                PREVIEW
                             </Button>    
                         </Col>
                     </Row>    
@@ -1168,14 +1184,14 @@ class RateCardDetails extends React.Component{
                             <Button
                             color="danger"
                             >
-                                Submit
+                                SUBMIT
                             </Button>    
                         </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="info"
                             >
-                                Review
+                                PREVIEW
                             </Button>    
                         </Col>
                     </Row>    
@@ -1275,14 +1291,14 @@ class RateCardDetails extends React.Component{
                             <Button
                             color="danger"
                             >
-                                Submit
+                                SUBMIT
                             </Button>    
                         </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="info"
                             >
-                                Review
+                                PREVIEW
                             </Button>    
                         </Col>
                     </Row>    
@@ -1382,14 +1398,14 @@ class RateCardDetails extends React.Component{
                             <Button
                             color="danger"
                             >
-                                Submit
+                                SUBMIT
                             </Button>    
                         </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="info"
                             >
-                                Review
+                                PREVIEW
                             </Button>    
                         </Col>
                     </Row>    

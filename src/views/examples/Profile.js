@@ -28,10 +28,12 @@ import {
   Input,
   Container,
   Row,
-  Col
+  Col,Modal,ModalBody
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
+import LoadingOverlay from "react-loading-overlay";
+import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
 let user =1;
@@ -54,10 +56,13 @@ class Profile extends React.Component {
     phone1:"",
     phone2:"",
     title:"", 
-    id:""
+    id:"",
+    isActive:false,
+    modal:false
   }
 
 componentDidMount(){
+  this.setState({isActive:true})
   axios.get("https://media-kokrokooad.herokuapp.com/api/user",{
     headers:{ 'Authorization':`Bearer ${user}`}
         }
@@ -71,7 +76,8 @@ componentDidMount(){
             phone1:res.data.user.phone1,
             phone2:res.data.user.phone2,
             title:res.data.user.title,
-            id:res.data.user.id
+            id:res.data.user.id,
+            isActive:false
           })
         }
 
@@ -80,8 +86,10 @@ componentDidMount(){
         });
 }
 
+toggleModal=()=>this.setState({modal:!this.state.modal});
 
 handleSubmit=(e)=>{
+  this.setState({isActive:true})
   e.preventDefault();
   console.log(e);
   console.log(this.state.id)
@@ -90,6 +98,13 @@ handleSubmit=(e)=>{
     headers:{ 'Authorization':`Bearer ${user}`}})
   .then(res=>{
     console.log(res.data)
+    this.setState({isActive:false,modal:true});
+
+    setTimeout(
+      function(){
+          this.setState({modal:false})
+      }.bind(this),2000)
+  
   })
   .catch(error=>{
     console.log(error.response.data)
@@ -99,7 +114,11 @@ handleSubmit=(e)=>{
   render() {
     return (
       <>
-        <UserHeader userName={this.state.username}/>
+      <LoadingOverlay 
+      active = {this.state.isActive}
+      spinner={<FadeLoader color={'#4071e1'}/>}
+      >
+        <UserHeader userName={this.state.name}/>
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
@@ -112,7 +131,7 @@ handleSubmit=(e)=>{
                         <img
                           alt="..."
                           className="rounded-circle"
-                          src={require("assets/img/theme/team-4-800x800.jpg")}
+                          src={require("assets/img/new_logo.png")}
                         />
                       </a>
                     </div>
@@ -131,24 +150,13 @@ handleSubmit=(e)=>{
                     </h3>
                     <div className="h5 font-weight-300">
                       <i className="ni location_pin mr-2" />
-                      Bucharest, Romania
+                      {this.state.name}
                     </div>
                     <div className="h5 mt-4">
                       <i className="ni business_briefcase-24 mr-2" />
-                      Solution Manager - Creative Tim Officer
+                      {this.state.title}
                     </div>
-                    <div>
-                      <i className="ni education_hat mr-2" />
-                      University of Computer Science
                     </div>
-                    <hr className="my-4" />
-                    <p>
-                      Ryan — the name taken by Melbourne-raised, Brooklyn-based
-                      Nick Murphy — writes, performs and records all of his own
-                      music.
-                    </p>
-                    
-                  </div>
                 </CardBody>
               </Card>
             </Col>
@@ -264,8 +272,8 @@ handleSubmit=(e)=>{
                         </Col>
                         </Row>
                     </div>
-                    <hr className="my-4" />
-                    {/* Address */}
+                   {/*  <hr className="my-4" />
+                    
                     <h6 className="heading-small text-muted mb-4">
                       Contact information
                     </h6>
@@ -342,35 +350,31 @@ handleSubmit=(e)=>{
                         </Col>
                       </Row>
                       
-                    </div>
+                    </div> */}
                     <hr className="my-4" />
-                    {/* Description */}
-                    <h6 className="heading-small text-muted mb-4">About me</h6>
+
                     <div className="pl-lg-4">
-                      <FormGroup>
-                        <label>About Me</label>
-                        <Input
-                          className="form-control-alternative"
-                          placeholder="A few words about you ..."
-                          rows="4"
-                          defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
-                          Open Source."
-                          type="textarea"
-                        />
-                      </FormGroup>
-                    </div>
+                    <Row>
                     <Button
-                      color="info"
                       type="submit"
+                      style={{backgroundColor:"#404E67",color:"white"}}
                     >
-                  Edit profile
-                </Button>
+                      Edit profile
+                    </Button>
+                    </Row>
+                  </div>
                   </Form>
                 </CardBody>
               </Card>
             </Col>
           </Row>
         </Container>
+        <Modal isOpen={this.state.modal} toggle={()=>this.toggleModal} style={{maxHeight:"40px", maxWidth:"300px",backgroundColor:"#404E67"}} className="alert-modal">
+            <ModalBody>
+            <h4 style={{textAlign:"center", marginTop:"-3%", fontWeight:"500", color:"white"}}>UPDATED!!</h4>
+            </ModalBody>
+        </Modal>
+        </LoadingOverlay>
       </>
     );
   }

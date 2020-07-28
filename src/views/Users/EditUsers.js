@@ -36,7 +36,7 @@ import {
 import Header from "components/Headers/Header.js";
 import UserCard from "../../components/Cards/UserCard.js";
 import LoadingOverlay from "react-loading-overlay";
-import BounceLoader from "react-spinners/BounceLoader";
+import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 import Pagination from "react-js-pagination";
 //require("bootstrap/less/bootstrap.less");
@@ -90,11 +90,12 @@ function EditUsers(props) {
         .then(res=>{
             console.log(res.data);
             if(res.data.status === "success"){
+                setIsActive(false);
                 setModal(true)
             setTimeout(
                 function(){
                     setModal(false);
-                    setIsActive(false)
+                    props.history.push("/media/admin-details",{admin_id:props.location.state.admin_id})
                 },2000)
             }
                 
@@ -108,15 +109,15 @@ function EditUsers(props) {
       <>
       <LoadingOverlay 
       active = {iActive}
-      spinner={<BounceLoader color={'#4071e1'}/>}
+      spinner={<FadeLoader color={'#4071e1'}/>}
       >
       <Header/>
         <Container className=" mt--7" fluid>
             
           <Row>
             <Col md="10">
-            <Card>
-                <CardBody>
+            <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
+                <CardBody className="mt-5">
                 <Form onSubmit={handleSubmit}>    
                 <Input value={name} type="text" onChange={e=>setName(e.target.value)}/>
                     <br/>
@@ -138,7 +139,7 @@ function EditUsers(props) {
                         style={{backgroundColor:"#404E67", color:"white",marginTop:"20px"}}
                         type="submit"
                         >
-                            Edit
+                            EDIT
                         </Button> 
                     </Form>
                 </CardBody>

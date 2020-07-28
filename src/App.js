@@ -25,8 +25,8 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
 
 import AdminLayout from "layouts/Admin.js";
-//import AuthLayout from "layouts/Auth.js";
 import Login from "./views/examples/Login.js";
+import ProtectedLoginRoute from "./ProtectedLoginRoute.js";
 import "./index.css";
 
 
@@ -35,8 +35,8 @@ class App extends React.Component{
     return(
   <BrowserRouter history={history}>
     <Switch>
-      <Route path="/media" render={props => <AdminLayout {...props} />} />
-      <Route exact path="/" component = {Login}/>
+      <Route path="/media" render={props => <AdminLayout {...props} history={history}/>} />
+      <ProtectedLoginRoute exact path="/" component = {Login}/>
       <Redirect from="/homepage" to="/media/index" />
     </Switch>
   </BrowserRouter>

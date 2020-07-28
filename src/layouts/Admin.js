@@ -23,6 +23,7 @@ import { Container } from "reactstrap";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
+import ProtectedRoute from "../ProtectedRoutes.js";
 
 import routes from "routes.js";
 
@@ -36,7 +37,7 @@ class Admin extends React.Component {
     return routes.map((prop, key) => {
       if (prop.layout === "/media") {
         return (
-          <Route
+          <ProtectedRoute
             path={prop.layout + prop.path}
             component={prop.component}
             key={key}

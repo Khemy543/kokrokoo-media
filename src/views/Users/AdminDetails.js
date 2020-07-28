@@ -37,7 +37,7 @@ import {
 import Header from "components/Headers/Header.js";
 import UserCard from "../../components/Cards/UserCard.js";
 import LoadingOverlay from "react-loading-overlay";
-import BounceLoader from "react-spinners/BounceLoader";
+import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 import Pagination from "react-js-pagination";
 //require("bootstrap/less/bootstrap.less");
@@ -167,16 +167,16 @@ class AdminDetails extends React.Component{
       <>
       <LoadingOverlay 
       active = {this.state.iActive}
-      spinner={<BounceLoader color={'#4071e1'}/>}
+      spinner={<FadeLoader color={'#4071e1'}/>}
       >
       <Header/>
         <Container className=" mt--7" fluid>
             
           <Row>
             <Col md="10">
-            <Card>
+            <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
                 <CardBody>
-                    <Input value={name} disabled/>
+                    <Input value={name} disabled style={{textTransform:"uppercase"}}/>
                     <br/>
                     <Input value={email} disabled/>
                     <br/>
@@ -189,9 +189,9 @@ class AdminDetails extends React.Component{
                     </Col>
                     </Row>
                     <br/>
-                    <Input value={title} disabled/>
+                    <Input value={title} disabled style={{textTransform:"uppercase"}}/>
                     <br/>
-                    <Input value={role} disabled/>
+                    <Input value={role} disabled style={{textTransform:"uppercase"}}/>
                     <br/>
                     <Row>
                         <Col>

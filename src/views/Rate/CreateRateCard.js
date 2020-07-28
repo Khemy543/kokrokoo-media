@@ -35,8 +35,9 @@ import {
 // core components
 import Header from "components/Headers/Header.js";
 import LoadingOverlay from "react-loading-overlay";
-import BounceLoader from "react-spinners/BounceLoader";
-import axios from "axios";
+import FadeLoader from "react-spinners/FadeLoader";
+import axios from "axios";/* 
+import history from "../../history.js"; */
 
 let user =1;
 let loggedin_data = false;
@@ -75,14 +76,20 @@ function CreateRateCard(props) {
         setIsActive(true)
         console.log(e);
         console.log("file_types:",file_types)
-    
+        if(file_types.length <=0 ){
+            alert("choose file type");
+            setIsActive(false)
+
+        }
+        else{
         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/new-title",{rate_card_title,service_description,file_types},
         {headers:{ 'Authorization':`Bearer ${user}`}}
         )
         .then(res=>{
             console.log(res.data);
             if(res.data.status === "success"){
-            props.history.push("/media/rate-details",{rate_id:res.data.ratecard_title.id, rate_title:res.data.ratecard_title.title})
+                console.log(props)
+            props.history.push("/media/rate-details",{rate_title:res.data.ratecard_title.title, title_id:res.data.ratecard_title.id})
             setIsActive(false)
             }
         })
@@ -91,20 +98,21 @@ function CreateRateCard(props) {
             setIsActive(false)
         })
     }
+}
 
     
     return (
       <>
       <LoadingOverlay 
       active = {isActive}
-      spinner={<BounceLoader color={'#4071e1'}/>}
+      spinner={<FadeLoader color={'#4071e1'}/>}
       >
       <Header/>
         <Container className=" mt--8" fluid>
             
           <Row>
             <Col md="10">
-            <Card className="shadow">
+            <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
             <CardHeader className=" bg-transparent">
                   <h3 className=" mb-0">ENTER RATE CARD TITLE</h3>
             </CardHeader>
@@ -112,13 +120,13 @@ function CreateRateCard(props) {
             <CardBody>
             <Row>
                 <Col md="12">
-                    <Form onSubmit={handlTitleSubmit}>
+                    <Form role="form" onSubmit={handlTitleSubmit}>
                     <FormGroup>
-                    <Input type="input" placeholder="Enter Rate Card Title" value={rate_card_title} onChange={e=>setTitle(e.target.value)}/>
+                    <Input type="input" placeholder="Enter Rate Card Title" value={rate_card_title} onChange={e=>setTitle(e.target.value)} required/>
                     </FormGroup>
                     <br/>    
                     <FormGroup>
-                    <Input type="textarea" placeholder="Enter Description" value={service_description} onChange={e=>setDescription(e.target.value)}/>
+                    <Input type="textarea" placeholder="Enter Description" value={service_description} onChange={e=>setDescription(e.target.value)} required/>
                     </FormGroup>
                     <Label>File Type</Label>
                     <FormGroup check>
@@ -150,7 +158,6 @@ function CreateRateCard(props) {
                     <Button
                     style={{marginTop:"20px",color:"white",backgroundColor:"#404E67"}}
                     type="submit"
-                    onClick={handlTitleSubmit}
                     >
                     Next
                     </Button>

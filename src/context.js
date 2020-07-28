@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import decode from "jwt-decode";
 
 const RateContext = React.createContext();
 
@@ -21,14 +22,20 @@ class RateProvider extends React.Component{
     }
 
     componentDidMount(){
-        axios.get("https://kokrokooad.herokuapp.com/api/all-subscriptions",{headers:{'Authorization':`Bearer ${user}`}})
-        .then(res=>{
-            console.log("mysubs:",res.data.data);
-            this.setState({cart:res.data.data})
-        })
-        .catch(error=>{
-            console.log(error);
-        })
+       this.isTokenExpired();/* 
+       localStorage.clear(); */
+    }
+
+    isTokenExpired() {
+        try {
+            const decoded = decode(user);
+            if (decoded.exp < Date.now() / 1000) { // Checking if token is expired.
+                localStorage.clear();
+            }
+        }
+        catch (err) {
+            return false;
+        }
     }
 
     render(){

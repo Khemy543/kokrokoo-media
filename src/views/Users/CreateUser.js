@@ -35,7 +35,7 @@ import {
 // core components
 import Header from "components/Headers/Header.js";
 import LoadingOverlay from "react-loading-overlay";
-import BounceLoader from "react-spinners/BounceLoader";
+import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
 let user =1;
@@ -93,48 +93,52 @@ function CreateUser(props) {
       <>
       <LoadingOverlay 
       active = {isActive}
-      spinner={<BounceLoader color={'#4071e1'}/>}
+      spinner={<FadeLoader color={'#4071e1'}/>}
       >
       <Header/>
-        <Container className=" mt--9" fluid>
+        <Container className=" mt--7" fluid>
             
           <Row>
             <Col md="10">
+            <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
+                <CardBody>
             <Form onSubmit={handleSubmit}>
                 <FormGroup>
                     <Label for="exampleEmail">Name</Label>
-                    <Input type="text" name="email"  placeholder="Enter Name" value={name} onChange={e=>setName(e.target.value)}/>
+                    <Input type="text" name="email"  placeholder="Enter Name" value={name} onChange={e=>setName(e.target.value)} required/>
                 </FormGroup>
                 <FormGroup>
                     <Label for="exampleEmail">Email</Label>
-                    <Input type="email" name="email"  placeholder="Enter Email" value={email} onChange={e=>setEmail(e.target.value)}/>
+                    <Input type="email" name="email"  placeholder="Enter Email" value={email} onChange={e=>setEmail(e.target.value)} required/>
                 </FormGroup>
                 <Row>
                 <Col md="6">
                 <FormGroup>
                     <Label for="exampleEmail">Phone 1</Label>
-                    <Input type="number" name="phone1"  placeholder="Enter Phone"value={phone1} onChange={e=>setPhone1(e.target.value)}/>
+                    <Input type="number" name="phone1"  placeholder="Enter Phone"value={phone1} onChange={e=>setPhone1(e.target.value)} required/>
                 </FormGroup>
                 </Col>
                 <Col md="6">
                 <FormGroup>
                     <Label for="exampleEmail">Phone 2</Label>
-                    <Input type="number" name="phone2"  placeholder="Enter Phone"value={phone2} onChange={e=>setPhone2(e.target.value)}/>
+                    <Input type="number" name="phone2"  placeholder="Enter Phone (optional)"value={phone2} onChange={e=>setPhone2(e.target.value)}/>
                 </FormGroup>
                 </Col>
                 </Row>
                 <FormGroup>
                     <Label for="exampleEmail">Title</Label>
-                    <Input type="text" name="title"  placeholder="Enter Title"value={title} onChange={e=>setTitle(e.target.value)}/>
+                    <Input type="text" name="title"  placeholder="Enter Title"value={title} onChange={e=>setTitle(e.target.value)} required/>
                 </FormGroup>
                 <FormGroup>
                     <Label for="exampleEmail">Role</Label>
-                    <Input type="text" name="role"  placeholder="Enter Role"value={role} onChange={e=>setRole(e.target.value)}/>
+                    <Input type="text" name="role"  placeholder="Enter Role"value={role} onChange={e=>setRole(e.target.value)} required/>
                 </FormGroup>
                 <Button style={{backgroundColor:"#404E67", color:"white"}} type="submit">
                     Create
                 </Button>    
-            </Form>    
+            </Form>
+            </CardBody>
+            </Card>    
             </Col>
             </Row>
         </Container>

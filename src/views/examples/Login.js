@@ -30,17 +30,18 @@ import {
   InputGroupText,
   InputGroup,
   Row,
-  Col,Container
+  Col,Container,Alert
 } from "reactstrap";
 import axios from "axios";
 import LoadingOverlay from "react-loading-overlay";
-import BounceLoader from "react-spinners/BounceLoader";
+import FadeLoader from "react-spinners/FadeLoader";
 
 
-function Login({history}){
+function Login(props){
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isActive , setIsActive] = React.useState(false);
+  const [alert, setAlert] = React.useState(false);
   
   var storageData =[];
 
@@ -66,13 +67,14 @@ function Login({history}){
         storageData.push(token_data,loggedin)
         localStorage.setItem('storageData',JSON.stringify(storageData));
         console.log("storagedata:",storageData);
-        history.push("/homepage")
+        window.location.reload("/");
         setIsActive(false);
 
       }
     })
     .catch(error=>{
-      console.log(error)
+      console.log(error);
+      setAlert(true);
       setIsActive(false);
     })
   }
@@ -81,16 +83,27 @@ function Login({history}){
       <>
       <LoadingOverlay 
       active = {isActive}
-      spinner={<BounceLoader color={'#4071e1'}/>}
+      spinner={<FadeLoader color={'#4071e1'}/>}
       >
       <Container>
         <Row>
-        <Col lg="5" md="7" className="ml-auto mr-auto mt-7 mb-auto">
-          <Card className="shadow border-0">
+        <Col lg="5" md="7" className="ml-auto mr-auto mt-6 mb-auto">
+          <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
             
             <CardBody className="px-lg-5 py-lg-5">
-              <h3 className="text-center">Sign In</h3>
-              <div className="text-center text-muted mb-4">
+
+              <div style={{textAlign:"center"}}>
+              <img src={require("../../assets/img/brand/kokrokoo.png")} style={{width:"150px", height:"150px"}}/>
+              </div>
+              {alert?
+                  <Alert color="warning" fade={true} style={{textAlign:"center",height:"50px"}}>
+                  Incorrect Credentials
+                </Alert>
+                :
+                <div>
+                </div>
+                }
+              <div className="text-center text-muted">
                 
               </div>
               <Form role="form" onSubmit={handleSubmit}>
@@ -124,12 +137,12 @@ function Login({history}){
                     className="custom-control-label"
                     htmlFor=" customCheckLogin"
                   >
-                    <span className="text-muted">Remember me</span>
+                    <span >Remember me</span>
                   </label>
                 </div>
                 <div className="text-center">
                   <Button className="my-4" color="primary" type="submit" >
-                    Sign in
+                    SIGN IN
                   </Button>
                 </div>
               </Form>
@@ -138,7 +151,6 @@ function Login({history}){
           <Row className="mt-3">
             <Col xs="6">
               <a
-                className="text-light"
                 href="#pablo"
                 onClick={e => e.preventDefault()}
               >
@@ -147,7 +159,6 @@ function Login({history}){
             </Col>
             <Col className="text-right" xs="6">
               <a
-                className="text-light"
                 href="#pablo"
                 onClick={e => e.preventDefault()}
               >
