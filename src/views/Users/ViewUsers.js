@@ -36,7 +36,7 @@ import {
 import Header from "components/Headers/Header.js";
 import UserCard from "../../components/Cards/UserCard.js";
 import LoadingOverlay from "react-loading-overlay";
-import BounceLoader from "react-spinners/BounceLoader";
+import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 import Pagination from "react-js-pagination";
 //require("bootstrap/less/bootstrap.less");
@@ -109,7 +109,7 @@ function ViewUsers({history}) {
       <>
       <LoadingOverlay 
       active = {isActive}
-      spinner={<BounceLoader color={'#4071e1'}/>}
+      spinner={<FadeLoader color={'#4071e1'}/>}
       >
       <Header/>
         <Container className=" mt--7" fluid>

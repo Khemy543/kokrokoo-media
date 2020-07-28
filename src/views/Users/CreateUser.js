@@ -30,7 +30,7 @@ import {
   Input,
   Button,
   CardTitle,
-  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label,Modal,ModalBody
+  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label,Modal,ModalBody,Alert
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -58,6 +58,8 @@ function CreateUser(props) {
     const [title, setTitle] = React.useState("");
     const [role, setRole] = React.useState("");
     const [modal, setModal]= React.useState(false);
+    const [alert,setAlert] = React.useState(false);
+    const [message, setMessage] = React.useState("");
 
 
     const toggleModal=()=>setModal(!modal);
@@ -84,7 +86,12 @@ function CreateUser(props) {
             }
         })
         .catch(error=>{
-            console.log(error.response.data)
+            console.log(error.response.data);
+            if(error){
+                setIsActive(false);
+                setMessage(error.response.data.errors.email || error.response.data.errors.phone1 || error.response.data.errors.phone2);
+                setAlert(true);
+            }
         })
     }
 
@@ -102,35 +109,43 @@ function CreateUser(props) {
             <Col md="10">
             <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
                 <CardBody>
+                {alert?
+                  <Alert color="warning" fade={true} style={{textAlign:"center",height:"50px"}}>
+                  {message}
+                </Alert>
+                :
+                <div>
+                </div>
+                }
             <Form onSubmit={handleSubmit}>
                 <FormGroup>
-                    <Label for="exampleEmail">Name</Label>
+                    <Label>Name</Label>
                     <Input type="text" name="email"  placeholder="Enter Name" value={name} onChange={e=>setName(e.target.value)} required/>
                 </FormGroup>
                 <FormGroup>
-                    <Label for="exampleEmail">Email</Label>
+                    <Label>Email</Label>
                     <Input type="email" name="email"  placeholder="Enter Email" value={email} onChange={e=>setEmail(e.target.value)} required/>
                 </FormGroup>
                 <Row>
                 <Col md="6">
                 <FormGroup>
-                    <Label for="exampleEmail">Phone 1</Label>
+                    <Label>Phone 1</Label>
                     <Input type="number" name="phone1"  placeholder="Enter Phone"value={phone1} onChange={e=>setPhone1(e.target.value)} required/>
                 </FormGroup>
                 </Col>
                 <Col md="6">
                 <FormGroup>
-                    <Label for="exampleEmail">Phone 2</Label>
+                    <Label>Phone 2</Label>
                     <Input type="number" name="phone2"  placeholder="Enter Phone (optional)"value={phone2} onChange={e=>setPhone2(e.target.value)}/>
                 </FormGroup>
                 </Col>
                 </Row>
                 <FormGroup>
-                    <Label for="exampleEmail">Title</Label>
+                    <Label>Title</Label>
                     <Input type="text" name="title"  placeholder="Enter Title"value={title} onChange={e=>setTitle(e.target.value)} required/>
                 </FormGroup>
                 <FormGroup>
-                    <Label for="exampleEmail">Role</Label>
+                    <Label>Role</Label>
                     <Input type="text" name="role"  placeholder="Enter Role"value={role} onChange={e=>setRole(e.target.value)} required/>
                 </FormGroup>
                 <Button style={{backgroundColor:"#404E67", color:"white"}} type="submit">
