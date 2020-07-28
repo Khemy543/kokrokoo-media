@@ -35,6 +35,7 @@ import {
 import axios from "axios";
 import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
+import AuthNavbar from "../../components/Navbars/AuthNavbar.js";
 
 
 function Login(props){
@@ -85,16 +86,14 @@ function Login(props){
       active = {isActive}
       spinner={<FadeLoader color={'#4071e1'}/>}
       >
+      <AuthNavbar />
       <Container>
         <Row>
         <Col lg="5" md="7" className="ml-auto mr-auto mt-6 mb-auto">
           <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
             
             <CardBody className="px-lg-5 py-lg-5">
-
-              <div style={{textAlign:"center"}}>
-              <img src={require("../../assets/img/brand/kokrokoo.png")} style={{width:"150px", height:"150px"}}/>
-              </div>
+            <h3 className="text-center">SIGN IN</h3>
               {alert?
                   <Alert color="warning" fade={true} style={{textAlign:"center",height:"50px"}}>
                   Incorrect Credentials
@@ -103,7 +102,7 @@ function Login(props){
                 <div>
                 </div>
                 }
-              <div className="text-center text-muted">
+              <div className="text-center text-muted mb-4">
                 
               </div>
               <Form role="form" onSubmit={handleSubmit}>
