@@ -131,7 +131,7 @@ var routes = [
     path: "/user-profile",
     name:"Profile",
     header:"profile",
-    component: RateCardDetails,
+    component: Profile,
     layout: "/media"
   }
 ];

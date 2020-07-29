@@ -56,7 +56,7 @@ class RateCardDetails extends React.Component{
         activeTab:"1",
         days:[],
         units:[],
-        title:this.props.location.state.rate_title,
+        title:"",
 
         slotValue:2,
         newSlot:[],
@@ -123,6 +123,15 @@ class RateCardDetails extends React.Component{
     }
 
     componentDidMount(){
+        console.log(this.props.location)
+        if(this.props.location.state !== undefined){
+            return(this.setState({title:this.props.location.state.rate_title}));
+        }
+        else{
+            this.props.history.push("/media/create-ratecards")
+        }
+        
+
         axios.get("https://media-kokrokooad.herokuapp.com/api/fetch-days-and-units")
         .then(res=>{
             console.log(res.data)
@@ -643,7 +652,9 @@ class RateCardDetails extends React.Component{
             <Col sm="12" md="12" xs="12" style={{marginBottom:"30px"}}>
                         <Input type="text" placeholder="Enter Rate Card Title" value={this.state.title} onChange={e=>this.setState({title:e.target.value})}/>
             </Col>
-            <Nav tabs>
+            <div className="nav-tabs-navigation">
+            <div className="nav-tabs-wrapper">
+            <Nav role="tablist" tabs>
                 {this.state.days.map(value=>(
                 <NavItem key={value.id}>
                 <NavLink
@@ -656,6 +667,8 @@ class RateCardDetails extends React.Component{
                 </NavItem>
             ))}
             </Nav>
+            </div>
+            </div>
             {/* Tab Details */}
             <TabContent activeTab={this.state.activeTab}>
                 <TabPane tabId="1">
