@@ -39,7 +39,7 @@ import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 import Pagination from "react-js-pagination";
-//require("bootstrap/less/bootstrap.less");
+
 
 
 let user =1;
@@ -115,7 +115,7 @@ function ViewUsers({history}) {
         <Container className=" mt--7" fluid>
             
           <Row>
-            <Col md="10">
+            <Col lg="12">
             {users && renderUsers()}
             </Col>
             </Row>

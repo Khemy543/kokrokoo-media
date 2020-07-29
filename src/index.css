@@ -1,3 +1,9 @@
 .alert-modal .modal-content {
     background-color: #404E67;
   }
+
+  @media (max-width:800px){
+ .alert-modal{
+  margin-left:14%;
+ }
+}

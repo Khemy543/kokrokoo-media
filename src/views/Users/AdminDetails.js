@@ -211,7 +211,7 @@ class AdminDetails extends React.Component{
             style={{backgroundColor:"#404E67", color:"white"}}
             onClick={()=>{this.props.history.push("/media/edit-admin",{admin_id:this.props.location.state.admin_id})}}
             >
-                EDIT DETAILS
+                EDIT
             </Button>
             </Col>
             <Col>

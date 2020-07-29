@@ -118,23 +118,23 @@ function EditUsers(props) {
             <Col md="10">
             <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
                 <CardBody className="mt-5">
-                <Form onSubmit={handleSubmit}>    
-                <Input value={name} type="text" onChange={e=>setName(e.target.value)}/>
+                <Form onSubmit={handleSubmit}  role="form">    
+                <Input value={name} type="text" onChange={e=>setName(e.target.value)} placeholder="Full Name" required/>
                     <br/>
-                    <Input value={email} type="text" onChange={e=>setEmail(e.target.value)}/>
+                    <Input value={email} type="email" onChange={e=>setEmail(e.target.value)} placeholder="Email" required/>
                     <br/>
                     <Row>
                         <Col>
-                    <Input value={phone1} type="text" onChange={e=>setPhone1(e.target.value)}/>
+                    <Input value={phone1} type="number" onChange={e=>setPhone1(e.target.value)} placeholder="Phone" required />
                     </Col>
                     <Col>
-                    <Input value={phone2} type="text" onChange={e=>setPhone2(e.target.value)}/>
+                    <Input value={phone2} type="number" onChange={e=>setPhone2(e.target.value)} placeholder="Phone (optional)"/>
                     </Col>
                     </Row>
                     <br/>
-                    <Input value={title} type="text" onChange={e=>setTitle(e.target.value)} />
+                    <Input value={title} type="text" onChange={e=>setTitle(e.target.value)} placeholder="Title" required/>
                     <br/>
-                    <Input value={role} type="text" onChange={e=>setRole(e.target.value)} />
+                    <Input value={role} type="text" onChange={e=>setRole(e.target.value)} placeholder="Role" required/>
                     <Button
                         style={{backgroundColor:"#404E67", color:"white",marginTop:"20px"}}
                         type="submit"

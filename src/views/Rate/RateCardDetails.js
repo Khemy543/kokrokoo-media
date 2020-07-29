@@ -125,7 +125,7 @@ class RateCardDetails extends React.Component{
     componentDidMount(){
         console.log(this.props.location)
         if(this.props.location.state !== undefined){
-            return(this.setState({title:this.props.location.state.rate_title}));
+            this.setState({title:this.props.location.state.rate_title});
         }
         else{
             this.props.history.push("/media/create-ratecards")
@@ -706,7 +706,7 @@ class RateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col>
-                        Number of Slots : 
+                        <Label>Number of Slots</Label>
                         </Col>
                         <Col>
                         <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumber} onChange={e=>this.setState({slotNumber:e.target.value})}/>
@@ -734,7 +734,8 @@ class RateCardDetails extends React.Component{
                         <Col md="2" sm="2" xs="2" lg="2" className="text-center">
                         <Button
                         onClick={()=>this.AddSlotMonday()}
-                        style={{marginTop:"30px",backgroundColor:"#404E67",color:"white"}}
+                        style={{marginTop:"30px",padding:"8px 12px 8px 12px"}}
+                        color="info"
                         >
                         <i className="fa fa-plus"/>
                         </Button>
@@ -771,7 +772,7 @@ class RateCardDetails extends React.Component{
                         </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
-                            color="info"
+                            style={{backgroundColor:"#404E67",color:"white"}}
                             >
                                 PREVIEW
                             </Button>    

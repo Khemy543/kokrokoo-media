@@ -43,6 +43,9 @@ function Login(props){
   const [password, setPassword] = React.useState("");
   const [isActive , setIsActive] = React.useState(false);
   const [alert, setAlert] = React.useState(false);
+  const [eye ,setEye] = React.useState(false);
+
+  const toggleEye=()=>setEye(!eye);
   
   var storageData =[];
 
@@ -123,7 +126,12 @@ function Login(props){
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Password" type="password" name="password" value={password} onChange={e=>setPassword(e.target.value)} required/>
+                    <Input placeholder="Password" type={eye?"text":"password"} name="password" value={password} onChange={e=>setPassword(e.target.value)} required/>
+                    <InputGroupAddon addonType="append">
+                    <InputGroupText>
+                    <i className={!eye?"fa fa-eye-slash":"fa fa-eye"} onClick={toggleEye} style={{cursor:"pointer"}}/>
+                    </InputGroupText>
+                  </InputGroupAddon>
                   </InputGroup>
                 </FormGroup>
                 <div className="custom-control custom-control-alternative custom-checkbox">
