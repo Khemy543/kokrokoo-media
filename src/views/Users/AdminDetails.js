@@ -204,9 +204,9 @@ class AdminDetails extends React.Component{
                 </CardBody>
             </Card>
             <Row style={{marginTop:"20px"}}>
-            <Col md="9">
+            <Col md="7">
             <Row>   
-            <Col>
+            <Col md="3" sm="3" xs="3">
             <Button
             style={{backgroundColor:"#404E67", color:"white"}}
             onClick={()=>{this.props.history.push("/media/edit-admin",{admin_id:this.props.location.state.admin_id})}}
@@ -214,7 +214,7 @@ class AdminDetails extends React.Component{
                 EDIT
             </Button>
             </Col>
-            <Col>
+            <Col md="5" sm="5" xs="5">
             {this.state.isActive==="active"?
             <div>
             <Button
@@ -246,7 +246,7 @@ class AdminDetails extends React.Component{
             </div>}
             
             </Col>
-            <Col>
+            <Col md="4" xs="4" sm="4">
             <Button
             color="danger"
             id="delete"

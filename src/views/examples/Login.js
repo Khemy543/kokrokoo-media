@@ -57,7 +57,7 @@ function Login(props){
     axios.post("https://media-kokrokooad.herokuapp.com/oauth/token",{
       grant_type: "password",
       client_id: 1,
-      client_secret:"MQNFC4AiKPBHOqbXDORuXiUdzs8LUZNjcO4kLbC7",
+      client_secret:"850QMBA8CeaLvOqAULkJBxoKqLLvb6cNRIzoyuU5",
       username: username,
       password: password,
       provider: "users",

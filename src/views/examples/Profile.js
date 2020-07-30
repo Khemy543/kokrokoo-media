@@ -58,7 +58,8 @@ class Profile extends React.Component {
     title:"", 
     id:"",
     isActive:false,
-    modal:false
+    modal:false,
+    message:""
   }
 
 componentDidMount(){
@@ -77,7 +78,7 @@ componentDidMount(){
             phone2:res.data.user.phone2,
             title:res.data.user.title,
             id:res.data.user.id,
-            isActive:false
+            isActive:false,
           })
         }
 
@@ -98,7 +99,7 @@ handleSubmit=(e)=>{
     headers:{ 'Authorization':`Bearer ${user}`}})
   .then(res=>{
     console.log(res.data)
-    this.setState({isActive:false,modal:true});
+    this.setState({message:"UPDATED!!",isActive:false,modal:true});
 
     setTimeout(
       function(){
@@ -107,7 +108,13 @@ handleSubmit=(e)=>{
   
   })
   .catch(error=>{
-    console.log(error.response.data)
+    console.log(error)
+    if(error){
+      this.setState({message:error.response.data.errors.email || error.response.data.errors.phone1 || error.response.data.errors.phone2,
+      modal:true,isActive:false
+      })
+      
+    }
   })
 }
 
@@ -371,7 +378,7 @@ handleSubmit=(e)=>{
         </Container>
         <Modal isOpen={this.state.modal} toggle={()=>this.toggleModal} style={{maxHeight:"40px", maxWidth:"300px",backgroundColor:"#404E67"}} className="alert-modal">
             <ModalBody>
-            <h4 style={{textAlign:"center", marginTop:"-3%", fontWeight:"500", color:"white"}}>UPDATED!!</h4>
+            <h4 style={{textAlign:"center", marginTop:"-3%", fontWeight:"500", color:"white"}}>{this.state.message}</h4>
             </ModalBody>
         </Modal>
         </LoadingOverlay>

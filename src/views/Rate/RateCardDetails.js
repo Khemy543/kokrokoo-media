@@ -61,7 +61,7 @@ class RateCardDetails extends React.Component{
         slotValue:2,
         newSlot:[],
         duration:"",
-        unit:"",
+        unit:1,
         rate:"",
         startTime:"",
         EndTime:"",
@@ -70,7 +70,7 @@ class RateCardDetails extends React.Component{
         slotValueTues:2,
         newSlotTues:[],
         durationTues:"",
-        unitTues:"",
+        unitTues:1,
         rateTues:"",
         startTimeTues:"",
         EndTimeTues:"",
@@ -79,7 +79,7 @@ class RateCardDetails extends React.Component{
         slotValueWed:2,
         newSlotWed:[],
         durationWed:"",
-        unitWed:"",
+        unitWed:1,
         rateWed:"",
         startTimeWed:"",
         EndTimeWed:"",
@@ -88,7 +88,7 @@ class RateCardDetails extends React.Component{
         slotValueThurs:2,
         newSlotThurs:[],
         durationThurs:"",
-        unitThurs:"",
+        unitThurs:1,
         rateThurs:"",
         startTimeThurs:"",
         EndTimeThurs:"",
@@ -97,7 +97,7 @@ class RateCardDetails extends React.Component{
         slotValueFri:2,
         newSlotFri:[],
         durationFri:"",
-        unitFri:"",
+        unitFri:1,
         rateFri:"",
         startTimeFri:"",
         EndTimeFri:"",
@@ -106,7 +106,7 @@ class RateCardDetails extends React.Component{
         slotValueSat:2,
         newSlotSat:[],
         durationSat:"",
-        unitSat:"",
+        unitSat:1,
         rateSat:"",
         startTimeSat:"",
         EndTimeSat:"",
@@ -115,7 +115,7 @@ class RateCardDetails extends React.Component{
         slotValueSun:2,
         newSlotSun:[],
         durationSun:"",
-        unitSun:"",
+        unitSun:1,
         rateSun:"",
         startTimeSun:"",
         EndTimeSun:"",
@@ -123,6 +123,7 @@ class RateCardDetails extends React.Component{
     }
 
     componentDidMount(){
+        this.setState({isActive:true});
         console.log(this.props.location)
         if(this.props.location.state !== undefined){
             this.setState({title:this.props.location.state.rate_title});
@@ -135,7 +136,7 @@ class RateCardDetails extends React.Component{
         axios.get("https://media-kokrokooad.herokuapp.com/api/fetch-days-and-units")
         .then(res=>{
             console.log(res.data)
-            this.setState({days:res.data.days, units:res.data.units})
+            this.setState({days:res.data.days, units:res.data.units,isActive:false})
         })
     }
     
@@ -147,7 +148,7 @@ class RateCardDetails extends React.Component{
         var tempSlot = [...this.state.newSlot];
         console.log(tempSlot)
         if(this.state.duration !=="" && this.state.rate !== "" && this.state.newSlot.length <=0 ){
-            tempSlot.push({id:this.state.slotValue,duration:"",unit:"",rate:""});
+            tempSlot.push({id:this.state.slotValue,duration:"",unit_id:1,rate:""});
             console.log("first:",tempSlot)
             return(this.setState({newSlot:tempSlot, slotValue:this.state.slotValue+1}));
         }
@@ -155,7 +156,7 @@ class RateCardDetails extends React.Component{
         if(this.state.duration !=="" && this.state.rate !== "" && this.state.newSlot.length > 0){
            let lastElement = tempSlot[tempSlot.length -1];
             if(lastElement.duration && lastElement.rate){
-                tempSlot.push({id:this.state.slotValue,duration:"",unit:"",rate:""});
+                tempSlot.push({id:this.state.slotValue,duration:"",unit_id:1,rate:""});
                 console.log("second:",tempSlot)
                 return(this.setState({newSlot:tempSlot, slotValue:this.state.slotValue+1}));
             }
@@ -205,24 +206,25 @@ class RateCardDetails extends React.Component{
         return(this.setState({newSlot:newArray}))
     }
 
-    handleSubmit=(e)=>{/* 
-        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.rate_id+"/add-details") */
+    handleSubmit=(e)=>{
        console.log("start submitting");
+       this.setState({isActive:true})
        let tempSlot = [...this.state.newSlot];
-       tempSlot.unshift({id:1,duration:this.state.duration,unit:this.state.unit,rate:this.state.rate});
+       tempSlot.unshift({id:1,duration:this.state.duration,unit_id:this.state.unit,rate:this.state.rate});
         console.log(tempSlot);
-        let data = [{
-            title_id:this.props.location.state.title_id,
-            title:this.state.title,
-            slotNumber:this.state.slotNumber,
-            startTime:this.state.startTime,
-            EndTime:this.state.EndTime,
-            day_id:1,
-            duration:tempSlot
-        }];
-        console.log(data);
+        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+        {start_time:this.state.startTime, end_time:this.state.EndTime, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumber,title:this.state.title},
+        {headers:{ 'Authorization':`Bearer ${user}`}}) 
+        .then(res=>{
+            console.log(res.data);
+            alert("saved");
+            this.setState({isActive:false});
+        })
+        .catch(error=>{
+            console.log(error.response.data)
+        })
 
-    }
+        }
 
     /* tab 2 */
 
@@ -230,7 +232,7 @@ class RateCardDetails extends React.Component{
         var tempSlot = [...this.state.newSlotTues];
         console.log(tempSlot)
         if(this.state.durationTues !=="" && this.state.rateTues !== "" && this.state.newSlotTues.length <=0 ){
-            tempSlot.push({id:this.state.slotValueTues,duration:"",unit:"",rate:""});
+            tempSlot.push({id:this.state.slotValueTues,duration:"",unit_id:1,rate:""});
             console.log("first:",tempSlot)
             return(this.setState({newSlotTues:tempSlot, slotValueTues:this.state.slotValueTues+1}));
         }
@@ -238,7 +240,7 @@ class RateCardDetails extends React.Component{
         if(this.state.durationTues !=="" && this.state.rateTues !== "" && this.state.newSlotTues.length > 0){
            let lastElement = tempSlot[tempSlot.length -1];
             if(lastElement.duration && lastElement.rate){
-                tempSlot.push({id:this.state.slotValueTues,duration:"",unit:"",rate:""});
+                tempSlot.push({id:this.state.slotValueTues,duration:"",unit_id:1,rate:""});
                 console.log("second:",tempSlot)
                 return(this.setState({newSlotTues:tempSlot, slotValueTues:this.state.slotValueTues+1}));
             }
@@ -289,7 +291,22 @@ class RateCardDetails extends React.Component{
     }
 
     handleSubmitTues=()=>{
-        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.rate_id+"/add-details")
+        console.log("start submitting");
+        this.setState({isActive:true})
+        let tempSlot = [...this.state.newSlotTues];
+        tempSlot.unshift({id:1,duration:this.state.durationTues,unit_id:this.state.unitTues,rate:this.state.rateTues});
+         console.log(tempSlot);
+         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+         {start_time:this.state.startTimeTues, end_time:this.state.EndTimeTues, day_id:2, durations:tempSlot, no_of_spots:this.state.slotNumberTues},
+         {headers:{ 'Authorization':`Bearer ${user}`}}) 
+         .then(res=>{
+             console.log(res.data);
+             alert("saved");
+             this.setState({isActive:false});
+         })
+         .catch(error=>{
+             console.log(error.response.data)
+         })
     }
 
     /* tab 3 */
@@ -298,7 +315,7 @@ class RateCardDetails extends React.Component{
         var tempSlot = [...this.state.newSlotWed];
         console.log(tempSlot)
         if(this.state.durationWed !=="" && this.state.rateWed !== "" && this.state.newSlotWed.length <=0 ){
-            tempSlot.push({id:this.state.slotValueWed,duration:"",unit:"",rate:""});
+            tempSlot.push({id:this.state.slotValueWed,duration:"",unit_id:1,rate:""});
             console.log("first:",tempSlot)
             return(this.setState({newSlotWed:tempSlot, slotValueWed:this.state.slotValueWed+1}));
         }
@@ -306,7 +323,7 @@ class RateCardDetails extends React.Component{
         if(this.state.durationWed !=="" && this.state.rateWed !== "" && this.state.newSlotWed.length > 0){
            let lastElement = tempSlot[tempSlot.length -1];
             if(lastElement.duration && lastElement.rate){
-                tempSlot.push({id:this.state.slotValueWed,duration:"",unit:"",rate:""});
+                tempSlot.push({id:this.state.slotValueWed,duration:"",unit_id:1,rate:""});
                 console.log("second:",tempSlot)
                 return(this.setState({newSlotWed:tempSlot, slotValueWed:this.state.slotValueWed+1}));
             }
@@ -357,7 +374,22 @@ class RateCardDetails extends React.Component{
     }
 
     handleSubmitWed=()=>{
-        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.rate_id+"/add-details")
+        console.log("start submitting");
+        this.setState({isActive:true})
+        let tempSlot = [...this.state.newSlotWed];
+        tempSlot.unshift({id:1,duration:this.state.durationWed,unit_id:this.state.unitWed,rate:this.state.rateWed});
+         console.log(tempSlot);
+         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+         {start_time:this.state.startTimeWed, end_time:this.state.EndTimeWed, day_id:3, durations:tempSlot, no_of_spots:this.state.slotNumberWed},
+         {headers:{ 'Authorization':`Bearer ${user}`}}) 
+         .then(res=>{
+             console.log("data:",res.data);
+             alert("saved");
+             this.setState({isActive:false});
+         })
+         .catch(error=>{
+             console.log(error.response.data)
+         })
     }
 
     /* tab 4 */
@@ -365,7 +397,7 @@ class RateCardDetails extends React.Component{
         var tempSlot = [...this.state.newSlotThurs];
         console.log(tempSlot)
         if(this.state.durationThurs !=="" && this.state.rateThurs !== "" && this.state.newSlotThurs.length <=0 ){
-            tempSlot.push({id:this.state.slotValueThurs,duration:"",unit:"",rate:""});
+            tempSlot.push({id:this.state.slotValueThurs,duration:"",unit_id:1,rate:""});
             console.log("first:",tempSlot)
             return(this.setState({newSlotThurs:tempSlot, slotValueThurs:this.state.slotValueThurs+1}));
         }
@@ -373,7 +405,7 @@ class RateCardDetails extends React.Component{
         if(this.state.durationThurs !=="" && this.state.rateThurs !== "" && this.state.newSlotThurs.length > 0){
            let lastElement = tempSlot[tempSlot.length -1];
             if(lastElement.duration && lastElement.rate){
-                tempSlot.push({id:this.state.slotValueThurs,duration:"",unit:"",rate:""});
+                tempSlot.push({id:this.state.slotValueThurs,duration:"",unit_id:1,rate:""});
                 console.log("second:",tempSlot)
                 return(this.setState({newSlotThurs:tempSlot, slotValueThurs:this.state.slotValueThurs+1}));
             }
@@ -424,7 +456,22 @@ class RateCardDetails extends React.Component{
     }
 
     handleSubmitThurs=()=>{
-        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.rate_id+"/add-details")
+        console.log("start submitting");
+        this.setState({isActive:true})
+        let tempSlot = [...this.state.newSlotThurs];
+        tempSlot.unshift({id:1,duration:this.state.durationThurs,unit_id:this.state.unitThurs,rate:this.state.rateThurs});
+         console.log(tempSlot);
+         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+         {start_time:this.state.startTimeThurs, end_time:this.state.EndTimeThurs, day_id:4, durations:tempSlot, no_of_spots:this.state.slotNumberThurs},
+         {headers:{ 'Authorization':`Bearer ${user}`}}) 
+         .then(res=>{
+             console.log("data:",res.data);
+             alert("saved");
+             this.setState({isActive:false});
+         })
+         .catch(error=>{
+             console.log(error.response.data)
+         })
     }
 
     /* tab 5 */
@@ -432,7 +479,7 @@ class RateCardDetails extends React.Component{
         var tempSlot = [...this.state.newSlotFri];
         console.log(tempSlot)
         if(this.state.durationFri !=="" && this.state.rateFri !== "" && this.state.newSlotFri.length <=0 ){
-            tempSlot.push({id:this.state.slotValueFri,duration:"",unit:"",rate:""});
+            tempSlot.push({id:this.state.slotValueFri,duration:"",unit_id:1,rate:""});
             console.log("first:",tempSlot)
             return(this.setState({newSlotFri:tempSlot, slotValueFri:this.state.slotValueFri+1}));
         }
@@ -440,7 +487,7 @@ class RateCardDetails extends React.Component{
         if(this.state.durationFri !=="" && this.state.rateFri !== "" && this.state.newSlotFri.length > 0){
            let lastElement = tempSlot[tempSlot.length -1];
             if(lastElement.duration && lastElement.rate){
-                tempSlot.push({id:this.state.slotValueFri,duration:"",unit:"",rate:""});
+                tempSlot.push({id:this.state.slotValueFri,duration:"",unit_id:1,rate:""});
                 console.log("second:",tempSlot)
                 return(this.setState({newSlotFri:tempSlot, slotValueFri:this.state.slotValueFri+1}));
             }
@@ -491,7 +538,22 @@ class RateCardDetails extends React.Component{
     }
 
     handleSubmitFri=()=>{
-        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.rate_id+"/add-details")
+        console.log("start submitting");
+        this.setState({isActive:true})
+        let tempSlot = [...this.state.newSlotFri];
+        tempSlot.unshift({id:1,duration:this.state.durationFri,unit_id:this.state.unitFri,rate:this.state.rateFri});
+         console.log(tempSlot);
+         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+         {start_time:this.state.startTimeFri, end_time:this.state.EndTimeFri, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberFri},
+         {headers:{ 'Authorization':`Bearer ${user}`}}) 
+         .then(res=>{
+             console.log("data:",res.data);
+             alert("saved");
+             this.setState({isActive:false});
+         })
+         .catch(error=>{
+             console.log(error.response.data)
+         })
     }
 
     /* tab 6 */
@@ -499,7 +561,7 @@ class RateCardDetails extends React.Component{
         var tempSlot = [...this.state.newSlotSat];
         console.log(tempSlot)
         if(this.state.durationSat !=="" && this.state.rateSat !== "" && this.state.newSlotSat.length <=0 ){
-            tempSlot.push({id:this.state.slotValueSat,duration:"",unit:"",rate:""});
+            tempSlot.push({id:this.state.slotValueSat,duration:"",unit_id:1,rate:""});
             console.log("first:",tempSlot)
             return(this.setState({newSlotSat:tempSlot, slotValueSat:this.state.slotValueSat+1}));
         }
@@ -507,7 +569,7 @@ class RateCardDetails extends React.Component{
         if(this.state.durationSat !=="" && this.state.rateSat !== "" && this.state.newSlotSat.length > 0){
            let lastElement = tempSlot[tempSlot.length -1];
             if(lastElement.duration && lastElement.rate){
-                tempSlot.push({id:this.state.slotValueSat,duration:"",unit:"",rate:""});
+                tempSlot.push({id:this.state.slotValueSat,duration:"",unit_id:1,rate:""});
                 console.log("second:",tempSlot)
                 return(this.setState({newSlotSat:tempSlot, slotValueSat:this.state.slotValueSat+1}));
             }
@@ -558,7 +620,22 @@ class RateCardDetails extends React.Component{
     }
 
     handleSubmitSat=()=>{
-        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.rate_id+"/add-details")
+        console.log("start submitting");
+        this.setState({isActive:true})
+        let tempSlot = [...this.state.newSlotSat];
+        tempSlot.unshift({id:1,duration:this.state.durationSat,unit_id:this.state.unitSat,rate:this.state.rateSat});
+         console.log(tempSlot);
+         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+         {start_time:this.state.startTimeSat, end_time:this.state.EndTimeSat, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberSat},
+         {headers:{ 'Authorization':`Bearer ${user}`}}) 
+         .then(res=>{
+             console.log("data:",res.data);
+             alert("saved");
+             this.setState({isActive:false});
+         })
+         .catch(error=>{
+             console.log(error.response.data)
+         })
     }
 
     /* tab 7 */
@@ -566,7 +643,7 @@ class RateCardDetails extends React.Component{
         var tempSlot = [...this.state.newSlotSun];
         console.log(tempSlot)
         if(this.state.durationSun !=="" && this.state.rateSun !== "" && this.state.newSlotSun.length <=0 ){
-            tempSlot.push({id:this.state.slotValueSun,duration:"",unit:"",rate:""});
+            tempSlot.push({id:this.state.slotValueSun,duration:"",unit_id:1,rate:""});
             console.log("first:",tempSlot)
             return(this.setState({newSlotSun:tempSlot, slotValueSun:this.state.slotValueSun+1}));
         }
@@ -574,7 +651,7 @@ class RateCardDetails extends React.Component{
         if(this.state.durationSun !=="" && this.state.rateSun !== "" && this.state.newSlotSun.length > 0){
            let lastElement = tempSlot[tempSlot.length -1];
             if(lastElement.duration && lastElement.rate){
-                tempSlot.push({id:this.state.slotValueSun,duration:"",unit:"",rate:""});
+                tempSlot.push({id:this.state.slotValueSun,duration:"",unit_id:1,rate:""});
                 console.log("second:",tempSlot)
                 return(this.setState({newSlotSun:tempSlot, slotValueSun:this.state.slotValueSun+1}));
             }
@@ -625,7 +702,22 @@ class RateCardDetails extends React.Component{
     }
 
     handleSubmitSun=()=>{
-        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.rate_id+"/add-details")
+        console.log("start submitting");
+        this.setState({isActive:true})
+        let tempSlot = [...this.state.newSlotSun];
+        tempSlot.unshift({id:1,duration:this.state.durationSun,unit_id:this.state.unitSat,rate:this.state.rateSun});
+         console.log(tempSlot);
+         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+         {start_time:this.state.startTimeSun, end_time:this.state.EndTimeSun, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumberSun},
+         {headers:{ 'Authorization':`Bearer ${user}`}}) 
+         .then(res=>{
+             console.log("data:",res.data);
+             alert("saved");
+             this.setState({isActive:false});
+         })
+         .catch(error=>{
+             console.log(error.response.data)
+         })
     }
 
     
@@ -637,7 +729,7 @@ class RateCardDetails extends React.Component{
       spinner={<FadeLoader color={'#4071e1'}/>}
       >
       <Header/>
-        <Container className=" mt--8" fluid>
+        <Container className=" mt--7" fluid>
             
           <Row>
             <Col md="10">
@@ -650,7 +742,7 @@ class RateCardDetails extends React.Component{
             <Row>
             <Col md="12" lg="12" sm="12" xs="12">
             <Col sm="12" md="12" xs="12" style={{marginBottom:"30px"}}>
-                        <Input type="text" placeholder="Enter Rate Card Title" value={this.state.title} onChange={e=>this.setState({title:e.target.value})}/>
+             <Input type="text" placeholder="Enter Rate Card Title" value={this.state.title} onChange={e=>this.setState({title:e.target.value})}/>
             </Col>
             <div className="nav-tabs-navigation">
             <div className="nav-tabs-wrapper">
@@ -723,8 +815,8 @@ class RateCardDetails extends React.Component{
                         </Col>
                         <Col md="3" sm="3" xs="3" lg="3">
                         <Label>Unit</Label>
-                        <Input type="select" value={this.state.unit} onChange={e=>this.setState({unit:e.target.value})}>
-                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                        <Input type="select" value={this.state.unit} onChange={e=>{this.setState({unit:e.target.value}); console.log(e.target.value)}}>
+                            {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                         </Input>
                         </Col>
                         <Col md="4" sm="4" xs="4" lg="4">
@@ -734,8 +826,7 @@ class RateCardDetails extends React.Component{
                         <Col md="2" sm="2" xs="2" lg="2" className="text-center">
                         <Button
                         onClick={()=>this.AddSlotMonday()}
-                        style={{marginTop:"30px",padding:"8px 12px 8px 12px"}}
-                        color="info"
+                        style={{marginTop:"30px",backgroundColor:"#404E67",color:"white"}}
                         >
                         <i className="fa fa-plus"/>
                         </Button>
@@ -747,8 +838,8 @@ class RateCardDetails extends React.Component{
                             <Input type="number" value={this.state.newSlot[index].duration} onChange={(e)=>this.handleDurationChange(value.id, e.target.value)}/>
                             </Col>
                             <Col md="3" sm="3" xs="3" lg="3">
-                            <Input type="select" value={this.state.newSlot.unit} onChange={(e)=>this.handleUnitChange(value.id, e.target.value)}>
-                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                            <Input type="select" value={this.state.newSlot[index].unit} onChange={(e)=>this.handleUnitChange(value.id, e.target.value)}>
+                            {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                             </Input>
                             </Col>
                             <Col md="4" sm="4" xs="4" lg="4">
@@ -767,16 +858,10 @@ class RateCardDetails extends React.Component{
                             color="danger"
                             onClick={()=>this.handleSubmit()}
                             >
-                                SUBMIT
+                                SAVE
                             </Button>    
                         </Col>
-                        <Col md="6"sm="6"lg="6"xs="6">
-                            <Button
-                            style={{backgroundColor:"#404E67",color:"white"}}
-                            >
-                                PREVIEW
-                            </Button>    
-                        </Col>
+                        
                     </Row>    
                 </Container>
                 </TabPane>
@@ -834,7 +919,7 @@ class RateCardDetails extends React.Component{
                        <Col md="3" sm="3" xs="3" lg="3">
                        <Label>Unit</Label>
                        <Input type="select" value={this.state.unitTues} onChange={e=>this.setState({unitTues:e.target.value})}>
-                           {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                           {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                        </Input>
                        </Col>
                        <Col md="4" sm="4" xs="4" lg="4">
@@ -857,7 +942,7 @@ class RateCardDetails extends React.Component{
                            </Col>
                            <Col md="3" sm="3" xs="3" lg="3">
                            <Input type="select" value={this.state.newSlotTues[index].unit} onChange={e=>this.handleUnitChangeTues(value.id,e.target.value)}>
-                           {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                           {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                            </Input>
                            </Col>
                            <Col md="4" sm="4" xs="4" lg="4">
@@ -874,17 +959,12 @@ class RateCardDetails extends React.Component{
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="danger"
+                           onClick={()=>this.handleSubmitTues()}
                            >
-                               SUBMIT
+                               SAVE
                            </Button>    
                        </Col>
-                       <Col md="6"sm="6"lg="6"xs="6">
-                           <Button
-                           color="info"
-                           >
-                               PREVIEW
-                           </Button>    
-                       </Col>
+                       
                    </Row>    
                </Container>
                </TabPane>
@@ -941,7 +1021,7 @@ class RateCardDetails extends React.Component{
                         <Col md="3" sm="3" xs="3" lg="3">
                         <Label>Unit</Label>
                         <Input type="select" value={this.state.unitWed} onChange={e=>this.setState({unitWed:e.target.value})}>
-                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                            {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                         </Input>
                         </Col>
                         <Col md="4" sm="4" xs="4" lg="4">
@@ -964,7 +1044,7 @@ class RateCardDetails extends React.Component{
                             </Col>
                             <Col md="3" sm="3" xs="3" lg="3">
                             <Input type="select" value={this.state.newSlotWed[index].unit} onChange={e=>this.handleUnitChangeWed(value.id,e.target.value)}>
-                            {this.state.newSlotWed.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                            {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                             </Input>
                             </Col>
                             <Col md="4" sm="4" xs="4" lg="4">
@@ -981,17 +1061,12 @@ class RateCardDetails extends React.Component{
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="danger"
+                            onClick={()=>this.handleSubmitWed()}
                             >
-                                SUBMIT
+                                SAVE
                             </Button>    
                         </Col>
-                        <Col md="6"sm="6"lg="6"xs="6">
-                            <Button
-                            color="info"
-                            >
-                                PREVIEW
-                            </Button>    
-                        </Col>
+                        
                     </Row>    
                 </Container>
                 </TabPane>
@@ -1048,7 +1123,7 @@ class RateCardDetails extends React.Component{
                         <Col md="3" sm="3" xs="3" lg="3">
                         <Label>Unit</Label>
                         <Input type="select" value={this.state.unitThurs} onChange={e=>this.setState({unitThurs:e.target.value})}>
-                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                            {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                         </Input>
                         </Col>
                         <Col md="4" sm="4" xs="4" lg="4">
@@ -1071,7 +1146,7 @@ class RateCardDetails extends React.Component{
                             </Col>
                             <Col md="3" sm="3" xs="3" lg="3">
                             <Input type="select" value={this.state.newSlotThurs[index].unit} onChange={e=>this.handleUnitChangeThurs(value.id, e.target.value)}>
-                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                            {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                             </Input>
                             </Col>
                             <Col md="4" sm="4" xs="4" lg="4">
@@ -1088,17 +1163,12 @@ class RateCardDetails extends React.Component{
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="danger"
+                            onClick={()=>this.handleSubmitThurs()}
                             >
-                                SUBMIT
+                                SAVE
                             </Button>    
                         </Col>
-                        <Col md="6"sm="6"lg="6"xs="6">
-                            <Button
-                            color="info"
-                            >
-                                PREVIEW
-                            </Button>    
-                        </Col>
+                        
                     </Row>    
                 </Container>
                 </TabPane>
@@ -1155,7 +1225,7 @@ class RateCardDetails extends React.Component{
                         <Col md="3" sm="3" xs="3" lg="3">
                         <Label>Unit</Label>
                         <Input type="select"  value={this.state.unitFri} onChange={e=>this.setState({unitFri:e.target.value})}>
-                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                            {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                         </Input>
                         </Col>
                         <Col md="4" sm="4" xs="4" lg="4">
@@ -1178,7 +1248,7 @@ class RateCardDetails extends React.Component{
                             </Col>
                             <Col md="3" sm="3" xs="3" lg="3">
                             <Input type="select" value={this.state.newSlotFri[index].unit} onChange={e=>this.handleUnitChangeFri(value.id,e.target.value)}>
-                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                            {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                             </Input>
                             </Col>
                             <Col md="4" sm="4" xs="4" lg="4">
@@ -1195,17 +1265,12 @@ class RateCardDetails extends React.Component{
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="danger"
+                            onClick={()=>this.handleSubmitFri()}
                             >
-                                SUBMIT
+                                SAVE
                             </Button>    
                         </Col>
-                        <Col md="6"sm="6"lg="6"xs="6">
-                            <Button
-                            color="info"
-                            >
-                                PREVIEW
-                            </Button>    
-                        </Col>
+                        
                     </Row>    
                 </Container>
                 </TabPane>
@@ -1262,7 +1327,7 @@ class RateCardDetails extends React.Component{
                         <Col md="3" sm="3" xs="3" lg="3">
                         <Label>Unit</Label>
                         <Input type="select" value={this.state.unitSat} onChange={e=>this.setState({unitSat:e.target.value})}>
-                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                            {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                         </Input>
                         </Col>
                         <Col md="4" sm="4" xs="4" lg="4">
@@ -1285,7 +1350,7 @@ class RateCardDetails extends React.Component{
                             </Col>
                             <Col md="3" sm="3" xs="3" lg="3">
                             <Input type="select" value={this.state.newSlotSat[index].unit} onChange={e=>this.handleUnitChangeSat(value.id,e.target.value)}>
-                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                            {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                             </Input>
                             </Col>
                             <Col md="4" sm="4" xs="4" lg="4">
@@ -1302,17 +1367,12 @@ class RateCardDetails extends React.Component{
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="danger"
+                            onClick={()=>this.handleSubmitSat()}
                             >
-                                SUBMIT
+                                SAVE
                             </Button>    
                         </Col>
-                        <Col md="6"sm="6"lg="6"xs="6">
-                            <Button
-                            color="info"
-                            >
-                                PREVIEW
-                            </Button>    
-                        </Col>
+                        
                     </Row>    
                 </Container>
                 </TabPane>
@@ -1369,7 +1429,7 @@ class RateCardDetails extends React.Component{
                         <Col md="3" sm="3" xs="3" lg="3">
                         <Label>Unit</Label>
                         <Input type="select" value={this.state.unitSun} onChange={e=>this.setState({unitSun:e.target.value})}>
-                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                            {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                         </Input>
                         </Col>
                         <Col md="4" sm="4" xs="4" lg="4">
@@ -1392,7 +1452,7 @@ class RateCardDetails extends React.Component{
                             </Col>
                             <Col md="3" sm="3" xs="3" lg="3">
                             <Input type="select" value={this.state.newSlotSun[index].unit} onChange={e=>this.handleUnitChangeSun(value.id,e.target.value)}>
-                            {this.state.units.map(value=>(<option key={value.id} value={value.unit}>{value.unit}</option>))}
+                            {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                             </Input>
                             </Col>
                             <Col md="4" sm="4" xs="4" lg="4">
@@ -1409,17 +1469,12 @@ class RateCardDetails extends React.Component{
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="danger"
+                            onClick={()=>this.handleSubmitSun()}
                             >
-                                SUBMIT
+                                SAVE
                             </Button>    
                         </Col>
-                        <Col md="6"sm="6"lg="6"xs="6">
-                            <Button
-                            color="info"
-                            >
-                                PREVIEW
-                            </Button>    
-                        </Col>
+                        
                     </Row>    
                 </Container>
                 </TabPane>
@@ -1427,9 +1482,20 @@ class RateCardDetails extends React.Component{
             </Col>
             </Row>
             </CardBody>    
-            </Card>    
-            </Col>
+            </Card> 
+            </Col> 
             </Row>
+            <Row style={{marginTop:"25px", marginBottom:"20px"}}>
+                <Col lg="10">
+
+                <Button
+                style={{backgroundColor:"#404E67",color:"white"}}
+                block
+                >
+                    PREVIEW
+                </Button>
+                </Col>
+            </Row> 
         </Container>
         </LoadingOverlay>
       </>

@@ -36,6 +36,7 @@ import {
 import Header from "components/Headers/Header.js";
 import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
+import RateCard from "../../components/Cards/RateCard.js";
 import axios from "axios";/* 
 import history from "../../history.js"; */
 
@@ -51,14 +52,18 @@ if(all_data !== null){
 }
 
 function ViewRateCards(props) {
-    const [isActive, setIsActive] = React.useState(false);;
+    const [isActive, setIsActive] = React.useState(false);
+    const [rateCards, setRateCards] = React.useState([]);
 
 
     React.useEffect(()=>{
+      setIsActive(true)
         axios.get("https://media-kokrokooad.herokuapp.com/api/ratecard/company-ratecards",
     {headers:{ 'Authorization':`Bearer ${user}`}})
     .then(res=>{
         console.log(res.data);
+        setRateCards(res.data)
+        setIsActive(false)
     })
     .catch(error=>{
         console.log(error)
@@ -77,9 +82,9 @@ function ViewRateCards(props) {
         <Container className=" mt--8" fluid>
             
           <Row>
-            <Col md="10">
-             
-            </Col>
+            {rateCards.map((value,index)=>(
+              <RateCard ratecard={value}/>
+            ))}
             </Row>
         </Container>
         </LoadingOverlay>
