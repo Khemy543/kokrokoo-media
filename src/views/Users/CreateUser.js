@@ -38,15 +38,11 @@ import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
-let user =1;
-let loggedin_data = false;
+let user =null;
 let all_data = JSON.parse(localStorage.getItem('storageData'));
 console.log("all_data:", all_data)
 if(all_data !== null){
   user = all_data[0];
-  loggedin_data = all_data[1];
-  //get user
-  console.log("user:",user);
 }
 
 function CreateUser(props) {

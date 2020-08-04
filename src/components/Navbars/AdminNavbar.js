@@ -35,17 +35,14 @@ import {
   Container,
   Media
 } from "reactstrap";
+import {RateConsumer} from "../../context.js";
 
 
-let user =1;
-let loggedin_data = false;
+let user =null;
 let all_data = JSON.parse(localStorage.getItem('storageData'));
 console.log("all_data:", all_data)
 if(all_data !== null){
   user = all_data[0];
-  loggedin_data = all_data[1];
-  //get user
-  console.log("user:",user);
 }
 
 class AdminNavbar extends React.Component {
@@ -86,7 +83,7 @@ componentDidMount(){
                 <InputGroup className="input-group-alternative" style={{color:"rgba(50, 50, 93, 0.62)"}}>
                   <InputGroupAddon addonType="prepend" style={{color:"rgba(50, 50, 93, 0.62)"}}>
                     <InputGroupText style={{color:"rgba(50, 50, 93, 0.62)"}}>
-                      <i className="fas fa-search" style={{color:"rgba(50, 50, 93, 0.62)"}}/>
+                      <i className="fa fa-search" style={{color:"rgba(50, 50, 93, 0.62)"}}/>
                     </InputGroupText>
                   </InputGroupAddon>
                   <Input placeholder="Search" type="text" style={{color:"rgba(50, 50, 93, 0.62)"}}/>
@@ -110,6 +107,8 @@ componentDidMount(){
                     </Media>
                   </Media>
                 </DropdownToggle>
+                <RateConsumer>
+                  {value=>(
                 <DropdownMenu className="dropdown-menu-arrow" right>
                   <DropdownItem className="noti-title" header tag="div">
                     <h6 className="text-overflow m-0">Welcome!</h6>
@@ -123,11 +122,13 @@ componentDidMount(){
                     <span>Settings</span>
                   </DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                  <DropdownItem onClick={()=>value.logout()}>
                     <i className="ni ni-user-run" />
                     <span>Logout</span>
                   </DropdownItem>
                 </DropdownMenu>
+              )}
+              </RateConsumer>
               </UncontrolledDropdown>
             </Nav>
           </Container>

@@ -27,6 +27,8 @@ import EditUser from "views/Users/EditUsers.js";
 import ViewRateCards from "views/Rate/ViewRateCard.js";
 import ViewSubscription from 'views/Subscription/ViewSubscription.js';
 import Login from "views/examples/Login.js";
+import PrintRateDetails from "views/Rate/PrintRateCardDetails.js";
+import Preview from "views/Rate/Preview.js";
 
 var routes = [
   {
@@ -62,6 +64,20 @@ var routes = [
     name: "Enter Rate Card Details",
     invisible:true,
     component: RateCardDetails,
+    layout: "/media"
+  },
+  {
+    path: "/print-rate-details",
+    name: "Enter Rate Card Details",
+    invisible:true,
+    component: PrintRateDetails,
+    layout: "/media"
+  },
+  {
+    path: "/preview-ratecards",
+    name: "Preview",
+    invisible:true,
+    component: Preview,
     layout: "/media"
   },
   {
@@ -105,13 +121,6 @@ var routes = [
     name: "Create New Users",
     header:"user",
     component: CreateUser,
-    layout: "/media"
-  },
-  {
-    path: "/user-activities",
-    name: "Users Activities",
-    header:"user",
-    component: Index,
     layout: "/media"
   },
   {

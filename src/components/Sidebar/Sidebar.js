@@ -1,21 +1,4 @@
-/*!
 
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-/*eslint-disable*/
 import React from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
 // nodejs library to set properties for components
@@ -51,7 +34,7 @@ import {
   Row,
   Col
 } from "reactstrap";
-
+import {RateConsumer} from "../../context.js";
 var ps;
 
 class Sidebar extends React.Component {
@@ -345,6 +328,8 @@ class Sidebar extends React.Component {
                   </span>
                 </Media>
               </DropdownToggle>
+              <RateConsumer>
+                {value=>(
               <DropdownMenu className="dropdown-menu-arrow" right>
                 <DropdownItem className="noti-title" header tag="div">
                   <h6 className="text-overflow m-0">Welcome!</h6>
@@ -358,11 +343,13 @@ class Sidebar extends React.Component {
                   <span>Settings</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                <DropdownItem onClick={()=>value.logout()}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
                 </DropdownItem>
               </DropdownMenu>
+            )}
+            </RateConsumer>
             </UncontrolledDropdown>
           </Nav>
           {/* Collapse */}

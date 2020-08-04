@@ -39,15 +39,11 @@ import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";/* 
 import history from "../../history.js"; */
 
-let user =1;
-let loggedin_data = false;
+let user =null;
 let all_data = JSON.parse(localStorage.getItem('storageData'));
 console.log("all_data:", all_data)
 if(all_data !== null){
   user = all_data[0];
-  loggedin_data = all_data[1];
-  //get user
-  console.log("user:",user);
 }
 
 function CreateRateCard(props) {
@@ -88,13 +84,17 @@ function CreateRateCard(props) {
         .then(res=>{
             console.log(res.data);
             if(res.data.status === "success"){
-                console.log(props)
+            if(res.data.media_type.id === 3){
+            props.history.push("/media/print-rate-details",{rate_title:res.data.ratecard_title.title, title_id:res.data.ratecard_title.id})
+            }
+            else{
             props.history.push("/media/rate-details",{rate_title:res.data.ratecard_title.title, title_id:res.data.ratecard_title.id})
+            }
             setIsActive(false)
             }
         })
         .catch(error=>{
-            console.log(error);
+            console.log(error.response.data);
             setIsActive(false)
         })
     }

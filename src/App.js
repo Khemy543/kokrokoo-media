@@ -21,9 +21,10 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import history from "./history";
 
 import "assets/plugins/nucleo/css/nucleo.css";
-import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
 
+import "font-awesome/css/font-awesome.css";
+import "font-awesome/less/font-awesome.less";
 import AdminLayout from "layouts/Admin.js";
 import Login from "./views/examples/Login.js";
 import ProtectedLoginRoute from "./ProtectedLoginRoute.js";

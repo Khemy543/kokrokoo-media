@@ -96,7 +96,7 @@ function Login(props){
           <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
             
             <CardBody className="px-lg-5 py-lg-5">
-            <h3 className="text-center">SIGN IN</h3>
+            <h3 className="text-center">MEDIA LOGIN</h3>
               {alert?
                   <Alert color="warning" fade={true} style={{textAlign:"center",height:"50px"}}>
                   Incorrect Credentials

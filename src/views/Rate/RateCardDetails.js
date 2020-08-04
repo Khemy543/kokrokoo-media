@@ -1,20 +1,4 @@
-/*!
 
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 // react component that copies the given text inside your clipboard
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -30,7 +14,7 @@ import {
   Input,
   Button,
   CardTitle,
-  Nav,NavItem,NavLink,TabContent,TabPane,FormGroup,Label
+  Nav,NavItem,NavLink,TabContent,TabPane,FormGroup,Label, FormFeedback
 } from "reactstrap";
 import classnames from 'classnames';
 // core components
@@ -39,15 +23,11 @@ import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
-let user =1;
-let loggedin_data = false;
+let user =null;
 let all_data = JSON.parse(localStorage.getItem('storageData'));
 console.log("all_data:", all_data)
 if(all_data !== null){
   user = all_data[0];
-  loggedin_data = all_data[1];
-  //get user
-  console.log("user:",user);
 }
 
 class RateCardDetails extends React.Component{
@@ -65,7 +45,9 @@ class RateCardDetails extends React.Component{
         rate:"",
         startTime:"",
         EndTime:"",
+        oldTImeFrames:[],
         slotNumber:"",
+        timeCheck:false,
 
         slotValueTues:2,
         newSlotTues:[],
@@ -75,6 +57,8 @@ class RateCardDetails extends React.Component{
         startTimeTues:"",
         EndTimeTues:"",
         slotNumberTues:"",
+        oldTImeFramesTues:[],
+        timeCheckTues:false,
 
         slotValueWed:2,
         newSlotWed:[],
@@ -84,6 +68,8 @@ class RateCardDetails extends React.Component{
         startTimeWed:"",
         EndTimeWed:"",
         slotNumberWed:"",
+        oldTImeFramesWed:[],
+        timeCheckWed:false,
 
         slotValueThurs:2,
         newSlotThurs:[],
@@ -93,6 +79,8 @@ class RateCardDetails extends React.Component{
         startTimeThurs:"",
         EndTimeThurs:"",
         slotNumberThurs:"",
+        oldTImeFramesThurs:[],
+        timeCheckThurs:false,
 
         slotValueFri:2,
         newSlotFri:[],
@@ -102,6 +90,8 @@ class RateCardDetails extends React.Component{
         startTimeFri:"",
         EndTimeFri:"",
         slotNumberFri:"",
+        oldTImeFramesFri:[],
+        timeCheckFri:false,
 
         slotValueSat:2,
         newSlotSat:[],
@@ -111,6 +101,8 @@ class RateCardDetails extends React.Component{
         startTimeSat:"",
         EndTimeSat:"",
         slotNumberSat:"",
+        oldTImeFramesSat:[],
+        timeCheckSat:false,
 
         slotValueSun:2,
         newSlotSun:[],
@@ -120,6 +112,8 @@ class RateCardDetails extends React.Component{
         startTimeSun:"",
         EndTimeSun:"",
         slotNumberSun:"",
+        oldTImeFramesSun:[],
+        timeCheckSun:false
     }
 
     componentDidMount(){
@@ -208,22 +202,83 @@ class RateCardDetails extends React.Component{
 
     handleSubmit=(e)=>{
        console.log("start submitting");
-       this.setState({isActive:true})
-       let tempSlot = [...this.state.newSlot];
-       tempSlot.unshift({id:1,duration:this.state.duration,unit_id:this.state.unit,rate:this.state.rate});
-        console.log(tempSlot);
-        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
-        {start_time:this.state.startTime, end_time:this.state.EndTime, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumber,title:this.state.title},
-        {headers:{ 'Authorization':`Bearer ${user}`}}) 
-        .then(res=>{
-            console.log(res.data);
-            alert("saved");
-            this.setState({isActive:false});
-        })
-        .catch(error=>{
-            console.log(error.response.data)
-        })
+       this.setState({isActive:true});
+        /* check time */
+       
+       if(this.state.oldTImeFrames.length <= 0 && this.state.startTime<this.state.EndTime){
+        let tempSlot = [...this.state.newSlot];
+        tempSlot.unshift({id:1,duration:this.state.duration,unit_id:this.state.unit,rate:this.state.rate});
+         console.log(tempSlot);
+         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+         {start_time:this.state.startTime, end_time:this.state.EndTime, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumber,rate_card_title:this.state.title},
+         {headers:{ 'Authorization':`Bearer ${user}`}}) 
+         .then(res=>{
+             console.log(res.data);
+             if(res.data.status === "success"){
+             this.setState({
+                 isActive:false,
+                 oldTImeFrames:res.data.segments,
+                 duration:"",
+                 unit:1,
+                 rate:"",
+                 startTime:"",
+                 EndTime:"",
+                 slotNumber:"",
+                });
+             alert("saved");
+             }
+         })
+         .catch(error=>{
+             console.log(error.response.data)
+         })
+ 
+       }
+       else{
+           var checker;
+           for(var i =0; i<this.state.oldTImeFrames.length; i++){
+               if(this.state.startTime < this.state.oldTImeFrames[i].end_time){
+                    alert("selected time intersects with a saved time");
+                    this.setState({isActive:false})
+                    checker = false;
+                    break;
+               }
+               else{
+                   checker = true;
+                   continue;
+                
+               }
+           }
 
+           if(checker === true && this.state.startTime<this.state.EndTime){
+            let tempSlot = [...this.state.newSlot];
+            tempSlot.unshift({id:1,duration:this.state.duration,unit_id:this.state.unit,rate:this.state.rate});
+             console.log(tempSlot);
+             axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+             {start_time:this.state.startTime, end_time:this.state.EndTime, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumber,rate_card_title:this.state.title},
+             {headers:{ 'Authorization':`Bearer ${user}`}}) 
+             .then(res=>{
+                 console.log(res.data);
+                 if(res.data.status === "success"){
+                 this.setState({isActive:false,
+                    oldTImeFrames:res.data.segments,
+                    duration:"",
+                    unit:1,
+                    rate:"",
+                    startTime:"",
+                    EndTime:"",
+                    slotNumber:"",});
+                 alert("saved");
+                 }
+             })
+             .catch(error=>{
+                 console.log(error.response.data)
+             })
+           }
+           else{
+               this.setState({isActive:false})
+           }
+       }
+       
         }
 
     /* tab 2 */
@@ -292,22 +347,84 @@ class RateCardDetails extends React.Component{
 
     handleSubmitTues=()=>{
         console.log("start submitting");
-        this.setState({isActive:true})
+        this.setState({isActive:true});
+        if(this.state.oldTImeFramesTues.length<=0 && this.state.startTimeTues<this.state.EndTimeTues){
         let tempSlot = [...this.state.newSlotTues];
         tempSlot.unshift({id:1,duration:this.state.durationTues,unit_id:this.state.unitTues,rate:this.state.rateTues});
          console.log(tempSlot);
          axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
-         {start_time:this.state.startTimeTues, end_time:this.state.EndTimeTues, day_id:2, durations:tempSlot, no_of_spots:this.state.slotNumberTues},
+         {start_time:this.state.startTimeTues, end_time:this.state.EndTimeTues, day_id:2, durations:tempSlot, no_of_spots:this.state.slotNumberTues,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log(res.data);
-             alert("saved");
-             this.setState({isActive:false});
+             if(res.data.status === "success"){
+                this.setState({
+                    isActive:false, 
+                    oldTImeFramesTues:res.data.segments,
+                    durationTues:"",
+                    unitTues:1,
+                    rateTues:"",
+                    startTimeTues:"",
+                    EndTimeTues:"",
+                    slotNumberTues:"",
+                });
+                alert("saved");
+
+             }
          })
          .catch(error=>{
              console.log(error.response.data)
          })
-    }
+        }
+        else{
+            var checker;
+            for(var i =0; i<this.state.oldTImeFramesTues.length; i++){
+                if(this.state.startTimeTues < this.state.oldTImeFramesTues[i].end_time){
+                     alert("selected time intersects with a saved time");
+                     this.setState({isActive:false})
+                     checker = false;
+                     break;
+                }
+                else{
+                    checker = true;
+                    continue;
+                 
+                }
+            }
+ 
+            if(checker === true && this.state.startTimeTues<this.state.EndTimeTues){
+                let tempSlot = [...this.state.newSlotTues];
+                tempSlot.unshift({id:1,duration:this.state.durationTues,unit_id:this.state.unitTues,rate:this.state.rateTues});
+                 console.log(tempSlot);
+                 axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                 {start_time:this.state.startTimeTues, end_time:this.state.EndTimeTues, day_id:2, durations:tempSlot, no_of_spots:this.state.slotNumberTues,rate_card_title:this.state.title},
+                 {headers:{ 'Authorization':`Bearer ${user}`}}) 
+                 .then(res=>{
+                     console.log(res.data);
+                     if(res.data.status === "success"){
+                        this.setState({isActive:false, 
+                            oldTImeFramesTues:res.data.segments,
+                            durationTues:"",
+                            unitTues:1,
+                            rateTues:"",
+                            startTimeTues:"",
+                            EndTimeTues:"",
+                            slotNumberTues:""});
+                        alert("saved");
+        
+                     }
+                 })
+                 .catch(error=>{
+                     console.log(error.response.data)
+                 })
+            }
+            else{
+                this.setState({isActive:false})
+            }
+        }
+        
+        }
+    
 
     /* tab 3 */
 
@@ -375,21 +492,77 @@ class RateCardDetails extends React.Component{
 
     handleSubmitWed=()=>{
         console.log("start submitting");
-        this.setState({isActive:true})
+        this.setState({isActive:true});
+        if(this.state.oldTImeFramesWed<=0 && this.state.startTimeWed<this.state.EndTimeWed){
         let tempSlot = [...this.state.newSlotWed];
         tempSlot.unshift({id:1,duration:this.state.durationWed,unit_id:this.state.unitWed,rate:this.state.rateWed});
          console.log(tempSlot);
          axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
-         {start_time:this.state.startTimeWed, end_time:this.state.EndTimeWed, day_id:3, durations:tempSlot, no_of_spots:this.state.slotNumberWed},
+         {start_time:this.state.startTimeWed, end_time:this.state.EndTimeWed, day_id:3, durations:tempSlot, no_of_spots:this.state.slotNumberWed,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
-             alert("saved");
-             this.setState({isActive:false});
+             if(res.data.status === "success"){
+                this.setState({isActive:false, 
+                    oldTImeFramesWed:res.data.segments,
+                    durationWed:"",
+                    unitWed:1,
+                    rateWed:"",
+                    startTimeWed:"",
+                    EndTimeWed:"",
+                    slotNumberWed:"",});
+                alert("saved");
+
+             }
          })
          .catch(error=>{
              console.log(error.response.data)
          })
+        }
+        else{
+            var checker;
+            for(var i =0; i<this.state.oldTImeFramesWed.length; i++){
+                if(this.state.startTimeWed < this.state.oldTImeFramesWed[i].end_time){
+                     alert("selected time intersects with a saved time");
+                     this.setState({isActive:false})
+                     checker = false;
+                     break;
+                }
+                else{
+                    checker = true;
+                    continue;
+                 
+                }
+            }
+ 
+            if(checker === true && this.state.startTimeWed<this.state.EndTimeWed){
+                let tempSlot = [...this.state.newSlotWed];
+                tempSlot.unshift({id:1,duration:this.state.durationWed,unit_id:this.state.unitWed,rate:this.state.rateWed});
+                 console.log(tempSlot);
+                 axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                 {start_time:this.state.startTimeWed, end_time:this.state.EndTimeWed, day_id:3, durations:tempSlot, no_of_spots:this.state.slotNumberWed,rate_card_title:this.state.title},
+                 {headers:{ 'Authorization':`Bearer ${user}`}}) 
+                 .then(res=>{
+                     console.log("data:",res.data);
+                     if(res.data.status === "success"){
+                        this.setState({isActive:false, 
+                            oldTImeFramesWed:res.data.segments,
+                            durationWed:"",
+                            unitWed:1,
+                            rateWed:"",
+                            startTimeWed:"",
+                            EndTimeWed:"",
+                            slotNumberWed:"",});
+                        alert("saved");
+        
+                     }
+                 })
+                 .catch(error=>{
+                     console.log(error.response.data)
+                 })
+            }
+
+        }
     }
 
     /* tab 4 */
@@ -458,20 +631,75 @@ class RateCardDetails extends React.Component{
     handleSubmitThurs=()=>{
         console.log("start submitting");
         this.setState({isActive:true})
+        if(this.state.oldTImeFramesThurs.length <=0 && this.state.startTimeThurs<this.state.EndTimeThurs){
         let tempSlot = [...this.state.newSlotThurs];
         tempSlot.unshift({id:1,duration:this.state.durationThurs,unit_id:this.state.unitThurs,rate:this.state.rateThurs});
          console.log(tempSlot);
          axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
-         {start_time:this.state.startTimeThurs, end_time:this.state.EndTimeThurs, day_id:4, durations:tempSlot, no_of_spots:this.state.slotNumberThurs},
+         {start_time:this.state.startTimeThurs, end_time:this.state.EndTimeThurs, day_id:4, durations:tempSlot, no_of_spots:this.state.slotNumberThurs,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
-             alert("saved");
-             this.setState({isActive:false});
+             if(res.data.status === "success"){
+                this.setState({isActive:false, 
+                    oldTImeFramesThurs:res.data.segments,
+                    durationThurs:"",
+                    unitThurs:1,
+                    rateThurs:"",
+                    startTimeThurs:"",
+                    EndTimeThurs:"",
+                    slotNumberThurs:"",});
+                alert("saved");
+
+             }
          })
          .catch(error=>{
              console.log(error.response.data)
          })
+        }
+        else{
+            var checker;
+            for(var i =0; i<this.state.oldTImeFramesThurs.length; i++){
+                if(this.state.startTimeThurs < this.state.oldTImeFramesThurs[i].end_time){
+                     alert("selected time intersects with a saved time");
+                     this.setState({isActive:false})
+                     checker = false;
+                     break;
+                }
+                else{
+                    checker = true;
+                    continue;
+                 
+                }
+            }
+ 
+            if(checker === true && this.state.startTimeThurs<this.state.EndTimeThurs){
+                let tempSlot = [...this.state.newSlotThurs];
+                tempSlot.unshift({id:1,duration:this.state.durationThurs,unit_id:this.state.unitThurs,rate:this.state.rateThurs});
+                 console.log(tempSlot);
+                 axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                 {start_time:this.state.startTimeThurs, end_time:this.state.EndTimeThurs, day_id:4, durations:tempSlot, no_of_spots:this.state.slotNumberThurs,rate_card_title:this.state.title},
+                 {headers:{ 'Authorization':`Bearer ${user}`}}) 
+                 .then(res=>{
+                     console.log("data:",res.data);
+                     if(res.data.status === "success"){
+                        this.setState({isActive:false, 
+                            oldTImeFramesThurs:res.data.segments,
+                            durationThurs:"",
+                            unitThurs:1,
+                            rateThurs:"",
+                            startTimeThurs:"",
+                            EndTimeThurs:"",
+                            slotNumberThurs:"",});
+                        alert("saved");
+        
+                     }
+                 })
+                 .catch(error=>{
+                     console.log(error.response.data)
+                 })
+            }
+        }
     }
 
     /* tab 5 */
@@ -539,21 +767,77 @@ class RateCardDetails extends React.Component{
 
     handleSubmitFri=()=>{
         console.log("start submitting");
-        this.setState({isActive:true})
+        this.setState({isActive:true});
+        if(this.state.oldTImeFramesFri.length <=0 && this.state.startTimeFri<this.state.EndTimeFri){
         let tempSlot = [...this.state.newSlotFri];
         tempSlot.unshift({id:1,duration:this.state.durationFri,unit_id:this.state.unitFri,rate:this.state.rateFri});
          console.log(tempSlot);
          axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
-         {start_time:this.state.startTimeFri, end_time:this.state.EndTimeFri, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberFri},
+         {start_time:this.state.startTimeFri, end_time:this.state.EndTimeFri, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberFri,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
-             alert("saved");
-             this.setState({isActive:false});
+             if(res.data.status === "success"){
+                this.setState({isActive:false, 
+                    oldTImeFramesFri:res.data.segments,
+                    durationFri:"",
+                    unitFri:1,
+                    rateFri:"",
+                    startTimeFri:"",
+                    EndTimeFri:"",
+                    slotNumberFri:"",});
+                alert("saved");
+
+             }
          })
          .catch(error=>{
              console.log(error.response.data)
          })
+        }
+        else{
+            var checker;
+            for(var i =0; i<this.state.oldTImeFramesFri.length; i++){
+                if(this.state.startTimeFri < this.state.oldTImeFramesFri[i].end_time){
+                     alert("selected time intersects with a saved time");
+                     this.setState({isActive:false})
+                     checker = false;
+                     break;
+                }
+                else{
+                    checker = true;
+                    continue;
+                 
+                }
+            }
+ 
+            if(checker === true && this.state.startTimeFri<this.state.EndTimeFri){
+                let tempSlot = [...this.state.newSlotFri];
+                tempSlot.unshift({id:1,duration:this.state.durationFri,unit_id:this.state.unitFri,rate:this.state.rateFri});
+                 console.log(tempSlot);
+                 axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                 {start_time:this.state.startTimeFri, end_time:this.state.EndTimeFri, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberFri,rate_card_title:this.state.title},
+                 {headers:{ 'Authorization':`Bearer ${user}`}}) 
+                 .then(res=>{
+                     console.log("data:",res.data);
+                     if(res.data.status === "success"){
+                        this.setState({isActive:false, 
+                            oldTImeFramesFri:res.data.segments,
+                            durationFri:"",
+                            unitFri:1,
+                            rateFri:"",
+                            startTimeFri:"",
+                            EndTimeFri:"",
+                            slotNumberFri:"",});
+                        alert("saved");
+        
+                     }
+                 })
+                 .catch(error=>{
+                     console.log(error.response.data)
+                 })
+            }
+
+        }
     }
 
     /* tab 6 */
@@ -621,21 +905,77 @@ class RateCardDetails extends React.Component{
 
     handleSubmitSat=()=>{
         console.log("start submitting");
-        this.setState({isActive:true})
+        this.setState({isActive:true});
+        if(this.state.oldTImeFramesSat.length<=0 && this.state.startTimeSat<this.state.EndTimeSat){
         let tempSlot = [...this.state.newSlotSat];
         tempSlot.unshift({id:1,duration:this.state.durationSat,unit_id:this.state.unitSat,rate:this.state.rateSat});
          console.log(tempSlot);
          axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
-         {start_time:this.state.startTimeSat, end_time:this.state.EndTimeSat, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberSat},
+         {start_time:this.state.startTimeSat, end_time:this.state.EndTimeSat, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberSat,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
-             alert("saved");
-             this.setState({isActive:false});
+             if(res.data.status === "success"){
+                this.setState({isActive:false, 
+                    oldTImeFramesSat:res.data.segments,
+                    durationSat:"",
+                    unitSat:1,
+                    rateSat:"",
+                    startTimeSat:"",
+                    EndTimeSat:"",
+                    slotNumberSat:"",
+                });
+                alert("saved");
+
+             }
          })
          .catch(error=>{
              console.log(error.response.data)
          })
+        }
+        else{
+            var checker;
+            for(var i =0; i<this.state.oldTImeFramesSat.length; i++){
+                if(this.state.startTimeSat < this.state.oldTImeFramesSat[i].end_time){
+                     alert("selected time intersects with a saved time");
+                     this.setState({isActive:false})
+                     checker = false;
+                     break;
+                }
+                else{
+                    checker = true;
+                    continue;
+                 
+                }
+            }
+ 
+            if(checker === true && this.state.startTimeSat<this.state.EndTimeSat){
+                let tempSlot = [...this.state.newSlotSat];
+                tempSlot.unshift({id:1,duration:this.state.durationSat,unit_id:this.state.unitSat,rate:this.state.rateSat});
+                 console.log(tempSlot);
+                 axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                 {start_time:this.state.startTimeSat, end_time:this.state.EndTimeSat, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberSat,rate_card_title:this.state.title},
+                 {headers:{ 'Authorization':`Bearer ${user}`}}) 
+                 .then(res=>{
+                     console.log("data:",res.data);
+                     if(res.data.status === "success"){
+                        this.setState({isActive:false, 
+                            oldTImeFramesSat:res.data.segments,
+                            durationSat:"",
+                            unitSat:1,
+                            rateSat:"",
+                            startTimeSat:"",
+                            EndTimeSat:"",
+                            slotNumberSat:"",});
+                        alert("saved");
+        
+                     }
+                 })
+                 .catch(error=>{
+                     console.log(error.response.data)
+                 })
+            }
+        }
     }
 
     /* tab 7 */
@@ -703,21 +1043,76 @@ class RateCardDetails extends React.Component{
 
     handleSubmitSun=()=>{
         console.log("start submitting");
-        this.setState({isActive:true})
+        this.setState({isActive:true});
+        if(this.state.oldTImeFramesSun.length<=0 && this.state.startTimeSun<this.state.EndTimeSun){
         let tempSlot = [...this.state.newSlotSun];
         tempSlot.unshift({id:1,duration:this.state.durationSun,unit_id:this.state.unitSat,rate:this.state.rateSun});
          console.log(tempSlot);
          axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
-         {start_time:this.state.startTimeSun, end_time:this.state.EndTimeSun, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumberSun},
+         {start_time:this.state.startTimeSun, end_time:this.state.EndTimeSun, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumberSun,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
-             alert("saved");
-             this.setState({isActive:false});
+             if(res.data.status === "success"){
+                this.setState({isActive:false, 
+                    oldTImeFramesSun:res.data.segments,
+                    durationSun:"",
+                    unitSun:1,
+                    rateSun:"",
+                    startTimeSun:"",
+                    EndTimeSun:"",
+                    slotNumberSun:"",});
+                alert("saved");
+
+             }
          })
          .catch(error=>{
              console.log(error.response.data)
          })
+        }
+        else{
+            var checker;
+            for(var i =0; i<this.state.oldTImeFramesSun.length; i++){
+                if(this.state.startTimeSun < this.state.oldTImeFramesSun[i].end_time){
+                     alert("selected time intersects with a saved time");
+                     this.setState({isActive:false})
+                     checker = false;
+                     break;
+                }
+                else{
+                    checker = true;
+                    continue;
+                 
+                }
+            }
+ 
+            if(checker === true && this.state.startTimeSun<this.state.EndTimeSun){
+                let tempSlot = [...this.state.newSlotSun];
+                tempSlot.unshift({id:1,duration:this.state.durationSun,unit_id:this.state.unitSat,rate:this.state.rateSun});
+                 console.log(tempSlot);
+                 axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                 {start_time:this.state.startTimeSun, end_time:this.state.EndTimeSun, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumberSun,rate_card_title:this.state.title},
+                 {headers:{ 'Authorization':`Bearer ${user}`}}) 
+                 .then(res=>{
+                     console.log("data:",res.data);
+                     if(res.data.status === "success"){
+                        this.setState({isActive:false, 
+                            oldTImeFramesSun:res.data.segments,
+                            durationSun:"",
+                            unitSun:1,
+                            rateSun:"",
+                            startTimeSun:"",
+                            EndTimeSun:"",
+                            slotNumberSun:"",});
+                        alert("saved");
+        
+                     }
+                 })
+                 .catch(error=>{
+                     console.log(error.response.data)
+                 })
+            }
+        }
     }
 
     
@@ -735,7 +1130,7 @@ class RateCardDetails extends React.Component{
             <Col md="10">
             <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
             <CardHeader className=" bg-transparent">
-                  <h3 className=" mb-0">ENTER RATE CARD DETAILS</h3>
+                  <h3 className=" mb-0">RATE CARD DETAILS</h3>
             </CardHeader>
 
             <CardBody>
@@ -784,13 +1179,15 @@ class RateCardDetails extends React.Component{
                     <FormGroup>
                         <Label for="exampleTime">End Time</Label>
                         <Input
+                        invalid={this.state.timeCheck}
                         type="time"
                         name="time"
                         id="exampleTime"
                         value={this.state.EndTime}
-                        onChange={e=>this.setState({EndTime:e.target.value})}
+                        onChange={e=>{e.target.value <= this.state.startTime? this.setState({timeCheck:true, EndTime:e.target.value}) : this.setState({timeCheck:false,EndTime:e.target.value})}}
                         placeholder="time placeholder"
                         />
+                        <FormFeedback tooltip>End time must be greater than start time</FormFeedback>
                     </FormGroup>
                     </Col> 
                     </Row>
@@ -886,13 +1283,15 @@ class RateCardDetails extends React.Component{
                    <FormGroup>
                        <Label for="exampleTime">End Time</Label>
                        <Input
+                       invalid={this.state.timeCheckTues}
                        type="time"
                        name="time"
                        id="exampleTime"
                        value={this.state.EndTimeTues}
-                       onChange={e=>this.setState({EndTimeTues:e.target.value})}
+                       onChange={e=>{e.target.value <= this.state.startTimeTues? this.setState({timeCheckTues:true, EndTimeTues:e.target.value}) : this.setState({timeCheckTues:false,EndTimeTues:e.target.value})}}
                        placeholder="time placeholder"
                        />
+                        <FormFeedback tooltip>End time must be greater than start time</FormFeedback>
                    </FormGroup>
                    
                    </Col> 
@@ -989,13 +1388,15 @@ class RateCardDetails extends React.Component{
                     <FormGroup>
                         <Label for="exampleTime">End Time</Label>
                         <Input
+                        invalid={this.state.timeCheckWed}
                         type="time"
                         name="time"
                         id="exampleTime"
                         value={this.state.EndTimeWed}
-                        onChange={e=>this.setState({EndTimeWed:e.target.value})}
+                        onChange={e=>{e.target.value <= this.state.startTimeWed? this.setState({timeCheckWed:true, EndTimeWed:e.target.value}) : this.setState({timeCheckWed:false,EndTimeWed:e.target.value})}}
                         placeholder="time placeholder"
                         />
+                        <FormFeedback tooltip>End time must be greater than start time</FormFeedback>
                     </FormGroup>
                     </Col> 
                     </Row>
@@ -1091,13 +1492,15 @@ class RateCardDetails extends React.Component{
                     <FormGroup>
                         <Label for="exampleTime">End Time</Label>
                         <Input
+                        invalid={this.state.timeCheckThurs}
                         type="time"
                         name="time"
                         id="exampleTime"
                         value={this.state.EndTimeThurs}
-                        onChange={e=>this.setState({EndTimeThurs:e.target.value})}
+                        onChange={e=>{e.target.value <= this.state.startTimeThurs? this.setState({timeCheckThurs:true, EndTimeThurs:e.target.value}) : this.setState({timeCheckThurs:false,EndTimeThurs:e.target.value})}}
                         placeholder="time placeholder"
                         />
+                        <FormFeedback tooltip>End time must be greater than start time</FormFeedback>
                     </FormGroup>
                     </Col> 
                     </Row>
@@ -1193,13 +1596,15 @@ class RateCardDetails extends React.Component{
                     <FormGroup>
                         <Label for="exampleTime">End Time</Label>
                         <Input
+                        invalid={this.state.timeCheckFri}
                         type="time"
                         name="time"
                         id="exampleTime"
                         value={this.state.EndTimeFri}
-                        onChange={e=>this.setState({EndTimeFri:e.target.value})}
+                        onChange={e=>{e.target.value <= this.state.startTimeFri? this.setState({timeCheckFri:true, EndTimeFri:e.target.value}) : this.setState({timeCheckFri:false,EndTimeFri:e.target.value})}}
                         placeholder="time placeholder"
                         />
+                        <FormFeedback tooltip>End time must be greater than start time</FormFeedback>
                     </FormGroup>
                     </Col> 
                     </Row>
@@ -1295,13 +1700,15 @@ class RateCardDetails extends React.Component{
                     <FormGroup>
                         <Label for="exampleTime">End Time</Label>
                         <Input
+                        invalid={this.state.timeCheckSat}
                         type="time"
                         name="time"
                         id="exampleTime"
                         value={this.state.EndTimeSat}
-                        onChange={e=>this.setState({EndTimeSat:e.target.value})}
+                        onChange={e=>{e.target.value <= this.state.startTimeSat? this.setState({timeCheckSat:true, EndTimeSat:e.target.value}) : this.setState({timeCheckSat:false,EndTimeSat:e.target.value})}}
                         placeholder="time placeholder"
                         />
+                        <FormFeedback tooltip>End time must be greater than start time</FormFeedback>
                     </FormGroup>
                     </Col> 
                     </Row>
@@ -1397,13 +1804,15 @@ class RateCardDetails extends React.Component{
                     <FormGroup>
                         <Label for="exampleTime">End Time</Label>
                         <Input
+                        invalid={this.state.timeCheckSun}
                         type="time"
                         name="time"
                         id="exampleTime"
                         value={this.state.EndTimeSun}
-                        onChange={e=>this.setState({EndTimeSun:e.target.value})}
+                        onChange={e=>{e.target.value <= this.state.startTimeSun? this.setState({timeCheckSun:true, EndTimeSun:e.target.value}) : this.setState({timeCheckSun:false,EndTimeSun:e.target.value})}}
                         placeholder="time placeholder"
                         />
+                        <FormFeedback tooltip>End time must be greater than start time</FormFeedback>
                     </FormGroup>
                     </Col> 
                     </Row>
@@ -1487,10 +1896,11 @@ class RateCardDetails extends React.Component{
             </Row>
             <Row style={{marginTop:"25px", marginBottom:"20px"}}>
                 <Col lg="10">
-
+                
                 <Button
                 style={{backgroundColor:"#404E67",color:"white"}}
                 block
+                onClick={()=>this.props.history.push("/media/preview-ratecards")}
                 >
                     PREVIEW
                 </Button>

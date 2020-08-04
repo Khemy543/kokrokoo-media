@@ -30,13 +30,12 @@ import {
   Input,
   Button,
   CardTitle,
-  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label
+  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label,Table
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
 import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
-import RateCard from "../../components/Cards/RateCard.js";
 import axios from "axios";/* 
 import history from "../../history.js"; */
 
@@ -80,12 +79,46 @@ function ViewRateCards(props) {
       >
       <Header/>
         <Container className=" mt--8" fluid>
-            
           <Row>
-            {rateCards.map((value,index)=>(
-              <RateCard ratecard={value}/>
-            ))}
-            </Row>
+            <Col lg="12">
+            <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
+            <CardBody style={{overflowX:"scroll"}}>
+            <Table stripped bordered>
+            <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
+            <tr>
+              <th>ID</th>
+              <th>Rate Card ID</th>
+              <th>Rate Card</th>
+              <th>Created At</th>
+              <th>Updated At</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rateCards.map((value, index)=>(
+              <tr>
+              <td>{value.id}</td>
+              <td>{value.id}</td>
+              <td>{value.rate_card_title}</td>
+              <td>1</td>
+              <td>1</td>
+              <td>
+                <Row>
+                  <Col md="6" lg="6" sm="6" xs="6" >
+                  <Button color="info" style={{padding:"5px 10px 5px 10px"}}><i className="fa fa-eye"/></Button>
+                  <Button color="success" style={{padding:"5px 10px 5px 10px"}}><i className="fa fa-pencil"/></Button>
+                  <Button color="danger" style={{padding:"5px 10px 5px 10px"}}><i className="fa fa-trash"/></Button>
+                  </Col>
+                </Row>  
+                </td>
+            </tr>
+            ))}  
+          </tbody>
+          </Table> 
+          </CardBody>
+          </Card>
+          </Col>
+          </Row> 
         </Container>
         </LoadingOverlay>
       </>
