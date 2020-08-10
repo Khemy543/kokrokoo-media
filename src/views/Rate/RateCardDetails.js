@@ -224,6 +224,7 @@ class RateCardDetails extends React.Component{
                  startTime:"",
                  EndTime:"",
                  slotNumber:"",
+                 newSlot:[]
                 });
              alert("saved");
              }
@@ -236,7 +237,7 @@ class RateCardDetails extends React.Component{
        else{
            var checker;
            for(var i =0; i<this.state.oldTImeFrames.length; i++){
-               if(this.state.startTime < this.state.oldTImeFrames[i].end_time){
+               if(this.state.startTime < this.state.oldTImeFrames[i].end_time && this.state.EndTime>this.state.oldTImeFrames[i].start_time){
                     alert("selected time intersects with a saved time");
                     this.setState({isActive:false})
                     checker = false;
@@ -1900,7 +1901,7 @@ class RateCardDetails extends React.Component{
                 <Button
                 style={{backgroundColor:"#404E67",color:"white"}}
                 block
-                onClick={()=>this.props.history.push("/media/preview-ratecards")}
+                onClick={()=>this.props.history.push("/media/preview-ratecards",{title_id:this.props.location.state.title_id})}
                 >
                     PREVIEW
                 </Button>

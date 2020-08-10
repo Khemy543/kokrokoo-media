@@ -26,9 +26,10 @@ import AdminDetails from "views/Users/AdminDetails.js";
 import EditUser from "views/Users/EditUsers.js";
 import ViewRateCards from "views/Rate/ViewRateCard.js";
 import ViewSubscription from 'views/Subscription/ViewSubscription.js';
-import Login from "views/examples/Login.js";
 import PrintRateDetails from "views/Rate/PrintRateCardDetails.js";
 import Preview from "views/Rate/Preview.js";
+import VideoPreview from "views/Rate/VideoPreview.js";
+import CreateNewTitle from "views/Rate/CreateNewTitle";
 
 var routes = [
   {
@@ -43,6 +44,13 @@ var routes = [
     name: "Create Rate Card",
     header:"rate",
     component: CreateRateCard,
+    layout: "/media"
+  },
+  {
+    path: "/new-title",
+    name: "New Title",
+    header:"rate",
+    component: CreateNewTitle,
     layout: "/media"
   },
   {
@@ -74,10 +82,17 @@ var routes = [
     layout: "/media"
   },
   {
-    path: "/preview-ratecards",
+    path: "/preview-ratecards/print",
     name: "Preview",
     invisible:true,
     component: Preview,
+    layout: "/media"
+  },
+  {
+    path: "/preview-ratecards",
+    name: "Preview",
+    invisible:true,
+    component: VideoPreview,
     layout: "/media"
   },
   {

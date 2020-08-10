@@ -38,21 +38,16 @@ import LoadingOverlay from "react-loading-overlay";
 import BounceLoader from "react-spinners/BounceLoader";
 import axios from "axios";
 
-let user =1;
-let loggedin_data = false;
+let user =null;
 let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
 if(all_data !== null){
   user = all_data[0];
-  loggedin_data = all_data[1];
-  //get user
-  console.log("user:",user);
 }
 
 function CreateFromExisting(props) {
     const [isActive, setIsActive] = React.useState(false);
     const [titles, setTitles] = React.useState([]);
-    const [title,setTitle] =React.useState("");
+    const [id,setId] = React.useState(1)
 
 
     React.useEffect(()=>{
@@ -60,21 +55,23 @@ function CreateFromExisting(props) {
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
+            setTitles(res.data.existing_titles);
         })
         .catch(error=>{
             console.log(error.response.data)
         })
-    })
+    },[])
 
-    const handleSubmit=()=>{
-        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/1/create-from-existing",title,
+    const pass=()=>{
+        /* axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/1/create-from-existing",title,
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
         })
         .catch(error=>{
-            console.log(error)
-        })
+            console.log(error.response.data)
+        }) */
+        props.history.push("/media/new-title",{id:id});
     }
     
 
@@ -92,21 +89,20 @@ function CreateFromExisting(props) {
             <Col md="10">
             <Card className="shadow">
             <CardHeader className=" bg-transparent">
-                  <h3 className=" mb-0">SELECT RATE CARD TITLE</h3>
+                  <h3 className=" mb-0">ENTER NEW TITLE</h3>
             </CardHeader>
 
             <CardBody>
             <Row>
                 <Col md="12">
-                <Input type="select" value={title} onChange={e=>setTitle(e.target.value)}>
-                {titles.map((value,key)=>(
-                    <option></option>
+                <Input type="select" value={id} onChange={e=>setId(e.target.value)}>
+                {titles.map((value)=>(
+                    <option key={value.id} value={value.id}>{value.title}</option>
                 ))}
                 </Input>
                     <Button
                     style={{marginTop:"20px",color:"white",backgroundColor:"#404E67"}}
-                    type="submit"
-                    onClick={handleSubmit}
+                    onClick={pass}
                     >
                     Next
                     </Button>

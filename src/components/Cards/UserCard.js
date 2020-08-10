@@ -11,7 +11,7 @@ function UserCard(props){
        const {name, email, title, phone1, phone2, role,id } = props.user
     return(
         <Col md="4" lg="4" sm="6" xs="6" style={{marginBottom:"20px"}}>
-        <Card className="card-plain" style={{backgroundColor:"white", cursor:"pointer",boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
+        <Card className="card-plain shadow" style={{backgroundColor:"white", cursor:"pointer"}}>
             <CardBody onClick={()=>{props.history.push("/media/admin-details",{admin_id:id})}}> 
                 <Row>
                 

@@ -174,7 +174,7 @@ class AdminDetails extends React.Component{
             
           <Row>
             <Col md="10">
-            <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
+            <Card className="shadow">
                 <CardBody>
                     <Input value={name} disabled style={{textTransform:"uppercase"}}/>
                     <br/>

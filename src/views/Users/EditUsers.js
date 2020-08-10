@@ -116,7 +116,7 @@ function EditUsers(props) {
             
           <Row>
             <Col md="10">
-            <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
+            <Card className="shadow">
                 <CardBody className="mt-5">
                 <Form onSubmit={handleSubmit}  role="form">    
                 <Input value={name} type="text" onChange={e=>setName(e.target.value)} placeholder="Full Name" required/>

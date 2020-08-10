@@ -103,7 +103,7 @@ function CreateUser(props) {
             
           <Row>
             <Col md="10">
-            <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
+            <Card className="shadow">
                 <CardBody>
                 {alert?
                   <Alert color="warning" fade={true} style={{textAlign:"center",height:"50px"}}>

@@ -86,22 +86,22 @@ function ViewRateCards(props) {
             <Table stripped bordered>
             <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
             <tr>
-              <th>ID</th>
+              <th>#</th>
               <th>Rate Card ID</th>
               <th>Rate Card</th>
-              <th>Created At</th>
-              <th>Updated At</th>
+              <th>Description</th>
+              <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {rateCards.map((value, index)=>(
               <tr>
-              <td>{value.id}</td>
+              <td>{index+1}</td>
               <td>{value.id}</td>
               <td>{value.rate_card_title}</td>
-              <td>1</td>
-              <td>1</td>
+              <td>{value.service_description}</td>
+              <td>{value.status}</td>
               <td>
                 <Row>
                   <Col md="6" lg="6" sm="6" xs="6" >
