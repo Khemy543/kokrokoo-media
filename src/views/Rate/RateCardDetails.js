@@ -1896,7 +1896,7 @@ class RateCardDetails extends React.Component{
             </Col> 
             </Row>
             <Row style={{marginTop:"25px", marginBottom:"20px"}}>
-                <Col lg="10">
+                <Col lg="6" className="ml-auto mr-auto">
                 
                 <Button
                 style={{backgroundColor:"#404E67",color:"white"}}

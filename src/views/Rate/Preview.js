@@ -40,11 +40,11 @@ class Preview extends React.Component{
   }
 
   componentDidMount(){
-
+    this.setState({isActive:true});
     axios.get("https://media-kokrokooad.herokuapp.com/api/fetch-days-and-units")
     .then(res=>{
         console.log(res.data)
-        this.setState({days:res.data.days,isActive:false})
+        this.setState({days:res.data.days})
     });
 
     axios.get("https://media-kokrokooad.herokuapp.com/api/ratecard/" +this.props.location.state.title_id + "/preview",
@@ -57,15 +57,15 @@ class Preview extends React.Component{
           let selectedDetaisl = tempData.find(item=> item.day.id === 1);
           console.log(selectedDetaisl);
           if(selectedDetaisl !== undefined){
-          this.setState({details:selectedDetaisl[0]})
+          this.setState({details:selectedDetaisl[0], isActive:false})
           }
           else{
-            this.setState({details:[]})
+            this.setState({details:[], isActive:false})
           }
         }
       })
       .catch(error => {
-        console.log(error.response.data)
+        console.log(error)
       });
 
 
