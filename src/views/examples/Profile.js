@@ -36,15 +36,10 @@ import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
-let user =1;
-let loggedin_data = false;
+let user =null;
 let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
 if(all_data !== null){
   user = all_data[0];
-  loggedin_data = all_data[1];
-  //get user
-  console.log("user:",user);
 }
 
 
@@ -59,7 +54,8 @@ class Profile extends React.Component {
     id:"",
     isActive:false,
     modal:false,
-    message:""
+    message:"",
+    company:[]
   }
 
 componentDidMount(){
@@ -78,7 +74,8 @@ componentDidMount(){
             phone2:res.data.user.phone2,
             title:res.data.user.title,
             id:res.data.user.id,
-            isActive:false,
+            company:res.data.company,
+            isActive:false
           })
         }
 
@@ -119,6 +116,10 @@ handleSubmit=(e)=>{
 }
 
   render() {
+    const {
+      company_name, business_cert, address,company_profile,logo,media_house,media_type,industy_type,
+      operation_cert,policy, website
+    }  = this.state.company;
     return (
       <>
       <LoadingOverlay 
@@ -279,85 +280,7 @@ handleSubmit=(e)=>{
                         </Col>
                         </Row>
                     </div>
-                   {/*  <hr className="my-4" />
-                    
-                    <h6 className="heading-small text-muted mb-4">
-                      Contact information
-                    </h6>
-                    <div className="pl-lg-4">
-                      <Row>
-                        <Col md="12">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-address"
-                            >
-                              Address
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                              id="input-address"
-                              placeholder="Home Address"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-city"
-                            >
-                              City
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="New York"
-                              id="input-city"
-                              placeholder="City"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-country"
-                            >
-                              Country
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="United States"
-                              id="input-country"
-                              placeholder="Country"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-country"
-                            >
-                              Postal code
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="input-postal-code"
-                              placeholder="Postal code"
-                              type="number"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      
-                    </div> */}
+                   
                     <hr className="my-4" />
 
                     <div className="pl-lg-4">
@@ -373,6 +296,32 @@ handleSubmit=(e)=>{
                   </Form>
                 </CardBody>
               </Card>
+            </Col>
+            </Row>
+            <Row>
+            <Col className="order-xl-1 mt-3" xl="8">
+              <Card className="bg-secondary shadow">
+                <CardHeader className="bg-white border-0">
+                  <Row className="align-items-center">
+                    <Col xs="8">
+                      <h3 className="mb-0">Company Information</h3>
+                    </Col>
+                  </Row>
+                </CardHeader>
+                <CardBody>
+                <h3>{company_name}</h3>
+                <h3>{company_profile}</h3>
+                <h3>{address}</h3>
+                <h3>{media_house}</h3>
+                <h3>{media_type}</h3>
+                <h3>{industy_type}</h3>
+                <h3>{logo}</h3>
+                <h3>{business_cert}</h3>
+                <h3>{operation_cert}</h3>
+                <h3>{policy}</h3>
+                <h3>{website}</h3>
+                </CardBody>
+                </Card>
             </Col>
           </Row>
         </Container>

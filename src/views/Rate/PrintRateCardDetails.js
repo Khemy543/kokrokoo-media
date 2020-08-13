@@ -1249,7 +1249,7 @@ class PrintRateDetails extends React.Component {
                 <Button
                 style={{backgroundColor:"#404E67",color:"white"}}
                 block
-                onClick={()=>this.props.history.push("/media/preview-ratecards/print",{title_id:this.props.location.state.title_id})}
+                onClick={()=>this.props.history.push("/media/edit-ratecards/print",{title_id:this.props.location.state.title_id})}
                 >
                     PREVIEW
                 </Button>

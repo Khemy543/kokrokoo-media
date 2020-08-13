@@ -10,7 +10,6 @@ import {
   Container,
   Row,
   Col,
-  UncontrolledTooltip,
   Input,
   Button,
   CardTitle,
@@ -368,6 +367,7 @@ class RateCardDetails extends React.Component{
                     startTimeTues:"",
                     EndTimeTues:"",
                     slotNumberTues:"",
+                    newSlotTues:[]
                 });
                 alert("saved");
 
@@ -410,7 +410,9 @@ class RateCardDetails extends React.Component{
                             rateTues:"",
                             startTimeTues:"",
                             EndTimeTues:"",
-                            slotNumberTues:""});
+                            slotNumberTues:"",
+                            newSlotTues:[]
+                        });
                         alert("saved");
         
                      }
@@ -511,7 +513,9 @@ class RateCardDetails extends React.Component{
                     rateWed:"",
                     startTimeWed:"",
                     EndTimeWed:"",
-                    slotNumberWed:"",});
+                    slotNumberWed:"",
+                    newSlotWed:[]
+                });
                 alert("saved");
 
              }
@@ -553,7 +557,9 @@ class RateCardDetails extends React.Component{
                             rateWed:"",
                             startTimeWed:"",
                             EndTimeWed:"",
-                            slotNumberWed:"",});
+                            slotNumberWed:"",
+                            newSlotWed:[]
+                        });
                         alert("saved");
         
                      }
@@ -649,7 +655,9 @@ class RateCardDetails extends React.Component{
                     rateThurs:"",
                     startTimeThurs:"",
                     EndTimeThurs:"",
-                    slotNumberThurs:"",});
+                    slotNumberThurs:"",
+                    newSlotThurs:[]
+                });
                 alert("saved");
 
              }
@@ -691,7 +699,9 @@ class RateCardDetails extends React.Component{
                             rateThurs:"",
                             startTimeThurs:"",
                             EndTimeThurs:"",
-                            slotNumberThurs:"",});
+                            slotNumberThurs:"",
+                            newSlotThurs:[]
+                        });
                         alert("saved");
         
                      }
@@ -786,7 +796,9 @@ class RateCardDetails extends React.Component{
                     rateFri:"",
                     startTimeFri:"",
                     EndTimeFri:"",
-                    slotNumberFri:"",});
+                    slotNumberFri:"",
+                    newSlotFri:[]
+                    });
                 alert("saved");
 
              }
@@ -828,7 +840,9 @@ class RateCardDetails extends React.Component{
                             rateFri:"",
                             startTimeFri:"",
                             EndTimeFri:"",
-                            slotNumberFri:"",});
+                            slotNumberFri:"",
+                            newSlotFri:[]
+                        });
                         alert("saved");
         
                      }
@@ -925,6 +939,7 @@ class RateCardDetails extends React.Component{
                     startTimeSat:"",
                     EndTimeSat:"",
                     slotNumberSat:"",
+                    newSlotSat:[]
                 });
                 alert("saved");
 
@@ -967,7 +982,9 @@ class RateCardDetails extends React.Component{
                             rateSat:"",
                             startTimeSat:"",
                             EndTimeSat:"",
-                            slotNumberSat:"",});
+                            slotNumberSat:"",
+                            newSlotSat:[]
+                        });
                         alert("saved");
         
                      }
@@ -1062,7 +1079,9 @@ class RateCardDetails extends React.Component{
                     rateSun:"",
                     startTimeSun:"",
                     EndTimeSun:"",
-                    slotNumberSun:"",});
+                    slotNumberSun:"",
+                    newSlotSun:[]
+                });
                 alert("saved");
 
              }
@@ -1104,13 +1123,15 @@ class RateCardDetails extends React.Component{
                             rateSun:"",
                             startTimeSun:"",
                             EndTimeSun:"",
-                            slotNumberSun:"",});
+                            slotNumberSun:"",
+                            newSlotSun:[]
+                        });
                         alert("saved");
         
                      }
                  })
                  .catch(error=>{
-                     console.log(error.response.data)
+                     console.log(error)
                  })
             }
         }
@@ -1896,12 +1917,12 @@ class RateCardDetails extends React.Component{
             </Col> 
             </Row>
             <Row style={{marginTop:"25px", marginBottom:"20px"}}>
-                <Col lg="6" className="ml-auto mr-auto">
+                <Col lg="5" className="ml-auto mr-auto">
                 
                 <Button
                 style={{backgroundColor:"#404E67",color:"white"}}
                 block
-                onClick={()=>this.props.history.push("/media/preview-ratecards",{title_id:this.props.location.state.title_id})}
+                onClick={()=>this.props.history.push("/media/edit-ratecards",{title_id:this.props.location.state.title_id})}
                 >
                     PREVIEW
                 </Button>

@@ -36,6 +36,28 @@ class RateProvider extends React.Component{
         }
     }
 
+
+    //check invalid token
+   /*  checkToken=()=>{
+        axios.get("https://media-kokrokooad.herokuapp.com/api/user",{
+        headers:{ 'Authorization':`Bearer ${user}`}})
+        .then(res=>{
+            console.log(res.data)
+        })
+        .catch(error=>{
+            if(!error.response){
+                alert("please check your internet connection")
+            }
+            else{
+            console.log(error.response.status);
+            if(error.response.status === 401){
+                localStorage.clear();
+                window.location.reload("/")
+            }
+            } 
+        })
+    } */
+
     logout=()=>{
         this.setState({isActive:true});
         axios.post("https://media-kokrokooad.herokuapp.com/api/user/logout",null,

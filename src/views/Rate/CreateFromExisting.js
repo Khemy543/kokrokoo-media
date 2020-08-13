@@ -35,7 +35,7 @@ import {
 // core components
 import Header from "components/Headers/Header.js";
 import LoadingOverlay from "react-loading-overlay";
-import BounceLoader from "react-spinners/BounceLoader";
+import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
 let user =null;
@@ -51,14 +51,16 @@ function CreateFromExisting(props) {
 
 
     React.useEffect(()=>{
+        setIsActive(true)
         axios.get("https://media-kokrokooad.herokuapp.com/api/ratecard/get-existing-titles",
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
             setTitles(res.data.existing_titles);
+            setIsActive(false)
         })
         .catch(error=>{
-            console.log(error.response.data)
+            console.log(error)
         })
     },[])
 
@@ -80,7 +82,7 @@ function CreateFromExisting(props) {
       <>
       <LoadingOverlay 
       active = {isActive}
-      spinner={<BounceLoader color={'#4071e1'}/>}
+      spinner={<FadeLoader color={'#4071e1'}/>}
       >
       <Header/>
         <Container className=" mt--8" fluid>

@@ -33,11 +33,39 @@ import {
   Row,
   Col,CardFooter
 } from "reactstrap";
+import axios from "axios";
 
 import Header from "components/Headers/Header.js";
 
+
+let user =null;
+let all_data = JSON.parse(localStorage.getItem('storageData'));
+if(all_data !== null){
+  user = all_data[0];
+}
+
+
 function Index (props){
 
+  React.useEffect(()=>{
+    axios.get("https://media-kokrokooad.herokuapp.com/api/user",{
+      headers:{ 'Authorization':`Bearer ${user}`}})
+      .then(res=>{
+          console.log(res.data)
+      })
+      .catch(error=>{
+          if(!error.response){
+              alert("please check your internet connection")
+          }
+          else{
+          console.log(error.response.status);
+          if(error.response.status === 401){
+              localStorage.clear();
+              window.location.reload("/")
+          }
+          } 
+      })
+  },[])
     return (
       <>
         <Header />

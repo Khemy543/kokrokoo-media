@@ -33,7 +33,8 @@ class VideoPreview extends React.Component{
     allData:[],
     timeCheck:false,
     units:[],
-    title:""
+    title:"",
+    id:1
   }
 
   componentDidMount(){
@@ -116,12 +117,23 @@ class VideoPreview extends React.Component{
   }
 
   handleDelete=(id,index)=>{
-    let tempDetails = this.state.data;
-    let selectedIndex = tempDetails[index];
-    let selectedDetail = selectedIndex.duration.filter(item=>item.id !== id);
-    console.log(selectedDetail)
-    selectedIndex.duration = selectedDetail;
-    this.setState({data:tempDetails})
+    axios.delete("https://media-kokrokooad.herokuapp.com/api/ratecard/"+id+"/delete-duration",
+    { headers: { 'Authorization': `Bearer ${user}` } })
+    .then(res=>{
+      console.log(res.data);
+      if(res.data.status === "deleted"){
+        let tempDetails = this.state.data;
+        let selectedIndex = tempDetails[index];
+        let selectedDetail = selectedIndex.duration.filter(item=>item.id !== id);
+        console.log(selectedDetail)
+        selectedIndex.duration = selectedDetail;
+        this.setState({data:tempDetails})
+      }
+    })
+    .catch(error=>{
+      console.log(error);
+    })
+   
   }
 
   handleSpotChange=(id,value)=>{
@@ -143,6 +155,36 @@ class VideoPreview extends React.Component{
       let selected = tempDetails.find(item=>item.id===id);
       selected.end_time=value;
       this.setState({data:tempDetails});
+  }
+
+  handleAddSlot=(id)=>{
+    let tempDetails = this.state.data;
+    let selected = tempDetails.find(item=>item.id === id);
+    if(selected.duration[selected.duration.length-1].duration && selected.duration[selected.duration.length-1].rate){
+    selected.duration.push({id:`#${this.state.id}`,duration:"", unit_id:1, rate:""});
+    this.setState({data:tempDetails, id:this.state.id+1});
+    }
+  }
+
+  handleSubmit=(id)=>{
+    let tempDetails = this.state.data;
+    let selected = tempDetails.find(item=>item.id === id);
+    console.log(selected);
+    this.setState({isActive:true})
+    axios.patch("https://media-kokrokooad.herokuapp.com/api/ratecard/"+id+"/update",
+    {start_time:selected.start_time, end_time:selected.end_time, no_of_spots:selected.no_of_spots,day_id:selected.day.id, durations:selected.duration},
+    { headers: { 'Authorization': `Bearer ${user}`}})
+    .then(res=>{
+      console.log(res.data);
+      if(res.data.status === "saved"){
+        alert("changes saved");
+        this.setState({isActive:false})
+      }
+    })
+    .catch(error=>{
+      console.log(error);
+      this.setState({isActive:false})
+    })
   }
 
 
@@ -219,13 +261,20 @@ class VideoPreview extends React.Component{
                             </Col> 
                           </Row>
                           <Row>
-                        <Col md="6">
+                        <Col md="12">
                         <Row>
                         <Col>
                         <Label>Number of Slots</Label>
+                        <Input type="number" min="0" placeholder="number of slots" value={value.no_of_spots} onChange={e=>this.handleSpotChange(value.id,e.target.value)}/>
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={value.no_of_spots} onChange={e=>this.handleSpotChange(value.id,e.target.value)}/>
+                        <Button
+                        color="info"
+                        style={{marginTop:"30px"}}
+                        onClick={()=>this.handleAddSlot(value.id)}
+                        >
+                        <i className="fa fa-plus" />
+                        </Button>
                         </Col>
                         </Row>    
                         </Col>
@@ -268,6 +317,7 @@ class VideoPreview extends React.Component{
                             <Col md="5">
                               <Button
                               color="info"
+                              onClick={()=>this.handleSubmit(value.id)}
                               >
                                 Save Changes
                               </Button>

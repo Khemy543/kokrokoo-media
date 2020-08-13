@@ -40,7 +40,6 @@ import {RateConsumer} from "../../context.js";
 
 let user =null;
 let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
 if(all_data !== null){
   user = all_data[0];
 }
@@ -58,7 +57,8 @@ componentDidMount(){
         .then(res=>{
         console.log(res.data)
         if(res.data.user !== null){
-          this.setState({username:res.data.user.name})
+          this.setState({username:res.data.user.name});
+          localStorage.setItem('media_type',res.data.company.media_type)
         }
 
         }).catch(error=>{

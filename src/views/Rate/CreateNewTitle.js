@@ -83,18 +83,19 @@ function CreateNewTitle(props) {
         )
         .then(res=>{
             console.log(res.data);
-            if(res.data.status === "success"){
-            if(res.data.media_type.id === 3){
-            props.history.push("/media/print-rate-details",{rate_title:res.data.ratecard_title.title, title_id:res.data.ratecard_title.id})
-            }
-            else{
-            props.history.push("/media/rate-details",{rate_title:res.data.ratecard_title.title, title_id:res.data.ratecard_title.id})
-            }
-            setIsActive(false)
+            if(res.data.status === "succes"){
+                if(res.data.media.id === 3){
+                    props.history.push("/media/edit-ratecards/print",{title_id:props.location.state.id})
+                }
+                else{
+                    props.history.push("/media/edit-ratecards",{title_id:props.location.state.id})
+                }
+                setIsActive(false)
+               
             }
         })
         .catch(error=>{
-            console.log(error.response.data);
+            console.log(error);
             setIsActive(false)
         })
     }

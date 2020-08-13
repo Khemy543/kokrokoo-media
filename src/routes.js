@@ -30,6 +30,8 @@ import PrintRateDetails from "views/Rate/PrintRateCardDetails.js";
 import Preview from "views/Rate/Preview.js";
 import VideoPreview from "views/Rate/VideoPreview.js";
 import CreateNewTitle from "views/Rate/CreateNewTitle";
+import ViewRateCardDetails from "views/Rate/ViewRateCardDetails";
+
 
 var routes = [
   {
@@ -49,6 +51,7 @@ var routes = [
   {
     path: "/new-title",
     name: "New Title",
+    invisible:true,
     header:"rate",
     component: CreateNewTitle,
     layout: "/media"
@@ -82,17 +85,24 @@ var routes = [
     layout: "/media"
   },
   {
-    path: "/preview-ratecards/print",
-    name: "Preview",
+    path: "/edit-ratecards/print",
+    name: "Edit Details",
     invisible:true,
     component: Preview,
     layout: "/media"
   },
   {
-    path: "/preview-ratecards",
-    name: "Preview",
+    path: "/edit-ratecards",
+    name: "Edit Details",
     invisible:true,
     component: VideoPreview,
+    layout: "/media"
+  },
+  {
+    path: "/view-details",
+    name: "Details",
+    invisible:true,
+    component: ViewRateCardDetails,
     layout: "/media"
   },
   {

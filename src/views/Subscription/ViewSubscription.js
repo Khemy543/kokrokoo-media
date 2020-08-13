@@ -80,18 +80,6 @@ function ViewSubscription (props){
                       <td>20-20-20</td>
                       <td><Button color="info" style={{padding:"3px 6px 3px 6px"}}><i className="fa fa-eye"/></Button></td>
                     </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Jacob</td>
-                      <td>Thornton</td>
-                      <td>@fat</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>Larry</td>
-                      <td>the Bird</td>
-                      <td>@twitter</td>
-                    </tr>
                   </tbody>
                 </Table>
               </CardBody>

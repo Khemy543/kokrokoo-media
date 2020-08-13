@@ -21,16 +21,14 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 // reactstrap components
 import {
   Card,
-  CardHeader,
   CardBody,
   Container,
   Row,
   Col,
-  UncontrolledTooltip,
-  Input,
-  Button,
-  CardTitle,
-  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label,Table
+  Button,Table,
+  Modal,
+  ModalBody,
+  ModalFooter
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -39,20 +37,18 @@ import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";/* 
 import history from "../../history.js"; */
 
-let user =1;
-let loggedin_data = false;
+let user =null;
 let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
 if(all_data !== null){
   user = all_data[0];
-  loggedin_data = all_data[1];
-  //get user
-  console.log("user:",user);
 }
 
 function ViewRateCards(props) {
     const [isActive, setIsActive] = React.useState(false);
     const [rateCards, setRateCards] = React.useState([]);
+    const [modal, setModal] = React.useState(false);
+    const [deleteID, setId]=React.useState(null);
+
 
 
     React.useEffect(()=>{
@@ -69,8 +65,45 @@ function ViewRateCards(props) {
     })
     },[])
     
-
+  
+    const handleEdit=(id)=>{
+      if(localStorage.getItem('media_type') === "Print"){
+        props.history.push("/media/edit-ratecards/print",{title_id:id});
+      }
+      else{
+        props.history.push("/media/edit-ratecards",{title_id:id});
+      }
+    }
     
+    const handleView=(id)=>{
+      if(localStorage.getItem('media_type') === "Print"){
+        props.history.push("/media/view-details/print",{title_id:id});
+      }
+      else{
+        props.history.push("/media/view-details",{title_id:id});
+      }
+    }
+
+    const hanldeDelete=()=>{
+      setModal(false);
+      setIsActive(true)
+      axios.delete("https://media-kokrokooad.herokuapp.com/api/ratecard/"+deleteID+"/delete",
+      {headers:{ 'Authorization':`Bearer ${user}`}})
+      .then(res=>{
+        console.log(res.data)
+        if(res.data.status ==="Ratecard deleted"){
+          let tempData = rateCards;
+          let newData = tempData.filter(item=>item.id !== deleteID);
+          setRateCards(newData)
+          setIsActive(false);
+        }
+      })
+      .catch(error=>{
+        console.log(error);
+        setIsActive(false)
+      })
+    }
+
     return (
       <>
       <LoadingOverlay 
@@ -90,7 +123,6 @@ function ViewRateCards(props) {
               <th>Rate Card ID</th>
               <th>Rate Card</th>
               <th>Description</th>
-              <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -101,13 +133,18 @@ function ViewRateCards(props) {
               <td>{value.id}</td>
               <td>{value.rate_card_title}</td>
               <td>{value.service_description}</td>
-              <td>{value.status}</td>
               <td>
                 <Row>
                   <Col md="6" lg="6" sm="6" xs="6" >
-                  <Button color="info" style={{padding:"5px 10px 5px 10px"}}><i className="fa fa-eye"/></Button>
-                  <Button color="success" style={{padding:"5px 10px 5px 10px"}}><i className="fa fa-pencil"/></Button>
-                  <Button color="danger" style={{padding:"5px 10px 5px 10px"}}><i className="fa fa-trash"/></Button>
+                  <Button color="info" style={{padding:"5px 10px 5px 10px"}}
+                  onClick={()=>handleView(value.id)}
+                  ><i className="fa fa-eye"/></Button>
+                  <Button color="success" style={{padding:"5px 10px 5px 10px"}}
+                  onClick={()=>handleEdit(value.id)}
+                  ><i className="fa fa-pencil"/></Button>
+                  <Button color="danger" style={{padding:"5px 10px 5px 10px"}}
+                  onClick={()=>{setModal(true); setId(value.id)}}
+                  ><i className="fa fa-trash"/></Button>
                   </Col>
                 </Row>  
                 </td>
@@ -120,6 +157,23 @@ function ViewRateCards(props) {
           </Col>
           </Row> 
         </Container>
+        <Modal isOpen={modal}>
+          <ModalBody>
+            Do you want to Delete?
+          </ModalBody>
+          <ModalFooter>
+            <Button color="danger"
+            onClick={()=>hanldeDelete()}
+            >
+              Yes
+            </Button>
+            <Button color="info"
+            onClick={()=>setModal(false)}
+            >
+              No
+            </Button>
+          </ModalFooter>
+        </Modal>
         </LoadingOverlay>
       </>
     );
