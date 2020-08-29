@@ -37,15 +37,10 @@ import {
 } from "reactstrap";
 
 
-let user =1;
-let loggedin_data = false;
+let user =null;
 let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
 if(all_data !== null){
   user = all_data[0];
-  loggedin_data = all_data[1];
-  //get user
-  console.log("user:",user);
 }
 
 class AuthNavbar extends React.Component {

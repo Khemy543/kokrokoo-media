@@ -196,7 +196,7 @@ class PrintRateDetails extends React.Component {
                   isActive:false,
                   size:"",
                   rate:"",
-                  page_section:"",
+                  page_section:"First Page",
                   newSlot:[],
                   title:res.data.rate_card_title
                  });
@@ -287,7 +287,7 @@ class PrintRateDetails extends React.Component {
                       sizeTues:"",
                       rateTues:"",
                       newSlotTues:[],
-                      page_sectionTues:'',
+                      page_sectionTues:'First Page',
                       title:res.data.rate_card_title
                      });
                   alert("saved");
@@ -377,7 +377,7 @@ class PrintRateDetails extends React.Component {
                           sizeWed:"",
                           rateWed:"",
                           newSlotWed:[],
-                          page_sectionWed:"",
+                          page_sectionWed:"First Page",
                           title:res.data.rate_card_title
                          });
                       alert("saved");
@@ -466,7 +466,7 @@ class PrintRateDetails extends React.Component {
                               sizeThurs:"",
                               rateThurs:"",
                               newSlotThurs:[],
-                              page_sectionThurs:"",
+                              page_sectionThurs:"First Page",
                               title:res.data.rate_card_title
                              });
                           alert("saved");
@@ -555,7 +555,7 @@ class PrintRateDetails extends React.Component {
                                   sizeFri:"",
                                   rateFri:"",
                                   newSlotFri:[],
-                                  page_sectionFri:"",
+                                  page_sectionFri:"First Page",
                                   title:res.data.rate_card_title
                                  });
                               alert("saved");
@@ -644,7 +644,7 @@ class PrintRateDetails extends React.Component {
                                       sizeSat:"",
                                       rateSat:"",
                                       newSlotSat:[],
-                                      page_sectionSat:"",
+                                      page_sectionSat:"First Page",
                                       title:res.data.rate_card_title
                                      });
                                   alert("saved");
@@ -734,7 +734,7 @@ class PrintRateDetails extends React.Component {
                                           sizeSun:"",
                                           rateSun:"",
                                           newSlotSun:[],
-                                          page_sectionSun:"",
+                                          page_sectionSun:"First Page",
                                           title:res.data.rate_card_title
                                          });
                                       alert("saved");

@@ -77,7 +77,7 @@ function ViewRateCards(props) {
     
     const handleView=(id)=>{
       if(localStorage.getItem('media_type') === "Print"){
-        props.history.push("/media/view-details/print",{title_id:id});
+        props.history.push("/media/print/view-details",{title_id:id});
       }
       else{
         props.history.push("/media/view-details",{title_id:id});

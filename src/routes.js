@@ -31,6 +31,7 @@ import Preview from "views/Rate/Preview.js";
 import VideoPreview from "views/Rate/VideoPreview.js";
 import CreateNewTitle from "views/Rate/CreateNewTitle";
 import ViewRateCardDetails from "views/Rate/ViewRateCardDetails";
+import ViewRateCardDetailsPrint from "views/Rate/ViewRateCardDetailsPrint.js";
 
 
 var routes = [
@@ -103,6 +104,13 @@ var routes = [
     name: "Details",
     invisible:true,
     component: ViewRateCardDetails,
+    layout: "/media"
+  },
+  {
+    path: "/print/view-details",
+    name: "Details",
+    invisible:true,
+    component: ViewRateCardDetailsPrint,
     layout: "/media"
   },
   {

@@ -33,7 +33,12 @@ import {
   Navbar,
   Nav,
   Container,
-  Media
+  Media,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Modal,
+  ModalHeader
 } from "reactstrap";
 import {RateConsumer} from "../../context.js";
 
@@ -46,7 +51,11 @@ if(all_data !== null){
 
 class AdminNavbar extends React.Component {
 state={
-    username:""
+    username:"",
+    published:false,
+    modal:false,
+    message:"",
+    messageModal:false
   }
 
 componentDidMount(){
@@ -57,13 +66,58 @@ componentDidMount(){
         .then(res=>{
         console.log(res.data)
         if(res.data.user !== null){
-          this.setState({username:res.data.user.name});
-          localStorage.setItem('media_type',res.data.company.media_type)
+          this.setState({username:res.data.user.name, published:res.data.company.isPublished});
+          localStorage.setItem('media_type',res.data.company.media_type);
+          localStorage.setItem('published',res.data.company.isPublished)
         }
 
         }).catch(error=>{
         console.log(error)
         });
+}
+
+handlePublish=()=>{
+  axios.post("https://media-kokrokooad.herokuapp.com/api/super-admin/publish-company",null,
+  {headers:{ 'Authorization':`Bearer ${user}`}})
+  .then(res=>{
+    console.log(res.data);
+    if(res.data.status === "Company is live already" || res.data.status === "Turned services on"){
+      this.setState({published:true,messageModal:true, message:res.data.status});
+      setTimeout(
+        function() {
+            this.setState({ messageModal: false });
+        }
+        .bind(this),
+        1500
+    );
+    }
+  })
+  .catch(error=>{
+    console.log(error.response.data)
+  })
+}
+
+handleUnPublish=()=>{
+  this.setState({modal:false})
+  axios.post("https://media-kokrokooad.herokuapp.com/api/super-admin/unpublish-company",null,
+  {headers:{ 'Authorization':`Bearer ${user}`}})
+  .then(res=>{
+    console.log(res.data);
+    if(res.data.status === "Turned services off" || res.data.status ==="Services are already off"){
+      this.setState({published:false,messageModal:true, message:res.data.status});
+      setTimeout(
+        function() {
+            this.setState({ messageModal: false });
+        }
+        .bind(this),
+        1500
+    );
+
+    }
+  })
+  .catch(error=>{
+    console.log(error.response.data)
+  })
 }
   
   
@@ -117,10 +171,17 @@ componentDidMount(){
                     <i className="ni ni-single-02" />
                     <span>My profile</span>
                   </DropdownItem>
-                  <DropdownItem to="/media/user-profile" tag={Link}>
-                    <i className="ni ni-settings-gear-65" />
-                    <span>Settings</span>
+                  {!this.state.published?
+                  <DropdownItem onClick={()=>{this.handlePublish()}}>
+                    <i className="fa fa-bell-o" />
+                    <span>Publish</span>
                   </DropdownItem>
+                  :
+                  <DropdownItem onClick={()=>this.setState({modal:true})}>
+                    <i className="fa fa-bell-slash-o" />
+                    <span>Unpublish</span>
+                  </DropdownItem>
+                  }
                   <DropdownItem divider />
                   <DropdownItem onClick={()=>value.logout()}>
                     <i className="ni ni-user-run" />
@@ -131,6 +192,24 @@ componentDidMount(){
               </RateConsumer>
               </UncontrolledDropdown>
             </Nav>
+            <Modal isOpen={this.state.modal}>
+            <ModalBody>
+              Do you want to Unpublish Company?
+            </ModalBody>
+            <ModalFooter>
+              <Button color="danger" onClick={()=>{this.handleUnPublish()}}>Yes</Button>
+              <Button color="info" onClick={()=>this.setState({moda:false})}>No</Button>
+            </ModalFooter>
+            </Modal>
+            <Modal isOpen={this.state.messageModal}>
+            <ModalHeader style={{borderBottom:"1px solid rgb(64 78 103 / 30%)"}}>
+              Message
+            </ModalHeader>
+              <ModalBody style={{textAlign:"center"}}>
+                {this.state.message}
+              </ModalBody>
+
+            </Modal>
           </Container>
         </Navbar>
       </>

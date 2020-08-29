@@ -46,6 +46,7 @@ if(all_data !== null){
 class Profile extends React.Component {
 
   state={
+    media:[],
     name:"",
     email:"",
     phone1:"",
@@ -55,7 +56,18 @@ class Profile extends React.Component {
     isActive:false,
     modal:false,
     message:"",
-    company:[]
+    company_id:"",
+    company_name:"",
+    business_cert:"", 
+    address:"",
+    company_profile:"",
+    logo:"",
+    media_house:"",
+    media_type:"",
+    industry_type:"",
+    operation_cert:"",
+    policy:"", 
+    website:""
   }
 
 componentDidMount(){
@@ -74,7 +86,19 @@ componentDidMount(){
             phone2:res.data.user.phone2,
             title:res.data.user.title,
             id:res.data.user.id,
-            company:res.data.company,
+
+            company_id:res.data.company.id,
+            company_name:res.data.company.company_name,
+            business_cert:res.data.company.business_cert, 
+            address:res.data.company.address,
+            company_profile:res.data.company.company_profile,
+            logo:res.data.company.logo,
+            media_house:res.data.company.media_house,
+            media_type:res.data.company.media_type,
+            industry_type:res.data.company.industry_type,
+            operation_cert:res.data.company.operation_cert,
+            policy:res.data.company.policy, 
+            website:res.data.company.website,
             isActive:false
           })
         }
@@ -82,6 +106,15 @@ componentDidMount(){
         }).catch(error=>{
         console.log(error)
         });
+
+        axios.get("https://kokrokooad.herokuapp.com/api/media-types")
+        .then(res=>{
+          console.log(res.data);
+          this.setState({media:res.data})
+        })
+        .catch(error=>{
+          console.log(error)
+        })
 }
 
 toggleModal=()=>this.setState({modal:!this.state.modal});
@@ -115,11 +148,47 @@ handleSubmit=(e)=>{
   })
 }
 
+handleSubmitCompany=(e)=>{
+  this.setState({isActive:true})
+  e.preventDefault();
+  console.log(e);
+  console.log(this.state.company_id)
+  axios.post("https://media-kokrokooad.herokuapp.com/api/super-admin/update-company/"+this.state.company_id+"",{
+    company_name:this.state.company_name,
+    business_cert:this.state.business_cert, 
+    address:this.state.address,
+    company_profile:this.state.company_profile,
+    logo:this.state.logo,
+    media_house:this.state.media_house,
+    media_type:this.state.media_type,
+    industy_type:this.state.industy_type,
+    operation_cert:this.state.operation_cert,
+    policy:this.state.policy, 
+    website:this.state.website,
+},{
+    headers:{ 'Authorization':`Bearer ${user}`}})
+  .then(res=>{
+    console.log(res.data);
+    this.setState({message:"UPDATED!!",isActive:false,modal:true});
+
+    setTimeout(
+      function(){
+          this.setState({modal:false})
+      }.bind(this),2000)
+  
+  })
+  .catch(error=>{
+    console.log(error.response.data)
+   /*  if(error){
+      this.setState({message:error.response.data.errors.email || error.response.data.errors.phone1 || error.response.data.errors.phone2,
+      modal:true,isActive:false
+      })
+      
+    } */
+  })
+}
+
   render() {
-    const {
-      company_name, business_cert, address,company_profile,logo,media_house,media_type,industy_type,
-      operation_cert,policy, website
-    }  = this.state.company;
     return (
       <>
       <LoadingOverlay 
@@ -266,7 +335,7 @@ handleSubmit=(e)=>{
                               className="form-control-label"
                               htmlFor="input-title"
                             >
-                              Phone
+                              Title
                             </label>
                             <Input
                               className="form-control-alternative"
@@ -287,9 +356,9 @@ handleSubmit=(e)=>{
                     <Row>
                     <Button
                       type="submit"
-                      style={{backgroundColor:"#404E67",color:"white"}}
+                      color="info"
                     >
-                      Edit profile
+                      Edit profile details
                     </Button>
                     </Row>
                   </div>
@@ -309,21 +378,232 @@ handleSubmit=(e)=>{
                   </Row>
                 </CardHeader>
                 <CardBody>
-                <h3>{company_name}</h3>
-                <h3>{company_profile}</h3>
-                <h3>{address}</h3>
-                <h3>{media_house}</h3>
-                <h3>{media_type}</h3>
-                <h3>{industy_type}</h3>
-                <h3>{logo}</h3>
-                <h3>{business_cert}</h3>
-                <h3>{operation_cert}</h3>
-                <h3>{policy}</h3>
-                <h3>{website}</h3>
+                <Form onSubmit = {this.handleSubmitCompany}>
+                <Row>
+                  <Col lg="6">
+                    <FormGroup>
+                      <label
+                        className="form-control-label"
+                        htmlFor="input-first-name"
+                      >
+                        Company Name
+                      </label>
+                      <Input
+                        className="form-control-alternative"
+                        value={this.state.company_name}
+                        id="input-first-name"
+                        placeholder="Company name"
+                        type="text"
+                        onChange={e=>this.setState({company_name:e.target.value})}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg="6">
+                    <FormGroup>
+                      <label
+                        className="form-control-label"
+                        htmlFor="input-last-name"
+                      >
+                        Company Profile
+                      </label>
+                      <Input
+                        className="form-control-alternative"
+                        value={this.state.company_profile}
+                        id="input-last-name"
+                        placeholder="Company Profile"
+                        type="text"
+                        onChange={e=>this.setState({company_profile:e.target.value})}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-first-name"
+                        >
+                          Address
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          value={this.state.address}
+                          id="input-first-name"
+                          placeholder="Address"
+                          type="text"
+                          onChange={e=>this.setState({address:e.target.value})}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-last-name"
+                        >
+                          Media House
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          value={this.state.media_house}
+                          id="input-last-name"
+                          placeholder="Media House"
+                          type="text"
+                          onChange={e=>this.setState({media_house:e.target.value})}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-first-name"
+                        >
+                          Media Type
+                        </label>
+                        <Input
+                          value={this.state.media_type}
+                          type="select"
+                          onChange={e=>this.setState({media_type:e.target.value})}
+                        >
+                          {this.state.media.map(value=>(<option value={value.id} key={value.id}>{value.mediaType}</option>))}
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-last-name"
+                        >
+                          Industry Type
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          value={this.state.industry_type}
+                          id="input-last-name"
+                          placeholder="Industry Type"
+                          type="text"
+                          onChange={e=>this.setState({industry_type:e.target.value})}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-first-name"
+                        >
+                          Business Certificate
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          value={`https://media-kokrokooad.herokuapp.com${this.state.business_cert}`}
+                          id="input-first-name"
+                          placeholder="Business Certificate"
+                          type="text"
+                          onChange={e=>this.setState({business_cert:e.target.value})}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-last-name"
+                        >
+                          Operation Certificate
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          value={this.state.operation_cert}
+                          id="input-last-name"
+                          placeholder="Operation Certificate"
+                          type="text"
+                          onChange={e=>this.setState({operation_cert:e.target.value})}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-first-name"
+                        >
+                          Policy
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          value={this.state.policy}
+                          id="input-first-name"
+                          placeholder="Policy"
+                          type="text"
+                          onChange={e=>this.setState({policy:e.target.value})}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-last-name"
+                        >
+                          Website
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          value={this.state.website}
+                          id="input-last-name"
+                          placeholder="Website"
+                          type="text"
+                          onChange={e=>this.setState({website:e.target.value})}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-first-name"
+                            >
+                              logo
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              value=""
+                              type="file"
+                              onChange={e=>this.setState({logo:e.target.value})}
+                            />
+                          </FormGroup>
+                        </Col>
+                        
+                      </Row>
+                <hr className="my-4" />
+                <div className="pl-lg-4">
+                  <Row>
+                  <Button
+                    type="submit"
+                    color="info"
+                  >
+                    Edit company details
+                  </Button>
+                  </Row>
+                </div>
+                </Form>
                 </CardBody>
                 </Card>
             </Col>
           </Row>
+          
         </Container>
         <Modal isOpen={this.state.modal} toggle={()=>this.toggleModal} style={{maxHeight:"40px", maxWidth:"300px",backgroundColor:"#404E67"}} className="alert-modal">
             <ModalBody>

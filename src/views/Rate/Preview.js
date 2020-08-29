@@ -31,6 +31,7 @@ class Preview extends React.Component{
     days:[],
     data:[],
     details:[],
+    id_number:1,
     page_section:[
       {id:1, page_section:"First Page"},
       {id:2, page_section:"Back Page"},
@@ -115,6 +116,14 @@ class Preview extends React.Component{
     this.setState({details:selectedDetail})
   }
 
+  addSlot=()=>{
+    let tempData = this.state.details;
+    if(tempData[tempData.length-1].size && tempData[tempData.length-1].cost){
+    tempData.push({id:`#${this.state.id_number}`, size:"", cost:"", page_section:"First Page"});
+    this.setState({details:tempData, id_number:this.state.id_number+1})
+    }
+  }
+
   render(){
   return (
       <>
@@ -156,23 +165,31 @@ class Preview extends React.Component{
                         <TabPane tabId={this.state.activeTab}>
                           <Container>
                           <Row>
-                            <Col>
+                            <Col md="3">
                             <h3>Size</h3>
                             </Col>
-                            <Col>
+                            <Col md="3">
                             <h3>Cost</h3>
                             </Col>
-                            <Col>
+                            <Col md="3">
                             <h3>Page Section</h3>
                             </Col>
-                            <Col>
+                            <Col md="2">
                             <h3 style={{textAlign:"center"}}>Delete</h3>
+                            </Col>
+                            <Col md="1">
+                            <Button
+                            color="info"
+                            onClick={()=>this.addSlot()}
+                            >
+                            <i className="fa fa-plus"/>
+                            </Button>
                             </Col>
                           </Row>
                           {this.state.details.map((value, index)=>(
                           <Row key={index} style={{marginBottom:"20px"}}>
                               <Col md="3"  sm="3" xs="3" lg="3">
-                                <Input type="text" value={value.size} onChange={e=>{this.handeleSizeChange(value.id,e.target.value)}}/>
+                                <Input type="text" placeholder='Eg. 2"X3"' value={value.size} onChange={e=>{this.handeleSizeChange(value.id,e.target.value)}}/>
                               </Col>
                               <Col md="3"  sm="3" xs="3" lg="3">
                                 <Input type="number" value={value.cost} onChange={e=>this.handleRateChange(value.id,e.target.value)}/>
@@ -184,9 +201,11 @@ class Preview extends React.Component{
                                   ))}
                                 </Input>
                               </Col>
-                              <Col md="3" sm="3" xs="3" lg="3" className="text-center">
+                              <Col md="2" sm="2" xs="2" lg="2" className="text-center">
                            <i className="fa fa-trash" style={{color:"red",fontSize:"20px",marginTop:"15px",cursor:"pointer"}} onClick={()=>this.handleDelete(value.id)}/>
                            </Col>
+                           <Col md="1">
+                            </Col>
                           </Row>
                           ))}
                           <Row>

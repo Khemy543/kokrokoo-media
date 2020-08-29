@@ -8,7 +8,6 @@ const RateContext = React.createContext();
 
 let user =1;
 let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data);
 if(all_data !== null){
   user = all_data[0];
 }

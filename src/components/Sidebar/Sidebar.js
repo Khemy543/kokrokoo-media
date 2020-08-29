@@ -3,6 +3,7 @@ import React from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
 // nodejs library to set properties for components
 import { PropTypes } from "prop-types";
+import axios from "axios";
 
 // reactstrap components
 import {
@@ -28,15 +29,21 @@ import {
   NavItem,
   NavLink,
   Nav,
-  Progress,
-  Table,
   Container,
   Row,
-  Col
+  Col,
+  ModalHeader,
+  ModalBody,
+  Modal,
+  ModalFooter
 } from "reactstrap";
 import {RateConsumer} from "../../context.js";
-var ps;
 
+let user =null;
+let all_data = JSON.parse(localStorage.getItem('storageData'));
+if(all_data !== null){
+  user = all_data[0];
+}
 class Sidebar extends React.Component {
   state = {
     collapseOpen: false,
@@ -46,7 +53,11 @@ class Sidebar extends React.Component {
     rateCollapse:false,
     reportCollapse:false,
     userCollapse:false,
-    profileCollapse:false
+    profileCollapse:false,
+    published:localStorage.getItem('published'),
+    modal:false,
+    message:"",
+    messageModal:false
   };
   constructor(props) {
     super(props);
@@ -260,6 +271,52 @@ class Sidebar extends React.Component {
     }
     })
   }
+
+
+  handlePublish=()=>{
+    axios.post("https://media-kokrokooad.herokuapp.com/api/super-admin/publish-company",null,
+    {headers:{ 'Authorization':`Bearer ${user}`}})
+    .then(res=>{
+      console.log(res.data);
+      if(res.data.status === "Company is live already" || res.data.status === "Turned services on"){
+        this.setState({published:true,messageModal:true, message:res.data.status});
+        setTimeout(
+          function() {
+              this.setState({ messageModal: false });
+          }
+          .bind(this),
+          1500
+      );
+      }
+    })
+    .catch(error=>{
+      console.log(error.response.data)
+    })
+  }
+  
+  handleUnPublish=()=>{
+    this.setState({modal:false})
+    axios.post("https://media-kokrokooad.herokuapp.com/api/super-admin/unpublish-company",null,
+    {headers:{ 'Authorization':`Bearer ${user}`}})
+    .then(res=>{
+      console.log(res.data);
+      if(res.data.status === "Turned services off" || res.data.status ==="Services are already off"){
+        this.setState({published:false,messageModal:true, message:res.data.status});
+        setTimeout(
+          function() {
+              this.setState({ messageModal: false });
+          }
+          .bind(this),
+          1500
+      );
+  
+      }
+    })
+    .catch(error=>{
+      console.log(error.response.data)
+    })
+  }
+
   render() {
     const { bgColor, routes, logo } = this.props;
     let navbarBrandProps;
@@ -338,10 +395,17 @@ class Sidebar extends React.Component {
                   <i className="ni ni-single-02" />
                   <span>My profile</span>
                 </DropdownItem>
-                <DropdownItem to="/media/user-profile" tag={Link}>
-                  <i className="ni ni-settings-gear-65" />
-                  <span>Settings</span>
-                </DropdownItem>
+                {!this.state.published?
+                  <DropdownItem onClick={()=>{this.handlePublish()}}>
+                    <i className="fa fa-bell-o" />
+                    <span>Publish</span>
+                  </DropdownItem>
+                  :
+                  <DropdownItem onClick={()=>this.setState({modal:true})}>
+                    <i className="fa fa-bell-slash-o" />
+                    <span>Unpublish</span>
+                  </DropdownItem>
+                  }
                 <DropdownItem divider />
                 <DropdownItem onClick={()=>value.logout()}>
                   <i className="ni ni-user-run" />
@@ -351,7 +415,26 @@ class Sidebar extends React.Component {
             )}
             </RateConsumer>
             </UncontrolledDropdown>
+            
           </Nav>
+            <Modal isOpen={this.state.modal}>
+            <ModalBody>
+              Do you want to Unpublish Company?
+            </ModalBody>
+            <ModalFooter>
+              <Button color="danger" onClick={()=>{this.handleUnPublish()}}>Yes</Button>
+              <Button color="info" onClick={()=>this.setState({moda:false})}>No</Button>
+            </ModalFooter>
+            </Modal>
+            <Modal isOpen={this.state.messageModal}>
+            <ModalHeader style={{borderBottom:"1px solid rgb(64 78 103 / 30%)"}}>
+              Message
+            </ModalHeader>
+              <ModalBody style={{textAlign:"center"}}>
+                {this.state.message}
+              </ModalBody>
+
+            </Modal>
           {/* Collapse */}
           <Collapse navbar isOpen={this.state.collapseOpen}>
             {/* Collapse header */}
@@ -454,7 +537,7 @@ class Sidebar extends React.Component {
                 </NavLink>
               </NavItem>
               <Collapse isOpen={this.state.userCollapse}>
-                {this.createUserLinks(routes)}>
+                {this.createUserLinks(routes)}
                 </Collapse>  
 
                 <NavItem onClick={this.toggleProfile}>

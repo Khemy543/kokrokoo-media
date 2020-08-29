@@ -144,7 +144,7 @@ function CreateNewTitle(props) {
                     </FormGroup>
                     <FormGroup check>
                         <Label check>
-                        <Input type="checkbox" value="document" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
+                        <Input type="checkbox" value="application" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
                         Document
                         </Label>
                     </FormGroup>

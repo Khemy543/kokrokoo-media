@@ -166,6 +166,24 @@ class VideoPreview extends React.Component{
     }
   }
 
+  handleDeleteSegment=(id)=>{
+    this.setState({isActive:true});
+    axios.delete("https://media-kokrokooad.herokuapp.com/api/ratecard/detail/"+id+"/delete",
+    { headers: { 'Authorization': `Bearer ${user}` } })
+    .then(res=>{
+      console.log(res.data);
+      if(res.data.status === "deleted"){
+        let tempDetails = this.state.data;
+        let newData = tempDetails.filter(item=>item.id !== id);
+        this.setState({data:newData, isActive:false});
+      }
+    })
+    .catch(error=>{
+      console.log(error);
+      this.setState({isActive:false})
+    })
+  }
+
   handleSubmit=(id)=>{
     let tempDetails = this.state.data;
     let selected = tempDetails.find(item=>item.id === id);
@@ -314,7 +332,7 @@ class VideoPreview extends React.Component{
                         </Row>
                           ))}
                           <Row>
-                            <Col md="5">
+                            <Col md="2">
                               <Button
                               color="info"
                               onClick={()=>this.handleSubmit(value.id)}
@@ -322,6 +340,18 @@ class VideoPreview extends React.Component{
                                 Save Changes
                               </Button>
                             </Col>
+                            <Col md="3">
+                              <Button
+                              color="danger"
+                              onClick={()=>this.handleDeleteSegment(value.id)}
+                              >
+                                Delete Segment
+                              </Button>
+                            </Col>
+                            <Col md="6">
+
+                            </Col>
+
                           </Row>
                           </div>
                           ))}
