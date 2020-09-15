@@ -27,7 +27,7 @@ import {
   Col,
   Button,Table,
   Modal,
-  ModalBody,
+  ModalBody,Spinner,
   ModalFooter
 } from "reactstrap";
 // core components
@@ -45,6 +45,7 @@ if(all_data !== null){
 
 function ViewRateCards(props) {
     const [isActive, setIsActive] = React.useState(false);
+    const [isActiveSpinner, setIsActiveSpinner] = React.useState(false);
     const [rateCards, setRateCards] = React.useState([]);
     const [modal, setModal] = React.useState(false);
     const [deleteID, setId]=React.useState(null);
@@ -52,28 +53,20 @@ function ViewRateCards(props) {
 
 
     React.useEffect(()=>{
-      setIsActive(true)
+      setIsActiveSpinner(true)
         axios.get("https://media-kokrokooad.herokuapp.com/api/ratecard/company-ratecards",
     {headers:{ 'Authorization':`Bearer ${user}`}})
     .then(res=>{
         console.log(res.data);
         setRateCards(res.data)
-        setIsActive(false)
+        setIsActiveSpinner(false)
     })
     .catch(error=>{
         console.log(error)
     })
     },[])
     
-  
-    const handleEdit=(id)=>{
-      if(localStorage.getItem('media_type') === "Print"){
-        props.history.push("/media/edit-ratecards/print",{title_id:id});
-      }
-      else{
-        props.history.push("/media/edit-ratecards",{title_id:id});
-      }
-    }
+
     
     const handleView=(id)=>{
       if(localStorage.getItem('media_type') === "Print"){
@@ -82,6 +75,7 @@ function ViewRateCards(props) {
       else{
         props.history.push("/media/view-details",{title_id:id});
       }
+      
     }
 
     const hanldeDelete=()=>{
@@ -112,8 +106,18 @@ function ViewRateCards(props) {
       >
       <Header/>
         <Container className=" mt--8" fluid>
+        {isActiveSpinner?
           <Row>
-            <Col lg="12">
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
+          <>
+          <Row>
+            <Col lg="12" md="12" sm="12" md="12" xs="12">
+            <p style={{fontSize:"13px", fontWeight:500}}
+            >Edit, Delete and View RateCards</p>
             <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
             <CardBody style={{overflowX:"scroll"}}>
             <Table stripped bordered>
@@ -136,15 +140,28 @@ function ViewRateCards(props) {
               <td>
                 <Row>
                   <Col md="6" lg="6" sm="6" xs="6" >
-                  <Button color="info" style={{padding:"5px 10px 5px 10px"}}
-                  onClick={()=>handleView(value.id)}
-                  ><i className="fa fa-eye"/></Button>
-                  <Button color="success" style={{padding:"5px 10px 5px 10px"}}
-                  onClick={()=>handleEdit(value.id)}
-                  ><i className="fa fa-pencil"/></Button>
-                  <Button color="danger" style={{padding:"5px 10px 5px 10px"}}
+                  <div style={{textAlign:"center"}}>
+                  <i className="fa fa-eye mr-3" style={{cursor:"pointer", color:"green",fontSize:"20px"}} onClick={()=>handleView(value.id)}/>
+                 
+                  
+                  <i className="fa fa-pencil mr-3"
+                    onClick={()=>props.history.push("/media/edit-ratecard-title",
+                            {
+                              title_id:value.id,
+                              description:value.service_description,
+                              file_types:value.file_types,
+                              title:value.rate_card_title
+                              
+                            })}
+                            style={{cursor:'pointer', color:"blue",fontSize:"20px"}}
+                  />
+                  
+                  <i className="fa fa-trash mr-3"
+                  style={{cursor:"pointer", color:"red", fontSize:"20px"}}
                   onClick={()=>{setModal(true); setId(value.id)}}
-                  ><i className="fa fa-trash"/></Button>
+                  />
+                  </div>
+                  
                   </Col>
                 </Row>  
                 </td>
@@ -156,6 +173,8 @@ function ViewRateCards(props) {
           </Card>
           </Col>
           </Row> 
+          </>
+        }
         </Container>
         <Modal isOpen={modal}>
           <ModalBody>

@@ -124,7 +124,7 @@ handleUnPublish=()=>{
   render() {
     return (
       <>
-        <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
+        <Navbar className="navbar-top navbar-dark shadow" expand="md" id="navbar-main">
           <Container fluid>
             <div
               className="h4 mb-0 text-uppercase d-none d-lg-inline-block"
@@ -132,7 +132,7 @@ handleUnPublish=()=>{
             >
               {this.props.brandText}
             </div>
-            <Form className="navbar-search navbar form-inline mr-3 d-none d-md-flex ml-lg-auto" style={{color:"rgba(50, 50, 93, 0.62)"}}>
+            {/* <Form className="navbar-search navbar form-inline mr-3 d-none d-md-flex ml-lg-auto" style={{color:"rgba(50, 50, 93, 0.62)"}}>
               <FormGroup className="mb-0" style={{color:"rgba(50, 50, 93, 0.62)"}}>
                 <InputGroup className="input-group-alternative" style={{color:"rgba(50, 50, 93, 0.62)"}}>
                   <InputGroupAddon addonType="prepend" style={{color:"rgba(50, 50, 93, 0.62)"}}>
@@ -143,7 +143,7 @@ handleUnPublish=()=>{
                   <Input placeholder="Search" type="text" style={{color:"rgba(50, 50, 93, 0.62)"}}/>
                 </InputGroup>
               </FormGroup>
-            </Form>
+            </Form> */}
             <Nav className="align-items-center d-none d-md-flex" navbar>
               <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
@@ -156,7 +156,7 @@ handleUnPublish=()=>{
                     </span>
                     <Media className="ml-2 d-none d-lg-block">
                       <span className="mb-0 text-sm font-weight-bold" style={{color:"#32325d"}}>
-                        {this.state.username}
+                        {this.state.username}  <i className="fa fa-chevron-down ml-2" style={{fontSize:"11px"}}/>
                       </span>
                     </Media>
                   </Media>

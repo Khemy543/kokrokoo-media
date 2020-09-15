@@ -46,11 +46,11 @@ if (all_data !== null) {
   user = all_data[0];
 }
 
-function ViewSubscription (props){
+function ActiveSubscriptions (props){
   const [subscriptions, setSubscription] = React.useState([]);
 
   React.useEffect(()=>{
-    axios.get("https://media-kokrokooad.herokuapp.com/api/all-subscriptions",
+    axios.get("https://media-kokrokooad.herokuapp.com/api/active-subscriptions",
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);
@@ -119,4 +119,4 @@ function ViewSubscription (props){
     );
   }
 
-export default ViewSubscription;
+export default ActiveSubscriptions;

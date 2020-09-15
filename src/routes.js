@@ -32,6 +32,13 @@ import VideoPreview from "views/Rate/VideoPreview.js";
 import CreateNewTitle from "views/Rate/CreateNewTitle";
 import ViewRateCardDetails from "views/Rate/ViewRateCardDetails";
 import ViewRateCardDetailsPrint from "views/Rate/ViewRateCardDetailsPrint.js";
+import EditRateTitle from "views/Rate/EditRateTitle.js";
+import SubscriptionDetails from "views/Subscription/SubscriptionDetails";
+import PendingSubscriptions from "views/Subscription/PendingSubscriptions";
+import ActiveSubscriptions from "views/Subscription/ActiveSubscriptions";
+import ApprovedSubscriptions from "views/Subscription/ApprovedSubscriptions";
+import RejectedSubscriptions from "views/Subscription/RejectedSubscriptions";
+import CompanyProfile from "views/examples/CompanyProfile.js";
 
 
 var routes = [
@@ -59,7 +66,7 @@ var routes = [
   },
   {
     path: "/view-ratecards",
-    name: "View RateCards",
+    name: "Manage RateCards",
     header:"rate",
     component: ViewRateCards,
     layout: "/media"
@@ -93,6 +100,14 @@ var routes = [
     layout: "/media"
   },
   {
+    path: "/edit-ratecard-title",
+    name: "Manage RateCards",
+    invisible:true,
+    header:"rate",
+    component: EditRateTitle,
+    layout: "/media"
+  },
+  {
     path: "/edit-ratecards",
     name: "Edit Details",
     invisible:true,
@@ -116,9 +131,50 @@ var routes = [
   {
     
     path: "/view-subscription",
-    name: "View Subscriptions",
+    name: "All Subscriptions",
     header:"subscriptions",
     component: ViewSubscription,
+    layout: "/media"
+  },
+  {
+    
+    path: "/pending-subscription",
+    name: "Pending Subscriptions",
+    header:"subscriptions",
+    component: PendingSubscriptions,
+    layout: "/media"
+  },
+  {
+    
+    path: "/active-subscription",
+    name: "Active Subscriptions",
+    header:"subscriptions",
+    component: ActiveSubscriptions,
+    layout: "/media"
+  },
+  {
+    
+    path: "/approved-subscription",
+    name: "Apporved Subscriptions",
+    header:"subscriptions",
+    component: ApprovedSubscriptions,
+    layout: "/media"
+  },
+  {
+    
+    path: "/rejected-subscription",
+    name: "Rejected Subscriptions",
+    header:"subscriptions",
+    component: RejectedSubscriptions,
+    layout: "/media"
+  },
+  {
+    
+    path: "/subscription-details",
+    name: "Subscriptions",
+    header:"subscriptions",
+    invisible:true,
+    component: SubscriptionDetails,
     layout: "/media"
   },
   {
@@ -171,9 +227,16 @@ var routes = [
   },
   {
     path: "/user-profile",
-    name:"Profile",
+    name:"User Profile",
     header:"profile",
     component: Profile,
+    layout: "/media"
+  },
+  {
+    path: "/company-profile",
+    name:"Company Profile",
+    header:"profile",
+    component: CompanyProfile,
     layout: "/media"
   }
 ];

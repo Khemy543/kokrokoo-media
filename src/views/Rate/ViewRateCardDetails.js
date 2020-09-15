@@ -25,7 +25,7 @@ import {
   Container,
   Row,
   Col,
-  Button,
+  Button,Spinner,
   Nav,NavItem,NavLink,TabContent,TabPane,Table
 } from "reactstrap";
 // core components
@@ -112,13 +112,17 @@ class ViewRateCardDetails extends React.Component{
     render(){
     return (
       <>
-      <LoadingOverlay 
-      active = {this.state.isActive}
-      spinner={<FadeLoader color={'#4071e1'}/>}
-      >
       <Header/>
         <Container className=" mt--8" fluid>
-            
+        
+        {this.state.isActive?
+          <Row>
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
+        <>
           <Row>
             <Col md="10">
             <Card className=" shadow"> 
@@ -136,7 +140,7 @@ class ViewRateCardDetails extends React.Component{
                                 {this.state.days.map((value,index)=>(
                                 <NavItem key={index}>
                                 <NavLink
-                                    style={{cursor:"pointer",textTransform: "uppercase" }}
+                                    style={{ cursor: "pointer", textTransform: "uppercase",fontSize:"14px", fontWeight:"bold" }}
                                     className={this.state.activeTab === `${value.id}` ? "active" : ""}
                                     onClick={() => { this.toggle(`${value.id}`); this.getDetails(value.id)}}
                                 >
@@ -149,7 +153,15 @@ class ViewRateCardDetails extends React.Component{
                         </div>
                         <TabContent activeTab={this.state.activeTab}>
                             <TabPane tabId={this.state.activeTab}>
-                            {this.state.data.map((value,index)=>(
+                            {this.state.data.length<=0?
+                              <Row>
+                                <Col md="6" className="mr-auto ml-auto" style={{textAlign:"center"}}>
+                                  <h3>No Data Saved For This Day</h3>
+                                </Col>
+                              </Row>
+                              :
+                              <>
+                              {this.state.data.map((value,index)=>(
                             <Container style={{borderBottom:"1px solid rgb(64 78 103 / 30%)"}} key={index}>
                                 <br/>
                             <Row>
@@ -164,15 +176,15 @@ class ViewRateCardDetails extends React.Component{
                             <Col>
                                 <Table bordered>
                                     <tbody>
-                                        <tr>
-                                            <th style={{fontWeight:1000}}>DURATION</th>
+                                        <tr> 
+                                            <th style={{fontWeight:1000,backgroundColor:"#01a9ac",color:"black"}}>DURATION</th>
                                             {value.duration.map((item, index)=>(
                                             <td>{item.duration} {item.unit_id}</td>
                                             ))}
 
                                         </tr>
                                         <tr>
-                                            <th style={{fontWeight:1000}}>RATE</th>
+                                            <th style={{fontWeight:1000,backgroundColor:"#01a9ac",color:"black"}}>RATE</th>
                                             {value.duration.map((item, index)=>(
                                             <td>{item.rate}</td>
                                             ))}
@@ -186,6 +198,9 @@ class ViewRateCardDetails extends React.Component{
                             
                             </Container>
                         ))}
+                              </>
+                            }
+                           
                             </TabPane>
                             </TabContent>
                         </Container>
@@ -198,15 +213,16 @@ class ViewRateCardDetails extends React.Component{
             <Col>
             <Button
             color="danger"
-            
+            onClick={()=>this.props.history.push("/media/view-ratecards")}
             >
             Back
             </Button>
             </Col>
             
             </Row>
+            </>
+        }
         </Container>
-        </LoadingOverlay>
       </>
     );
   }

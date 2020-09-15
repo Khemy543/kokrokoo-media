@@ -29,7 +29,7 @@ import {
   UncontrolledTooltip,
   Input,
   Button,
-  CardTitle,
+  Spinner,
   Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label
 } from "reactstrap";
 // core components
@@ -46,18 +46,19 @@ if(all_data !== null){
 
 function CreateFromExisting(props) {
     const [isActive, setIsActive] = React.useState(false);
+    const [isActiveSpinner, setIsActiveSpinner] = React.useState(false);
     const [titles, setTitles] = React.useState([]);
     const [id,setId] = React.useState(1)
 
 
     React.useEffect(()=>{
-        setIsActive(true)
+        setIsActiveSpinner(true)
         axios.get("https://media-kokrokooad.herokuapp.com/api/ratecard/get-existing-titles",
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
             setTitles(res.data.existing_titles);
-            setIsActive(false)
+            setIsActiveSpinner(false)
         })
         .catch(error=>{
             console.log(error)
@@ -86,9 +87,18 @@ function CreateFromExisting(props) {
       >
       <Header/>
         <Container className=" mt--8" fluid>
-            
+        {isActiveSpinner?
           <Row>
-            <Col md="10">
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
+          <>
+          <Row>
+            <Col md="10" sm="12" lg="10" xl="10" xs="12">
+            <p style={{fontSize:"13px", fontWeight:500}}
+            >Create RateCard From Existing RateCards, Select A RateCard <span style={{color:"red"}}>Title</span></p>
             <Card className="shadow">
             <CardHeader className=" bg-transparent">
                   <h3 className=" mb-0">ENTER NEW TITLE</h3>
@@ -102,8 +112,9 @@ function CreateFromExisting(props) {
                     <option key={value.id} value={value.id}>{value.title}</option>
                 ))}
                 </Input>
+                <br/> 
                     <Button
-                    style={{marginTop:"20px",color:"white",backgroundColor:"#404E67"}}
+                    color="info"
                     onClick={pass}
                     >
                     Next
@@ -114,6 +125,9 @@ function CreateFromExisting(props) {
             </Card>    
             </Col>
             </Row>
+          </>
+        }
+
         </Container>
         </LoadingOverlay>
       </>

@@ -6,6 +6,25 @@ import FadeLoader from "react-spinners/FadeLoader";
 
 const RateContext = React.createContext();
 
+axios.interceptors.request.use(request=>{
+    console.log(request);
+    return request;
+  })
+  
+  
+  axios.interceptors.response.use(
+      response=>{
+    console.log(response);
+    return response;
+  },
+  error=>{
+      console.log(error);
+      if(!error.response){
+          alert("Please Check Your Internet Connection")
+      }
+  })
+
+  
 let user =1;
 let all_data = JSON.parse(localStorage.getItem('storageData'));
 if(all_data !== null){
@@ -15,7 +34,8 @@ if(all_data !== null){
 class RateProvider extends React.Component{
 
     state = {
-        cart:[]
+        cart:[],
+        modal:false
     };
 
     componentDidMount(){
@@ -36,26 +56,6 @@ class RateProvider extends React.Component{
     }
 
 
-    //check invalid token
-   /*  checkToken=()=>{
-        axios.get("https://media-kokrokooad.herokuapp.com/api/user",{
-        headers:{ 'Authorization':`Bearer ${user}`}})
-        .then(res=>{
-            console.log(res.data)
-        })
-        .catch(error=>{
-            if(!error.response){
-                alert("please check your internet connection")
-            }
-            else{
-            console.log(error.response.status);
-            if(error.response.status === 401){
-                localStorage.clear();
-                window.location.reload("/")
-            }
-            } 
-        })
-    } */
 
     logout=()=>{
         this.setState({isActive:true});
@@ -85,6 +85,16 @@ class RateProvider extends React.Component{
             >
             {this.props.children}
             </LoadingOverlay>
+               {/*  <Modal isOpen={this.state.modal}>
+                    <ModalHeader>
+                    {this.state.message}
+                    </ModalHeader>
+                    <ModalFooter>
+                    <Button color="danger" onClick={()=>this.setState({modal:false})}>
+                    close
+                    </Button>
+                    </ModalFooter>
+                </Modal> */}
             </RateContext.Provider>
         );
     }

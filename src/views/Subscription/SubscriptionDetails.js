@@ -46,11 +46,10 @@ if (all_data !== null) {
   user = all_data[0];
 }
 
-function ViewSubscription (props){
-  const [subscriptions, setSubscription] = React.useState([]);
-
+function SubscriptionDetails (props){
+const [subscription, setSubscription] = React.useState([]);
   React.useEffect(()=>{
-    axios.get("https://media-kokrokooad.herokuapp.com/api/all-subscriptions",
+    axios.get("https://media-kokrokooad.herokuapp.com/api/"+props.location.state.id+"/subscriptions",
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);
@@ -60,10 +59,6 @@ function ViewSubscription (props){
       console.log(error.response.data)
     })
   },[])
-
-  const getDetails=(id)=>{
-    props.history.push("/media/subscription-details",{id:id})
-  }
 
     return (
       <>
@@ -77,36 +72,7 @@ function ViewSubscription (props){
                 Show Entries
               </CardHeader>
               <CardBody style={{overflowX:"scroll"}}>
-              <Table striped bordered>
-                  <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
-                    <tr>
-                      <th>#</th>
-                      <th>Subscription ID</th>
-                      <th>Subscription Title</th>
-                      <th>Rate Card</th>
-                      <th>Status</th>
-                      <th>Created Date</th>
-                      <th>Company</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {subscriptions.map((value,index)=>(
-                    <tr>
-                      <th scope="row">{index +1}</th>
-                      <td>{value.id}</td>
-                      <td>{value.title}</td>
-                      <td>{value.rate_card_title_id}</td>
-                      <td>{value.status}</td>
-                      <td>{value.time}</td>
-                      <td>{value.comapny_id}</td>
-                      <td style={{textAlign:"center"}}>
-                      <i className="fa fa-eye" style={{fontSize:"17px",color:"#1a0080",cursor:"pointer"}} onClick={()=>getDetails(value.id)}/>
-                      </td>
-                    </tr>
-                    ))}
-                  </tbody>
-                </Table>
+              
               </CardBody>
               <CardFooter>
                 Showing 1 to 5 of Entries
@@ -119,4 +85,4 @@ function ViewSubscription (props){
     );
   }
 
-export default ViewSubscription;
+export default SubscriptionDetails;

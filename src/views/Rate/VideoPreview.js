@@ -6,7 +6,7 @@ import {
   Container,
   Row,
   Col, CardHeader, Nav, NavItem, NavLink,
-  TabContent,TabPane,Input,Button, FormGroup,Label,FormFeedback
+  TabContent,TabPane,Input,Button, FormGroup,Label,FormFeedback,Spinner, CardFooter
 } from "reactstrap";
 // core components
 import classnames from 'classnames';
@@ -27,6 +27,7 @@ class VideoPreview extends React.Component{
 
   state={
     isActive:false,
+    isActiveSpinner:false,
     activeTab:"1",
     days:[],
     data:[],
@@ -38,7 +39,7 @@ class VideoPreview extends React.Component{
   }
 
   componentDidMount(){
-    this.setState({isActive:true})
+    this.setState({isActiveSpinner:true})
     axios.get("https://media-kokrokooad.herokuapp.com/api/fetch-days-and-units")
     .then(res=>{
         console.log(res.data)
@@ -59,7 +60,7 @@ class VideoPreview extends React.Component{
           let selectedDetaisl = tempData.filter(item=> item.day.id === 1);
           console.log("selected:",selectedDetaisl);
           if(selectedDetaisl !== undefined){
-          this.setState({data:selectedDetaisl,isActive:false})
+          this.setState({data:selectedDetaisl,isActiveSpinner:false})
           }
           else{
             this.setState({data:[],isActive:false})
@@ -69,9 +70,6 @@ class VideoPreview extends React.Component{
       .catch(error => {
         console.log(error)
       });
-
-
-
   }
 
   toggle = tab => {
@@ -205,19 +203,40 @@ class VideoPreview extends React.Component{
     })
   }
 
+  handleComplete=()=>{
+    console.log("completing...")
+    axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/complete/create",null,
+    { headers: { 'Authorization': `Bearer ${user}`}})
+    .then(res=>{
+      console.log(res.data);
+    })
+    .catch(error=>{
+      console.log(error.response.data)
+    })
+  }
+
 
   render(){
   return (
       <>
       <LoadingOverlay
         active={this.state.isActive}
-        spinner={<FadeLoader color={'#4071e1'} />}
+        spinner={<FadeLoader color={'#4071e1'}/>}
       >
         <Header />
         <Container className=" mt--8" fluid>
-
+        {this.state.isActiveSpinner?
           <Row>
-            <Col md="12">
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
+          <>
+          <Row>
+            <Col md="12" sm="12" lg="12" xl="12" xs="12">
+            <p style={{fontSize:"13px", fontWeight:500}}
+            >Edit RateCard Details, Delete and Add More Fields.</p>
               <Card className="shadow">
                 <CardHeader className=" bg-transparent">
                   <h3 className=" mb-0">{this.state.title}</h3>
@@ -231,7 +250,7 @@ class VideoPreview extends React.Component{
                             {this.state.days.map(value => (
                               <NavItem key={value.id}>
                                 <NavLink
-                                  style={{ cursor: "pointer", textTransform: "uppercase" }}
+                                  style={{ cursor: "pointer", textTransform: "uppercase",fontSize:"14px", fontWeight:"bold" }}
                                   className={classnames({ active: this.state.activeTab === `${value.id}` })}
                                   onClick={() => { this.toggle(`${value.id}`); this.getDetails(value.id)}}
                                 >
@@ -246,12 +265,20 @@ class VideoPreview extends React.Component{
                       <TabContent activeTab={this.state.activeTab}>
                         <TabPane tabId={this.state.activeTab}>
                           <Container>
+                          {this.state.data.length<=0?
+                          <Row>
+                            <Col md="6" className="mr-auto ml-auto" style={{textAlign:"center"}}>
+                              <h3>No Data Saved For This Day</h3>
+                            </Col>
+                          </Row>
+                          :
+                          <>
                           {this.state.data.map((value, index)=>(
                           <div key={index} style={{paddingBottom:"50px"}}>
                           <Row>
                           <Col sm="6" md="6" xs="6" lg="6">
                             <FormGroup>
-                                <Label for="exampleTime">Start Time</Label>
+                                <Label for="exampleTime"  id="boldstyle">Start Time</Label>
                                 <Input
                                 type="time"
                                 name="time"
@@ -264,7 +291,7 @@ class VideoPreview extends React.Component{
                             </Col>
                             <Col sm="6" md="6" xs="6" lg="6" >
                             <FormGroup>
-                                <Label for="exampleTime">End Time</Label>
+                                <Label for="exampleTime" id="boldstyle">End Time</Label>
                                 <Input
                                 invalid={this.state.timeCheck}
                                 type="time"
@@ -282,7 +309,7 @@ class VideoPreview extends React.Component{
                         <Col md="12">
                         <Row>
                         <Col>
-                        <Label>Number of Slots</Label>
+                        <Label id="boldstyle">Number of Slots</Label>
                         <Input type="number" min="0" placeholder="number of slots" value={value.no_of_spots} onChange={e=>this.handleSpotChange(value.id,e.target.value)}/>
                         </Col>
                         <Col>
@@ -301,16 +328,16 @@ class VideoPreview extends React.Component{
                         <br/>    
                         <Row>
                             <Col>
-                            <h3>Duration</h3>
+                            <h3 id="boldstyle">Duration</h3>
                             </Col>
                             <Col>
-                            <h3>Unit</h3>
+                            <h3 id="boldstyle">Unit</h3>
                             </Col>
                             <Col>
-                            <h3>Rate</h3>
+                            <h3 id="boldstyle">Rate</h3>
                             </Col>
                             <Col>
-                            <h3 style={{textAlign:"center"}}>Delete</h3>
+                            <h3 style={{textAlign:"center"}} id="boldstyle">Delete</h3>
                             </Col>
                           </Row>
                           {value.duration.map((item, key)=>(
@@ -331,6 +358,7 @@ class VideoPreview extends React.Component{
                             </Col>
                         </Row>
                           ))}
+                          <br/>
                           <Row>
                             <Col md="2">
                               <Button
@@ -348,25 +376,45 @@ class VideoPreview extends React.Component{
                                 Delete Segment
                               </Button>
                             </Col>
+                           
                             <Col md="6">
 
                             </Col>
-
                           </Row>
                           </div>
                           ))}
-                         
-
+                          </>
+                            }
+                          
                           </Container>
                         </TabPane>
                       </TabContent>
                             
                 </Col>    
                 </Row>
-            </CardBody>    
+            </CardBody>
+            <CardFooter >
+                    <Button
+                    style={{float:"right"}}
+                    onClick={()=>this.props.history.push("/media/rate-details",{title_id:this.props.location.state.title_id, rate_title:this.state.title})}
+                    color="primary"
+                    >
+                    Add New Segment
+                    </Button>
+
+                    <Button
+                    style={{float:"right", marginRight:"10px"}}
+                    onClick={()=>this.handleComplete()}
+                    color="success"
+                    >
+                   Complete
+                    </Button>
+            </CardFooter>
             </Card>    
             </Col>
             </Row>
+          </>
+        }
         </Container>
         </LoadingOverlay>
       </>

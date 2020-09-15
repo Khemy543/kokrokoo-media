@@ -111,7 +111,9 @@ function CreateRateCard(props) {
         <Container className=" mt--8" fluid>
             
           <Row>
-            <Col md="10">
+            <Col md="10" sm="12" xs="12" lg="12" xl="12">
+            <p style={{fontSize:"13px", fontWeight:500}}
+            >Create A RateCard, Enter TItle, Description And Select File Types</p>
             <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
             <CardHeader className=" bg-transparent">
                   <h3 className=" mb-0">ENTER RATE CARD TITLE</h3>
@@ -154,9 +156,9 @@ function CreateRateCard(props) {
                         </Label>
                     </FormGroup>
       
-
+                    <br/>
                     <Button
-                    style={{marginTop:"20px",color:"white",backgroundColor:"#404E67"}}
+                    color="info"
                     type="submit"
                     >
                     Next

@@ -57,27 +57,24 @@ function Login(props){
     axios.post("https://media-kokrokooad.herokuapp.com/oauth/token",{
       grant_type: "password",
       client_id: 1,
-      client_secret:"xdTjCikoI0Gj7p0AhAgiH2ZrSHMdzFwsK1vpG8VO",
+      client_secret:"CLepT8Ou9Rl5MiSNRNCsYwNVNTO9P7s0RLV2NwoK",
       username: username,
       password: password,
       provider: "users",
     headers:{"Content-Type": "application/json", "Accept": "application/json"}}
   )
     .then(res=>{
-      console.log(res.data)
       if(res.data.status == "success"){
         const token_data  = res.data.access_token;
         const loggedin = true;
         storageData.push(token_data,loggedin)
         localStorage.setItem('storageData',JSON.stringify(storageData));
-        console.log("storagedata:",storageData);
         window.location.reload("/");
         setIsActive(false);
 
       }
     })
     .catch(error=>{
-      console.log(error);
       setAlert(true);
       setIsActive(false);
     })

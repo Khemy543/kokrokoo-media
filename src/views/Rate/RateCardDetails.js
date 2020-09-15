@@ -1,5 +1,6 @@
 
 import React from "react";
+import  { Prompt } from 'react-router-dom';
 // react component that copies the given text inside your clipboard
 import { CopyToClipboard } from "react-copy-to-clipboard";
 // reactstrap components
@@ -12,8 +13,8 @@ import {
   Col,
   Input,
   Button,
-  CardTitle,
-  Nav,NavItem,NavLink,TabContent,TabPane,FormGroup,Label, FormFeedback
+  CardFooter,
+  Nav,NavItem,NavLink,TabContent,TabPane,FormGroup,Label, FormFeedback, Spinner
 } from "reactstrap";
 import classnames from 'classnames';
 // core components
@@ -31,7 +32,9 @@ if(all_data !== null){
 
 class RateCardDetails extends React.Component{
     state={
+        dataUnsaved:true,
         isActive:false,
+        isActiveSpinner:false,
         activeTab:"1",
         days:[],
         units:[],
@@ -116,7 +119,7 @@ class RateCardDetails extends React.Component{
     }
 
     componentDidMount(){
-        this.setState({isActive:true});
+        this.setState({isActiveSpinner:true});
         console.log(this.props.location)
         if(this.props.location.state !== undefined){
             this.setState({title:this.props.location.state.rate_title});
@@ -129,8 +132,12 @@ class RateCardDetails extends React.Component{
         axios.get("https://media-kokrokooad.herokuapp.com/api/fetch-days-and-units")
         .then(res=>{
             console.log(res.data)
-            this.setState({days:res.data.days, units:res.data.units,isActive:false})
+            this.setState({days:res.data.days, units:res.data.units,isActiveSpinner:false})
         })
+    }
+
+    componentWillUnmount(){
+        console.log(this.props.location)
     }
     
     toggle = tab => {
@@ -1137,20 +1144,35 @@ class RateCardDetails extends React.Component{
         }
     }
 
+
     
     render(){
     return (
-      <>
+      <React.Fragment>
+        <Prompt
+        when={true}
+        message="You have unsaved changes, are you sure you want to leave?"
+        />
+        <>
       <LoadingOverlay 
       active = {this.state.isActive}
       spinner={<FadeLoader color={'#4071e1'}/>}
       >
       <Header/>
-        <Container className=" mt--7" fluid>
-            
+        <Container className=" mt--9" fluid>
+        {this.state.isActiveSpinner?
           <Row>
-            <Col md="10">
-            <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
+          <>
+          <Row>
+            <Col md="10" sm="12" xs="12" lg="10" xl="10">
+            <p style={{fontSize:"13px", fontWeight:500}}
+            >Enter RateCard Details For Each Day Of The Week.</p>
+            <Card style={{boxShadow:"0 2 px 12px rgba(0,0,0,0.1)"}}>
             <CardHeader className=" bg-transparent">
                   <h3 className=" mb-0">RATE CARD DETAILS</h3>
             </CardHeader>
@@ -1167,7 +1189,7 @@ class RateCardDetails extends React.Component{
                 {this.state.days.map(value=>(
                 <NavItem key={value.id}>
                 <NavLink
-                style={{cursor:"pointer",textTransform:"uppercase"}}
+                style={{cursor:"pointer",textTransform:"uppercase",fontSize:"14px", fontWeight:"bold"}}
                     className={classnames({ active: this.state.activeTab === `${value.id}` })}
                     onClick={() => { this.toggle(`${value.id}`); }}
                 >
@@ -1186,7 +1208,7 @@ class RateCardDetails extends React.Component{
                     
                     <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                     <FormGroup>
-                        <Label for="exampleTime">Start Time</Label>
+                        <Label for="exampleTime" id="boldstyle">Start Time</Label>
                         <Input
                         type="time"
                         name="time"
@@ -1199,7 +1221,7 @@ class RateCardDetails extends React.Component{
                     </Col>
                     <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                     <FormGroup>
-                        <Label for="exampleTime">End Time</Label>
+                        <Label for="exampleTime" id="boldstyle">End Time</Label>
                         <Input
                         invalid={this.state.timeCheck}
                         type="time"
@@ -1217,7 +1239,7 @@ class RateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col>
-                        <Label>Number of Slots</Label>
+                        <Label id="boldstyle">Number of Slots</Label>
                         </Col>
                         <Col>
                         <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumber} onChange={e=>this.setState({slotNumber:e.target.value})}/>
@@ -1229,17 +1251,17 @@ class RateCardDetails extends React.Component{
                     <br/>    
                     <Row>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Duration</Label>
+                        <Label id="boldstyle">Duration</Label>
                         <Input type="number" min="0" value={this.state.duration} onChange={e=>this.setState({duration:e.target.value})}/>
                         </Col>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Unit</Label>
+                        <Label id="boldstyle">Unit</Label>
                         <Input type="select" value={this.state.unit} onChange={e=>{this.setState({unit:e.target.value}); console.log(e.target.value)}}>
                             {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                         </Input>
                         </Col>
                         <Col md="4" sm="4" xs="4" lg="4">
-                        <Label>Rate</Label>
+                        <Label id="boldstyle">Rate</Label>
                         <Input type="number" min="0" value={this.state.rate} onChange={e=>this.setState({rate:e.target.value})}/>
                         </Col>
                         <Col md="2" sm="2" xs="2" lg="2" className="text-center">
@@ -1274,7 +1296,7 @@ class RateCardDetails extends React.Component{
                     <Row style={{marginTop:"20px"}}>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
-                            color="danger"
+                            color="info"
                             onClick={()=>this.handleSubmit()}
                             >
                                 SAVE
@@ -1290,7 +1312,7 @@ class RateCardDetails extends React.Component{
                    <Row>
                    <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                    <FormGroup>
-                       <Label for="exampleTime">Start Time</Label>
+                       <Label for="exampleTime" id="boldstyle">Start Time</Label>
                        <Input
                        type="time"
                        name="time"
@@ -1303,7 +1325,7 @@ class RateCardDetails extends React.Component{
                    </Col>
                    <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                    <FormGroup>
-                       <Label for="exampleTime">End Time</Label>
+                       <Label for="exampleTime"  id="boldstyle">End Time</Label>
                        <Input
                        invalid={this.state.timeCheckTues}
                        type="time"
@@ -1321,7 +1343,7 @@ class RateCardDetails extends React.Component{
                    <Row>
                         <Col md="6">
                         <Row>
-                        <Col>
+                        <Col  id="boldstyle">
                         Number of Slots : 
                         </Col>
                         <Col>
@@ -1334,17 +1356,17 @@ class RateCardDetails extends React.Component{
                     <br/> 
                    <Row>
                        <Col md="3" sm="3" xs="3" lg="3">
-                       <Label>Duration</Label>
+                       <Label  id="boldstyle">Duration</Label>
                        <Input type="number" min="0" value={this.state.durationTues} onChange={e=>this.setState({durationTues:e.target.value})}/>
                        </Col>
                        <Col md="3" sm="3" xs="3" lg="3">
-                       <Label>Unit</Label>
+                       <Label  id="boldstyle">Unit</Label>
                        <Input type="select" value={this.state.unitTues} onChange={e=>this.setState({unitTues:e.target.value})}>
                            {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                        </Input>
                        </Col>
                        <Col md="4" sm="4" xs="4" lg="4">
-                       <Label>Rate</Label>
+                       <Label  id="boldstyle">Rate</Label>
                        <Input type="number" min="0" value={this.state.rateTues} onChange={e=>this.setState({rateTues:e.target.value})}/>
                        </Col>
                        <Col md="2" sm="2" xs="2" lg="2" className="text-center">
@@ -1379,7 +1401,7 @@ class RateCardDetails extends React.Component{
                    <Row style={{marginTop:"20px"}}>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
-                           color="danger"
+                           color="info"
                            onClick={()=>this.handleSubmitTues()}
                            >
                                SAVE
@@ -1395,7 +1417,7 @@ class RateCardDetails extends React.Component{
                     <Row>
                     <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                     <FormGroup>
-                        <Label for="exampleTime">Start Time</Label>
+                        <Label for="exampleTime"  id="boldstyle">Start Time</Label>
                         <Input
                         type="time"
                         name="time"
@@ -1408,7 +1430,7 @@ class RateCardDetails extends React.Component{
                     </Col>
                     <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                     <FormGroup>
-                        <Label for="exampleTime">End Time</Label>
+                        <Label for="exampleTime"  id="boldstyle">End Time</Label>
                         <Input
                         invalid={this.state.timeCheckWed}
                         type="time"
@@ -1425,7 +1447,7 @@ class RateCardDetails extends React.Component{
                     <Row>
                         <Col md="6">
                         <Row>
-                        <Col>
+                        <Col  id="boldstyle">
                         Number of Slots : 
                         </Col>
                         <Col>
@@ -1438,17 +1460,17 @@ class RateCardDetails extends React.Component{
                     <br/> 
                     <Row>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Duration</Label>
+                        <Label  id="boldstyle">Duration</Label>
                         <Input type="number" min="0" value={this.state.durationWed} onChange={e=>this.setState({durationWed:e.target.value})}/>
                         </Col>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Unit</Label>
+                        <Label  id="boldstyle">Unit</Label>
                         <Input type="select" value={this.state.unitWed} onChange={e=>this.setState({unitWed:e.target.value})}>
                             {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                         </Input>
                         </Col>
                         <Col md="4" sm="4" xs="4" lg="4">
-                        <Label>Rate</Label>
+                        <Label  id="boldstyle">Rate</Label>
                         <Input type="number" min="0" value={this.state.rateWed} onChange={e=>this.setState({rateWed:e.target.value})}/>
                         </Col>
                         <Col md="2" sm="2" xs="2" lg="2" className="text-center">
@@ -1483,7 +1505,7 @@ class RateCardDetails extends React.Component{
                     <Row style={{marginTop:"20px"}}>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
-                            color="danger"
+                            color="info"
                             onClick={()=>this.handleSubmitWed()}
                             >
                                 SAVE
@@ -1499,7 +1521,7 @@ class RateCardDetails extends React.Component{
                     <Row>
                     <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                     <FormGroup>
-                        <Label for="exampleTime">Start Time</Label>
+                        <Label for="exampleTime"  id="boldstyle">Start Time</Label>
                         <Input
                         type="time"
                         name="time"
@@ -1512,7 +1534,7 @@ class RateCardDetails extends React.Component{
                     </Col>
                     <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                     <FormGroup>
-                        <Label for="exampleTime">End Time</Label>
+                        <Label for="exampleTime"  id="boldstyle">End Time</Label>
                         <Input
                         invalid={this.state.timeCheckThurs}
                         type="time"
@@ -1529,7 +1551,7 @@ class RateCardDetails extends React.Component{
                     <Row>
                         <Col md="6">
                         <Row>
-                        <Col>
+                        <Col id="boldstyle">
                         Number of Slots : 
                         </Col>
                         <Col>
@@ -1542,17 +1564,17 @@ class RateCardDetails extends React.Component{
                     <br/> 
                     <Row>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Duration</Label>
+                        <Label id="boldstyle">Duration</Label>
                         <Input type="number" min="0" value={this.state.durationThurs} onChange={e=>this.setState({durationThurs:e.target.value})}/>
                         </Col>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Unit</Label>
+                        <Label id="boldstyle">Unit</Label>
                         <Input type="select" value={this.state.unitThurs} onChange={e=>this.setState({unitThurs:e.target.value})}>
                             {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                         </Input>
                         </Col>
                         <Col md="4" sm="4" xs="4" lg="4">
-                        <Label>Rate</Label>
+                        <Label id="boldstyle">Rate</Label>
                         <Input type="number" min="0" value={this.state.rateThurs} onChange={e=>this.setState({rateThurs:e.target.value})}/>
                         </Col>
                         <Col md="2" sm="2" xs="2" lg="2" className="text-center">
@@ -1587,7 +1609,7 @@ class RateCardDetails extends React.Component{
                     <Row style={{marginTop:"20px"}}>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
-                            color="danger"
+                            color="info"
                             onClick={()=>this.handleSubmitThurs()}
                             >
                                 SAVE
@@ -1603,7 +1625,7 @@ class RateCardDetails extends React.Component{
                     <Row>
                     <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                     <FormGroup>
-                        <Label for="exampleTime">Start Time</Label>
+                        <Label for="exampleTime" id="boldstyle">Start Time</Label>
                         <Input
                         type="time"
                         name="time"
@@ -1616,7 +1638,7 @@ class RateCardDetails extends React.Component{
                     </Col>
                     <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                     <FormGroup>
-                        <Label for="exampleTime">End Time</Label>
+                        <Label for="exampleTime" id="boldstyle">End Time</Label>
                         <Input
                         invalid={this.state.timeCheckFri}
                         type="time"
@@ -1633,7 +1655,7 @@ class RateCardDetails extends React.Component{
                     <Row>
                         <Col md="6">
                         <Row>
-                        <Col>
+                        <Col id="boldstyle">
                         Number of Slots : 
                         </Col>
                         <Col>
@@ -1646,17 +1668,17 @@ class RateCardDetails extends React.Component{
                     <br/> 
                     <Row>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Duration</Label>
+                        <Label id="boldstyle">Duration</Label>
                         <Input type="number" min="0" value={this.state.durationFri} onChange={e=>this.setState({durationFri:e.target.value})}/>
                         </Col>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Unit</Label>
+                        <Label id="boldstyle">Unit</Label>
                         <Input type="select"  value={this.state.unitFri} onChange={e=>this.setState({unitFri:e.target.value})}>
                             {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                         </Input>
                         </Col>
                         <Col md="4" sm="4" xs="4" lg="4">
-                        <Label>Rate</Label>
+                        <Label id="boldstyle">Rate</Label>
                         <Input type="number" min="0" value={this.state.rateFri} onChange={e=>this.setState({rateFri:e.target.value})}/>
                         </Col>
                         <Col md="2" sm="2" xs="2" lg="2" className="text-center">
@@ -1691,7 +1713,7 @@ class RateCardDetails extends React.Component{
                     <Row style={{marginTop:"20px"}}>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
-                            color="danger"
+                            color="info"
                             onClick={()=>this.handleSubmitFri()}
                             >
                                 SAVE
@@ -1707,7 +1729,7 @@ class RateCardDetails extends React.Component{
                     <Row>
                     <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                     <FormGroup>
-                        <Label for="exampleTime">Start Time</Label>
+                        <Label for="exampleTime" id="boldstyle">Start Time</Label>
                         <Input
                         type="time"
                         name="time"
@@ -1720,7 +1742,7 @@ class RateCardDetails extends React.Component{
                     </Col>
                     <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                     <FormGroup>
-                        <Label for="exampleTime">End Time</Label>
+                        <Label for="exampleTime" id="boldstyle">End Time</Label>
                         <Input
                         invalid={this.state.timeCheckSat}
                         type="time"
@@ -1737,7 +1759,7 @@ class RateCardDetails extends React.Component{
                     <Row>
                         <Col md="6">
                         <Row>
-                        <Col>
+                        <Col id="boldstyle">
                         Number of Slots : 
                         </Col>
                         <Col>
@@ -1750,17 +1772,17 @@ class RateCardDetails extends React.Component{
                     <br/> 
                     <Row>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Duration</Label>
+                        <Label id="boldstyle">Duration</Label>
                         <Input type="number" min="0" value={this.state.durationSat} onChange={e=>this.setState({durationSat:e.target.value})}/>
                         </Col>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Unit</Label>
+                        <Label id="boldstyle">Unit</Label>
                         <Input type="select" value={this.state.unitSat} onChange={e=>this.setState({unitSat:e.target.value})}>
                             {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                         </Input>
                         </Col>
                         <Col md="4" sm="4" xs="4" lg="4">
-                        <Label>Rate</Label>
+                        <Label id="boldstyle">Rate</Label>
                         <Input type="number" min="0" value={this.state.rateSat} onChange={e=>this.setState({rateSat:e.target.value})}/>
                         </Col>
                         <Col md="2" sm="2" xs="2" lg="2" className="text-center">
@@ -1795,7 +1817,7 @@ class RateCardDetails extends React.Component{
                     <Row style={{marginTop:"20px"}}>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
-                            color="danger"
+                            color="info"
                             onClick={()=>this.handleSubmitSat()}
                             >
                                 SAVE
@@ -1811,7 +1833,7 @@ class RateCardDetails extends React.Component{
                     <Row>
                     <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                     <FormGroup>
-                        <Label for="exampleTime">Start Time</Label>
+                        <Label for="exampleTime" id="boldstyle">Start Time</Label>
                         <Input
                         type="time"
                         name="time"
@@ -1824,7 +1846,7 @@ class RateCardDetails extends React.Component{
                     </Col>
                     <Col sm="6" md="6" xs="6" lg="6" style={{marginTop:"20px"}}>
                     <FormGroup>
-                        <Label for="exampleTime">End Time</Label>
+                        <Label for="exampleTime" id="boldstyle">End Time</Label>
                         <Input
                         invalid={this.state.timeCheckSun}
                         type="time"
@@ -1841,7 +1863,7 @@ class RateCardDetails extends React.Component{
                     <Row>
                         <Col md="6">
                         <Row>
-                        <Col>
+                        <Col id="boldstyle">
                         Number of Slots : 
                         </Col>
                         <Col>
@@ -1854,17 +1876,17 @@ class RateCardDetails extends React.Component{
                     <br/> 
                     <Row>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Duration</Label>
+                        <Label id="boldstyle">Duration</Label>
                         <Input type="number" min="0" value={this.state.durationSun} onChange={e=>this.setState({durationSun:e.target.value})}/>
                         </Col>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Unit</Label>
+                        <Label id="boldstyle">Unit</Label>
                         <Input type="select" value={this.state.unitSun} onChange={e=>this.setState({unitSun:e.target.value})}>
                             {this.state.units.map(value=>(<option key={value.id} value={value.id}>{value.unit}</option>))}
                         </Input>
                         </Col>
                         <Col md="4" sm="4" xs="4" lg="4">
-                        <Label>Rate</Label>
+                        <Label id="boldstyle">Rate</Label>
                         <Input type="number" min="0" value={this.state.rateSun} onChange={e=>this.setState({rateSun:e.target.value})}/>
                         </Col>
                         <Col md="2" sm="2" xs="2" lg="2" className="text-center">
@@ -1899,7 +1921,7 @@ class RateCardDetails extends React.Component{
                     <Row style={{marginTop:"20px"}}>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
-                            color="danger"
+                            color="info"
                             onClick={()=>this.handleSubmitSun()}
                             >
                                 SAVE
@@ -1912,25 +1934,26 @@ class RateCardDetails extends React.Component{
             </TabContent>
             </Col>
             </Row>
-            </CardBody>    
-            </Card> 
-            </Col> 
-            </Row>
-            <Row style={{marginTop:"25px", marginBottom:"20px"}}>
-                <Col lg="5" className="ml-auto mr-auto">
-                
+            </CardBody>
+            <CardFooter>
                 <Button
-                style={{backgroundColor:"#404E67",color:"white"}}
-                block
+                style={{float:"right"}}
+                color="primary"
                 onClick={()=>this.props.history.push("/media/edit-ratecards",{title_id:this.props.location.state.title_id})}
                 >
                     PREVIEW
                 </Button>
-                </Col>
-            </Row> 
+            </CardFooter>
+            </Card> 
+            </Col> 
+            </Row>
+          </>
+        }
+           
         </Container>
         </LoadingOverlay>
-      </>
+        </>
+      </React.Fragment>
     );
   }
 }

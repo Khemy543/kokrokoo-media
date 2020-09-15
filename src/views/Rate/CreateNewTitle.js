@@ -112,7 +112,7 @@ function CreateNewTitle(props) {
         <Container className=" mt--8" fluid>
             
           <Row>
-            <Col md="10">
+            <Col md="10" sm="12" lg="10" xl="10" xs="12">
             <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
             <CardHeader className=" bg-transparent">
                   <h3 className=" mb-0">ENTER RATE CARD TITLE</h3>

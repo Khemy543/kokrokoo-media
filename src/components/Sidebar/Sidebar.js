@@ -82,27 +82,83 @@ class Sidebar extends React.Component {
 
   //toggle dashboard
   toggleDashboardCollapse=()=>{
-    this.setState({dashboardCollapse:!this.state.dashboardCollapse})
+    this.setState({
+      dashboardCollapse:!this.state.dashboardCollapse,
+      subscriptionsCollapse:false,
+      transactionCollapse:false,
+      rateCollapse:false,
+      reportCollapse:false,
+      userCollapse:false,
+      profileCollapse:false
+    })
   }
 
   toggleSubscriptionCollapse=()=>{
-    this.setState({subscriptionsCollapse:!this.state.subscriptionsCollapse})
+    this.setState({
+      subscriptionsCollapse:!this.state.subscriptionsCollapse,
+      dashboardCollapse:false,
+      transactionCollapse:false,
+      rateCollapse:false,
+      reportCollapse:false,
+      userCollapse:false,
+      profileCollapse:false
+    })
   }
   toggleTransCollapse=()=>{
-    this.setState({transactionCollapse:!this.state.transactionCollapse})
+    this.setState({
+      transactionCollapse:!this.state.transactionCollapse,
+      subscriptionsCollapse:false,
+      dashboardCollapse:false,
+      rateCollapse:false,
+      reportCollapse:false,
+      userCollapse:false,
+      profileCollapse:false
+    })
   }
   toggleRateCollapse=()=>{
-    this.setState({rateCollapse:!this.state.rateCollapse})
+    this.setState({
+      rateCollapse:!this.state.rateCollapse,
+      subscriptionsCollapse:false,
+      transactionCollapse:false,
+      dashboardCollapse:false,
+      reportCollapse:false,
+      userCollapse:false,
+      profileCollapse:false
+    })
   }
   toggleReportCollapse=()=>{
-    this.setState({reportCollapse:!this.state.reportCollapse})
+    this.setState({
+      reportCollapse:!this.state.reportCollapse,
+      subscriptionsCollapse:false,
+      transactionCollapse:false,
+      rateCollapse:false,
+      dashboardCollapse:false,
+      userCollapse:false,
+      profileCollapse:false
+    })
   }
   toggleUserCollapse=()=>{
-    this.setState({userCollapse:!this.state.userCollapse})
+    this.setState({
+      userCollapse:!this.state.userCollapse,
+      subscriptionsCollapse:false,
+      transactionCollapse:false,
+      rateCollapse:false,
+      reportCollapse:false,
+      dashboardCollapse:false,
+      profileCollapse:false
+    })
   }
 
   toggleProfile=()=>{
-    this.setState({profileCollapse:!this.state.profileCollapse})
+    this.setState({
+      profileCollapse:!this.state.profileCollapse,
+      subscriptionsCollapse:false,
+      transactionCollapse:false,
+      rateCollapse:false,
+      reportCollapse:false,
+      userCollapse:false,
+      dashboardCollapse:false
+    })
   }
   // creates the links that appear in the left menu / Sidebar
   createDashboardLinks = routes => {

@@ -47,7 +47,7 @@ if(all_data !== null){
 
 function Index (props){
 
-  React.useEffect(()=>{
+  /* React.useEffect(()=>{
     axios.get("https://media-kokrokooad.herokuapp.com/api/user",{
       headers:{ 'Authorization':`Bearer ${user}`}})
       .then(res=>{
@@ -65,7 +65,7 @@ function Index (props){
           }
           } 
       })
-  },[])
+  },[]) */
     return (
       <>
         <Header />
