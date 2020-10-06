@@ -39,13 +39,8 @@ import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";/* 
 import history from "../../history.js"; */
-
-let user =null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if(all_data !== null){
-  user = all_data[0];
-}
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 class PrintRateDetails extends React.Component {
     
@@ -108,7 +103,7 @@ class PrintRateDetails extends React.Component {
         }
         
 
-        axios.get("https://media-kokrokooad.herokuapp.com/api/fetch-days-and-units")
+        axios.get(`${domain}/api/fetch-days-and-units`)
         .then(res=>{
             console.log(res.data)
             this.setState({days:res.data.days, units:res.data.units,isActive:false})
@@ -186,7 +181,7 @@ class PrintRateDetails extends React.Component {
          let tempSlot = [...this.state.newSlot];
          tempSlot.unshift({id:1,size:this.state.size,cost:this.state.rate,page_section:this.state.page_section});
           console.log(tempSlot);
-          axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+          axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
           {day_id:1, details:tempSlot, rate_card_title:this.state.title},
           {headers:{ 'Authorization':`Bearer ${user}`}}) 
           .then(res=>{
@@ -276,7 +271,7 @@ class PrintRateDetails extends React.Component {
              let tempSlot = [...this.state.newSlotTues];
              tempSlot.unshift({id:1,size:this.state.sizeTues,cost:this.state.rateTues,page_section:this.state.page_sectionTues});
               console.log(tempSlot);
-              axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+              axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
               {day_id:2, details:tempSlot,rate_card_title:this.state.title},
               {headers:{ 'Authorization':`Bearer ${user}`}}) 
               .then(res=>{
@@ -366,7 +361,7 @@ class PrintRateDetails extends React.Component {
                  let tempSlot = [...this.state.newSlotWed];
                  tempSlot.unshift({id:1,size:this.state.sizeWed,cost:this.state.rateWed, page_section:this.state.page_sectionWed});
                   console.log(tempSlot);
-                  axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                  axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
                   {day_id:3, details:tempSlot,rate_card_title:this.state.title},
                   {headers:{ 'Authorization':`Bearer ${user}`}}) 
                   .then(res=>{
@@ -455,7 +450,7 @@ class PrintRateDetails extends React.Component {
                      let tempSlot = [...this.state.newSlotThurs];
                      tempSlot.unshift({id:1,size:this.state.sizeThurs,cost:this.state.rateThurs,page_section:this.state.page_sectionThurs});
                       console.log(tempSlot);
-                      axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                      axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
                       {day_id:4, details:tempSlot,rate_card_title:this.state.title},
                       {headers:{ 'Authorization':`Bearer ${user}`}}) 
                       .then(res=>{
@@ -544,7 +539,7 @@ class PrintRateDetails extends React.Component {
                          let tempSlot = [...this.state.newSlotFri];
                          tempSlot.unshift({id:1,size:this.state.sizeFri,cost:this.state.rateFri, page_section:this.state.page_sectionFri});
                           console.log(tempSlot);
-                          axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                          axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
                           {day_id:5, details:tempSlot,rate_card_title:this.state.title},
                           {headers:{ 'Authorization':`Bearer ${user}`}}) 
                           .then(res=>{
@@ -633,7 +628,7 @@ class PrintRateDetails extends React.Component {
                              let tempSlot = [...this.state.newSlotSat];
                              tempSlot.unshift({id:1,size:this.state.sizeSat,cost:this.state.rateSat, page_section:this.state.page_sectionSat});
                               console.log(tempSlot);
-                              axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                              axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
                               {day_id:6, details:tempSlot,rate_card_title:this.state.title},
                               {headers:{ 'Authorization':`Bearer ${user}`}}) 
                               .then(res=>{
@@ -723,7 +718,7 @@ class PrintRateDetails extends React.Component {
                                  let tempSlot = [...this.state.newSlotSun];
                                  tempSlot.unshift({id:1,size:this.state.sizeSun,cost:this.state.rateSun, page_section:this.state.page_sectionSun});
                                   console.log(tempSlot);
-                                  axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                                  axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
                                   {day_id:7, details:tempSlot,rate_card_title:this.state.title},
                                   {headers:{ 'Authorization':`Bearer ${user}`}}) 
                                   .then(res=>{

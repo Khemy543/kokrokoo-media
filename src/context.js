@@ -6,7 +6,7 @@ import FadeLoader from "react-spinners/FadeLoader";
 
 const RateContext = React.createContext();
 
-axios.interceptors.request.use(request=>{
+/* axios.interceptors.request.use(request=>{
     console.log(request);
     return request;
   })
@@ -22,14 +22,11 @@ axios.interceptors.request.use(request=>{
       if(!error.response){
           alert("Please Check Your Internet Connection")
       }
-  })
+  }) */
 
   
-let user =1;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-if(all_data !== null){
-  user = all_data[0];
-}
+  let user = localStorage.getItem("access_token");
+  var domain = "https://media.test.backend.kokrokooad.com";
 
 class RateProvider extends React.Component{
 
@@ -58,8 +55,7 @@ class RateProvider extends React.Component{
 
 
     logout=()=>{
-        this.setState({isActive:true});
-        axios.post("https://media-kokrokooad.herokuapp.com/api/user/logout",null,
+        axios.post(`${domain}/api/user/logout`,null,
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);

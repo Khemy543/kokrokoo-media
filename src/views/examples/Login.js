@@ -37,7 +37,7 @@ import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import AuthNavbar from "../../components/Navbars/AuthNavbar.js";
 
-
+var domain = "https://media.test.backend.kokrokooad.com";
 function Login(props){
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -47,17 +47,16 @@ function Login(props){
 
   const toggleEye=()=>setEye(!eye);
   
-  var storageData =[];
 
   const handleSubmit=(e)=>{
     e.preventDefault();
     console.log(e)
     setIsActive(true);
 
-    axios.post("https://media-kokrokooad.herokuapp.com/oauth/token",{
+    axios.post(`${domain}/oauth/token`,{
       grant_type: "password",
       client_id: 1,
-      client_secret:"CLepT8Ou9Rl5MiSNRNCsYwNVNTO9P7s0RLV2NwoK",
+      client_secret:"venQwjIwausUqUAFya22SP2j8lwVS0Q3UTceHLNK",
       username: username,
       password: password,
       provider: "users",
@@ -66,15 +65,14 @@ function Login(props){
     .then(res=>{
       if(res.data.status == "success"){
         const token_data  = res.data.access_token;
-        const loggedin = true;
-        storageData.push(token_data,loggedin)
-        localStorage.setItem('storageData',JSON.stringify(storageData));
+        localStorage.setItem('access_token',token_data);
         window.location.reload("/");
         setIsActive(false);
 
       }
     })
     .catch(error=>{
+      console.log(error.response.data)
       setAlert(true);
       setIsActive(false);
     })
@@ -86,6 +84,17 @@ function Login(props){
       active = {isActive}
       spinner={<FadeLoader color={'#4071e1'}/>}
       >
+      <div
+        style={{
+          backgroundImage: "url(" + require("../../assets/img/brand/login.jpeg") + ")",
+          backgroundPosition:"center",
+          backgroundRepeat:"repeat",
+          backgroundSize:"cover",
+          height:"100vh"
+        }}
+      >
+      
+      <div className="filter" />
       <AuthNavbar />
       <Container>
         <Row>
@@ -150,29 +159,21 @@ function Login(props){
                   </Button>
                 </div>
               </Form>
+              <Row className="mt-3">
+                <Col xs="6">
+                  <a
+                    href="/auth/forget-password"
+                  >
+                    <small>Forgot password?</small>
+                  </a>
+                </Col>
+              </Row>
             </CardBody>
           </Card>
-          <Row className="mt-3">
-            <Col xs="6">
-              <a
-                href="#pablo"
-                onClick={e => e.preventDefault()}
-              >
-                <small>Forgot password?</small>
-              </a>
-            </Col>
-            <Col className="text-right" xs="6">
-              <a
-                href="#pablo"
-                onClick={e => e.preventDefault()}
-              >
-                <small>Create new account</small>
-              </a>
-            </Col>
-          </Row>
         </Col>
         </Row>
         </Container>
+        </div>
         </LoadingOverlay>
       </>
     );

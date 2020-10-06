@@ -43,11 +43,8 @@ import {
 import {RateConsumer} from "../../context.js";
 
 
-let user =null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-if(all_data !== null){
-  user = all_data[0];
-}
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 class AdminNavbar extends React.Component {
 state={
@@ -59,7 +56,7 @@ state={
   }
 
 componentDidMount(){
-  axios.get("https://media-kokrokooad.herokuapp.com/api/user",{
+  axios.get(`${domain}/api/user`,{
     headers:{ 'Authorization':`Bearer ${user}`}
         }
         )
@@ -77,7 +74,7 @@ componentDidMount(){
 }
 
 handlePublish=()=>{
-  axios.post("https://media-kokrokooad.herokuapp.com/api/super-admin/publish-company",null,
+  axios.post(`${domain}/api/super-admin/publish-company`,null,
   {headers:{ 'Authorization':`Bearer ${user}`}})
   .then(res=>{
     console.log(res.data);
@@ -99,7 +96,7 @@ handlePublish=()=>{
 
 handleUnPublish=()=>{
   this.setState({modal:false})
-  axios.post("https://media-kokrokooad.herokuapp.com/api/super-admin/unpublish-company",null,
+  axios.post(`${domain}/api/super-admin/unpublish-company`,null,
   {headers:{ 'Authorization':`Bearer ${user}`}})
   .then(res=>{
     console.log(res.data);
@@ -194,7 +191,7 @@ handleUnPublish=()=>{
             </Nav>
             <Modal isOpen={this.state.modal}>
             <ModalBody>
-              Do you want to Unpublish Company?
+              Do You Want To Unpublish Your Media House?
             </ModalBody>
             <ModalFooter>
               <Button color="danger" onClick={()=>{this.handleUnPublish()}}>Yes</Button>

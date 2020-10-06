@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 // react component that copies the given text inside your clipboard
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -41,17 +24,8 @@ import axios from "axios";
 import Pagination from "react-js-pagination";
 
 
-
-let user =1;
-let loggedin_data = false;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if(all_data !== null){
-  user = all_data[0];
-  loggedin_data = all_data[1];
-  //get user
-  console.log("user:",user);
-}
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 function ViewUsers({history}) {
     const [isActive, setIsActive] = React.useState(false);
@@ -64,7 +38,7 @@ function ViewUsers({history}) {
 
     function getUsers(pageNumber=1){
         setIsActive(true);
-      axios.get("http://media-kokrokooad.herokuapp.com/api/super-admin/get-all/staff?page="+pageNumber+"",
+      axios.get(`${domain}/api/super-admin/get-all/staff?page=${pageNumber}`,
       {headers:{ 'Authorization':`Bearer ${user}`}})
       .then(res=>{
           setUsers(res.data);

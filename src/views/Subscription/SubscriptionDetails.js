@@ -25,61 +25,198 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
-  NavItem,
-  NavLink,
-  Nav,
-  Progress,
   Table,
   Container,
   Row,
-  Col
+  Col,Spinner, Modal,ModalBody,ModalFooter
 } from "reactstrap";
 
 
 import Header from "components/Headers/Header.js";
 import axios from "axios";
+import ApprovedSubscriptions from "./ApprovedSubscriptions";
 
-let user = null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if (all_data !== null) {
-  user = all_data[0];
-}
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 function SubscriptionDetails (props){
 const [subscription, setSubscription] = React.useState([]);
+const  [title, setTitle] = React.useState("");
+const [file, setFile] = React.useState("");
+const [isActiveSpinner, setIsActiveSpinner] = React.useState(false)
+const [modal, setModal] = React.useState(false);
+const [total, setTotal] = React.useState(0);
+
+
   React.useEffect(()=>{
-    axios.get("https://media-kokrokooad.herokuapp.com/api/"+props.location.state.id+"/subscriptions",
+    setIsActiveSpinner(true)
+    //subscription details
+    let total = 0;
+    axios.get(`${domain}/api/subscription/${props.location.state.id}/details`,
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);
       setSubscription(res.data)
+      setTitle(props.location.state.title)
+      setIsActiveSpinner(false)
+      for(var i=0; i<res.data.length; i++){
+        total = total + Number(res.data[i].total_amount)
+      }
+      setTotal(total)
+    })
+    .catch(error=>{
+      console.log(error)
+    })
+
+    
+  },[])
+  
+  const downloadFile=()=>{
+    //fetch add file
+    axios.get(`${domain}/api/download/${props.location.state.id}/subscription-ad`,
+    { 
+      headers: { 
+        'Authorization': `Bearer ${user}` ,
+        'responseType': 'blob'
+      } 
+    })
+    .then(res=>{
+      console.log(res);
+      console.log(res.headers)
+      const downloadUrl = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', `${props.location.state.title}.mp4`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
     })
     .catch(error=>{
       console.log(error.response.data)
     })
-  },[])
+  }/* 
+  response.headers["content-disposition"].split("filename=")[1] */
 
+  const handleApprove=(id)=>{
+    axios.post(`${domain}/api/approve/${id}/subscriptions`,null,
+    { headers: { 'Authorization': `Bearer ${user}` } }
+    )
+    .then(res=>{
+      console.log(res.data)
+      setModal(false)
+      props.history.push("/media/approved-subscription")
+    })
+    .catch(error=>{
+      console.log(error.response.data)
+    })
+  }
     return (
       <>
         <Header />
         {/* Page content */}
         <Container className="mt--7" fluid>
+        {isActiveSpinner?
+          <Row>
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
           <Row>
             <Col className="mb-5 mb-xl-0" lg="12">
+            <p style={{fontSize:"13px", fontWeight:500}}
+            >View Campaign Details, Download Ad File, Accept Or Reject Campaign</p>
             <Card>
               <CardHeader>
-                Show Entries
+              <Row>
+                <Col>
+                <h4 style={{textTransform:"uppercase"}}>{title}</h4>
+                </Col>
+                <Col>
+                  <h3>Total Campaign Amount : <span style={{color:"red"}}>GH¢ {total}.00</span></h3>
+                </Col>
+              </Row>
+             
               </CardHeader>
-              <CardBody style={{overflowX:"scroll"}}>
-              
+              <CardBody>
+                {subscription.map((item,key)=>(
+                  <Row style={{marginBottom:"20px"}}>
+                    <Col md="12">
+                    <h3>Total Amount  : {item.total_amount}</h3>
+                    <p style={{marginBottom:"0px", fontSize:"14px",fontWeight:600}}>{item.selected_date} - {item.day.day}</p>
+                    <p style={{marginTop:"0px", fontSize:"14px", fontWeight:600}}>Roll over {item.no_of_weeks} week(s)</p>
+                    <Table  bordered>
+                    <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
+                      <tr>
+                      <td>#</td>
+                      <td>Duration</td>
+                      <td>Rate</td>
+                      <td>Selected Spots</td>
+                      <td>Amount</td>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {item.details.map((value,index)=>(
+                        <tr>
+                          <td>{index + 1}</td>
+                          <td>{value.duration.duration} {value.duration.unit.unit}</td>
+                          <td>{value.duration.rate}</td>
+                          <td>{value.selected_spots}</td>
+                          <td>{Number(value.duration.rate) * value.selected_spots}.00</td>
+                        </tr>
+                        ))}
+                      </tbody>
+                  </Table>
+                    </Col>
+                  </Row>
+                
+                  ))}
+                  <div>
+                    <Button
+                    color="info"
+                    onClick={()=>downloadFile()}
+                    >
+                      <i className="fa fa-download"/> Download File
+                    </Button>
+                  </div>
               </CardBody>
-              <CardFooter>
-                Showing 1 to 5 of Entries
+              <CardFooter >
+              <div style={{float:"right"}}>
+              <Button
+              color="info"
+              onClick={()=>setModal(true)}
+              >
+                Approve
+              </Button>
+              <Button
+              color="danger"
+              onClick={()=>props.history.push("/media/rejected-messages",{id:props.location.state.id})}
+              >
+                Reject
+              </Button>
+              </div>
               </CardFooter>   
             </Card>  
             </Col>
+            <Modal isOpen={modal}>
+              <ModalBody>
+                <h3 style={{fontSize:"15px", fontWeight:600}}>Approve Campaign?</h3>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger"
+                onClick={()=>handleApprove(props.location.state.id)}
+                >
+                  Yes
+                </Button>
+                <Button color="info"
+                onClick={()=>setModal(false)}
+                >
+                  No
+                </Button>
+              </ModalFooter>
+            </Modal>
           </Row>
+        }
         </Container>
       </>
     );

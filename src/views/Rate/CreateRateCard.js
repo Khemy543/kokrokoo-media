@@ -39,12 +39,8 @@ import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";/* 
 import history from "../../history.js"; */
 
-let user =null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if(all_data !== null){
-  user = all_data[0];
-}
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 function CreateRateCard(props) {
     const [isActive, setIsActive] = React.useState(false);
@@ -78,7 +74,7 @@ function CreateRateCard(props) {
 
         }
         else{
-        axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/new-title",{rate_card_title,service_description,file_types},
+        axios.post(`${domain}/api/ratecard/new-title`,{rate_card_title,service_description,file_types},
         {headers:{ 'Authorization':`Bearer ${user}`}}
         )
         .then(res=>{

@@ -75,12 +75,12 @@ function Index (props){
             <Col className="mb-5 mb-xl-0" lg="12">
             <Row>
               <Col md="3" className="mb-4">
-              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"linear-gradient(to right, #fe9365, #feb798)"}}>
+              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"linear-gradient(to right, #fe9365, #feb798)",cursor:"pointer"}} onClick={()=>props.history.push('/media/view-subscription')}>
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
                     <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-th-list mr-2"/>5</h1> 
-                    <p>All Subscriptions</p>
+                    <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>All Campaigns</p>
                     </Col>
                   </Row>  
                 </CardBody>  
@@ -90,12 +90,12 @@ function Index (props){
               </Col>
 
               <Col md="3" className="mb-4">
-              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"linear-gradient(to right, #0ac282, #0df3a3)"}}>
+              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"linear-gradient(to right, #0ac282, #0df3a3)",cursor:"pointer"}}  onClick={()=>props.history.push('/media/approved-subscription')}>
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
                     <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-thumbs-up mr-2"/>5</h1>
-                    <p>Accepted Subscriptions</p>
+                    <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>Approved Campaigns</p>
                     </Col>
                   </Row>  
                 </CardBody>  
@@ -105,12 +105,12 @@ function Index (props){
               </Col>
 
               <Col md="3" className="mb-4">
-              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"linear-gradient(to right, #fe5d70, #fe909d)"}}>
+              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"linear-gradient(to right, #fe5d70, #fe909d)",cursor:"pointer"}}  onClick={()=>props.history.push('/media/rejected-subscription')}>
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
                     <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-thumbs-down mr-2"/>5</h1>
-                    <p>Rejected Subscriptions</p>
+                    <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>Rejected Campaigns</p>
                     </Col>
                   </Row>  
                 </CardBody>  
@@ -120,12 +120,12 @@ function Index (props){
               </Col>
 
               <Col md="3" className="mb-4">
-              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"linear-gradient(to right, #01a9ac, #01dbdf)"}}>
+              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"linear-gradient(to right, #01a9ac, #01dbdf)",cursor:"pointer"}} >
                 <CardBody style={{padding:"5px 10px 5px 10px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
                     <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-star mr-2"/>5</h1>
-                    <p>Completed Subscriptions</p>
+                    <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>Completed Campaigns</p>
                     </Col>
                   </Row>  
                 </CardBody>  
@@ -135,12 +135,12 @@ function Index (props){
               </Col>
 
               <Col md="3" className="mb-4">
-              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"#01a9ac"}}>
+              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"#01a9ac",cursor:"pointer"}}  onClick={()=>props.history.push('/media/pending-subscription')}>
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
                     <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-hand-paper mr-2"/>5</h1>
-                    <p>Pending Subscriptions</p>
+                    <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>Pending Campaigns</p>
                     </Col>
                   </Row>  
                 </CardBody>  
@@ -150,12 +150,12 @@ function Index (props){
               </Col>
 
               <Col md="3" className="mb-4">
-              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"#01a9ac"}}>
+              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"#01a9ac",cursor:"pointer"}} >
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
                     <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-heart mr-2"/>5</h1>
-                    <p>Live Subscriptions</p>
+                    <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>Live Campaigns</p>
                     </Col>
                   </Row>  
                 </CardBody>  
@@ -165,12 +165,12 @@ function Index (props){
               </Col>
 
               <Col md="3" className="mb-4">
-              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"#fe9365"}}>
+              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"#fe9365",cursor:"pointer"}} onClick={()=>props.history.push('/media/active-subscription')}>
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
                     <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-eye mr-2"/>5</h1>
-                    <p>Active Subscriptions</p>
+                    <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>Active Campaigns</p>
                     </Col>
                   </Row>  
                 </CardBody>  
@@ -180,7 +180,7 @@ function Index (props){
               </Col>
 
               <Col md="3" className="mb-4">
-              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"#0ac282"}}>
+              {/* <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"#0ac282"}}>
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
@@ -191,7 +191,7 @@ function Index (props){
                 </CardBody>  
                 <CardFooter style={{background:"#0ac282", borderTop:"1px solid white",padding:"10px 10px 10px 10px"}}>
                 </CardFooter>  
-              </Card>  
+              </Card>   */}
               </Col>
             </Row>
             </Col>

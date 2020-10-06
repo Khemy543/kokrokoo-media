@@ -39,18 +39,14 @@ import {
 import Header from "components/Headers/Header.js";
 import axios from "axios";
 
-let user = null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if (all_data !== null) {
-  user = all_data[0];
-}
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 function ApprovedSubscriptions (props){
   const [subscriptions, setSubscription] = React.useState([]);
 
   React.useEffect(()=>{
-    axios.get("https://media-kokrokooad.herokuapp.com/api/approved-subscriptions",
+    axios.get(`${domain}/api/approved-subscriptions`,
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);
@@ -61,8 +57,8 @@ function ApprovedSubscriptions (props){
     })
   },[])
 
-  const getDetails=(id)=>{
-    props.history.push("/media/subscription-details",{id:id})
+  const getDetails=(id, title)=>{
+    props.history.push("/media/approved-details",{id:id, title:title})
   }
 
     return (
@@ -96,12 +92,12 @@ function ApprovedSubscriptions (props){
                       <th scope="row">{index +1}</th>
                       <td>{value.id}</td>
                       <td>{value.title}</td>
-                      <td>{value.rate_card_title_id}</td>
+                      <td>{value.rate_card_title}</td>
                       <td>{value.status}</td>
                       <td>{value.time}</td>
                       <td>{value.comapny_id}</td>
                       <td style={{textAlign:"center"}}>
-                      <i className="fa fa-eye" style={{fontSize:"17px",color:"#1a0080",cursor:"pointer"}} onClick={()=>getDetails(value.id)}/>
+                      <i className="fa fa-eye" style={{fontSize:"17px",color:"#1a0080",cursor:"pointer"}} onClick={()=>getDetails(value.id,value.title)}/>
                       </td>
                     </tr>
                     ))}

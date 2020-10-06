@@ -24,45 +24,39 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
-  NavItem,
-  NavLink,
-  Nav,
-  Progress,
   Table,
   Container,
   Row,
-  Col
+  Col,Spinner
 } from "reactstrap";
 
 
 import Header from "components/Headers/Header.js";
 import axios from "axios";
 
-let user = null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if (all_data !== null) {
-  user = all_data[0];
-}
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 function ViewSubscription (props){
   const [subscriptions, setSubscription] = React.useState([]);
+  const [isActiveSpinner, setIsActiveSpinner] = React.useState(false)
 
   React.useEffect(()=>{
-    axios.get("https://media-kokrokooad.herokuapp.com/api/all-subscriptions",
+    setIsActiveSpinner(true)
+    axios.get(`${domain}/api/all-subscriptions`,
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);
       setSubscription(res.data)
+      setIsActiveSpinner(false)
     })
     .catch(error=>{
-      console.log(error.response.data)
+      console.log(error)
     })
   },[])
 
-  const getDetails=(id)=>{
-    props.history.push("/media/subscription-details",{id:id})
+  const getDetails=(id, title)=>{
+    props.history.push("/media/subscription-details",{id:id, title,title})
   }
 
     return (
@@ -70,19 +64,25 @@ function ViewSubscription (props){
         <Header />
         {/* Page content */}
         <Container className="mt--7" fluid>
+        {isActiveSpinner?
           <Row>
-            <Col className="mb-5 mb-xl-0" lg="12">
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
+          <Row>
+            <Col className="mb-5 mb-xl-0" lg="12" md="12" xs="12" sm="12" xl="12">
+            <p style={{fontSize:"13px", fontWeight:500}}
+            >View All <span style={{color:"red"}}>Campaigns</span></p>
             <Card>
-              <CardHeader>
-                Show Entries
-              </CardHeader>
               <CardBody style={{overflowX:"scroll"}}>
               <Table striped bordered>
                   <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
                     <tr>
                       <th>#</th>
-                      <th>Subscription ID</th>
-                      <th>Subscription Title</th>
+                      <th>Campaign ID</th>
+                      <th>Campaign Title</th>
                       <th>Rate Card</th>
                       <th>Status</th>
                       <th>Created Date</th>
@@ -96,24 +96,22 @@ function ViewSubscription (props){
                       <th scope="row">{index +1}</th>
                       <td>{value.id}</td>
                       <td>{value.title}</td>
-                      <td>{value.rate_card_title_id}</td>
+                      <td>{value.rate_card_title}</td>
                       <td>{value.status}</td>
                       <td>{value.time}</td>
                       <td>{value.comapny_id}</td>
                       <td style={{textAlign:"center"}}>
-                      <i className="fa fa-eye" style={{fontSize:"17px",color:"#1a0080",cursor:"pointer"}} onClick={()=>getDetails(value.id)}/>
+                      <i className="fa fa-eye" style={{fontSize:"17px",color:"#1a0080",cursor:"pointer"}} onClick={()=>getDetails(value.id, value.title)}/>
                       </td>
                     </tr>
                     ))}
                   </tbody>
                 </Table>
-              </CardBody>
-              <CardFooter>
-                Showing 1 to 5 of Entries
-              </CardFooter>   
+              </CardBody> 
             </Card>  
             </Col>
           </Row>
+        }
         </Container>
       </>
     );

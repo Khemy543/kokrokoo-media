@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 // react component that copies the given text inside your clipboard
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -38,12 +21,8 @@ import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
-let user =null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if(all_data !== null){
-  user = all_data[0];
-}
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 function CreateUser(props) {
     const [isActive, setIsActive] = React.useState(false);
@@ -52,11 +31,20 @@ function CreateUser(props) {
     const [phone1, setPhone1] = React.useState("");
     const [phone2, setPhone2] = React.useState("");
     const [title, setTitle] = React.useState("");
-    const [role, setRole] = React.useState("");
+    const [role, setRole] = React.useState(1);
     const [modal, setModal]= React.useState(false);
     const [alert,setAlert] = React.useState(false);
     const [message, setMessage] = React.useState("");
+    const [roles,setRoles] = React.useState([]);
 
+
+    React.useEffect(()=>{
+        axios.get(`${domain}/api/get-roles`,
+        {headers:{ 'Authorization':`Bearer ${user}`}})
+        .then(res=>{
+            console.log("roles",res);
+        })
+    })
 
     const toggleModal=()=>setModal(!modal);
     const handleSubmit=(e)=>{
@@ -64,7 +52,7 @@ function CreateUser(props) {
         e.preventDefault();
         console.log(e);
         console.log(user)
-        axios.post("https://media-kokrokooad.herokuapp.com/api/super-admin/add-new/staff",
+        axios.post(`${domain}/api/super-admin/add-new/staff`,
         {name,email,phone1,phone2,title,role},
         {headers:{ 'Authorization':`Bearer ${user}`}}
         )
@@ -126,23 +114,25 @@ function CreateUser(props) {
                 <Col md="6">
                 <FormGroup>
                     <Label>Phone 1</Label>
-                    <Input type="number" name="phone1"  placeholder="Enter Phone"value={phone1} onChange={e=>setPhone1(e.target.value)} required/>
+                    <Input type="number" name="phone1"  placeholder="Enter Phone" value={phone1} onChange={e=>setPhone1(e.target.value)} required/>
                 </FormGroup>
                 </Col>
                 <Col md="6">
                 <FormGroup>
                     <Label>Phone 2</Label>
-                    <Input type="number" name="phone2"  placeholder="Enter Phone (optional)"value={phone2} onChange={e=>setPhone2(e.target.value)}/>
+                    <Input type="number" name="phone2"  placeholder="Enter Phone (optional)" value={phone2} onChange={e=>setPhone2(e.target.value)}/>
                 </FormGroup>
                 </Col>
                 </Row>
                 <FormGroup>
                     <Label>Title</Label>
-                    <Input type="text" name="title"  placeholder="Enter Title"value={title} onChange={e=>setTitle(e.target.value)} required/>
+                    <Input type="text" name="title"  placeholder="Enter Title" value={title} onChange={e=>setTitle(e.target.value)} required/>
                 </FormGroup>
                 <FormGroup>
                     <Label>Role</Label>
-                    <Input type="text" name="role"  placeholder="Enter Role"value={role} onChange={e=>setRole(e.target.value)} required/>
+                    <Input type="select" name="role"  placeholder="Enter Role" value={role} onChange={e=>setRole(e.target.value)} required>
+                    {roles.map(value=>(<option value={value.role} key={value.id}>{value.role}</option>))}
+                    </Input>
                 </FormGroup>
                 <Button style={{backgroundColor:"#404E67", color:"white"}} type="submit">
                     Create

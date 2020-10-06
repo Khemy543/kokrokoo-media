@@ -35,13 +35,10 @@ import UserHeader from "components/Headers/UserHeader.js";
 import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
+import Header from "components/Headers/Header";
 
-let user =null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-if(all_data !== null){
-  user = all_data[0];
-}
-
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 class Profile extends React.Component {
 
@@ -60,7 +57,7 @@ class Profile extends React.Component {
 
 componentDidMount(){
   this.setState({isActive:true})
-  axios.get("https://media-kokrokooad.herokuapp.com/api/user",{
+  axios.get(`${domain}/api/user`,{
     headers:{ 'Authorization':`Bearer ${user}`}
         }
         )
@@ -82,7 +79,7 @@ componentDidMount(){
         console.log(error.response.data)
         });
 
-        axios.get("https://kokrokooad.herokuapp.com/api/media-types")
+        axios.get("https://backend.kokrokooad.com/api/media-types")
         .then(res=>{
           console.log(res.data);
           this.setState({media:res.data})
@@ -99,7 +96,7 @@ handleSubmit=(e)=>{
   e.preventDefault();
   console.log(e);
   console.log(this.state.id)
-  axios.patch("https://media-kokrokooad.herokuapp.com/api/update/"+this.state.id+"",{
+  axios.patch(`${domain}/api/update/${this.state.id}`,{
   name:this.state.name, email:this.state.email,phone1:this.state.phone1,phone1:this.state.phone2,title:this.state.title},{
     headers:{ 'Authorization':`Bearer ${user}`}})
   .then(res=>{
@@ -130,7 +127,7 @@ handleSubmit=(e)=>{
       active = {this.state.isActive}
       spinner={<FadeLoader color={'#4071e1'}/>}
       >
-        <UserHeader userName={this.state.name}/>
+      <Header/>
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>

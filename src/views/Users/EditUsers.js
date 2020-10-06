@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 // react component that copies the given text inside your clipboard
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -41,7 +24,8 @@ import axios from "axios";
 import Pagination from "react-js-pagination";
 //require("bootstrap/less/bootstrap.less");
 
-
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 
 function EditUsers(props) {
@@ -61,7 +45,7 @@ function EditUsers(props) {
         
         var  user = all_data[0];
         setIsActive(true)
-        axios.get("https://media-kokrokooad.herokuapp.com/api/super-admin/get/"+props.location.state.admin_id+"/details",
+        axios.get(`${domain}/api/super-admin/get/${props.location.state.admin_id}/details`,
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
@@ -85,7 +69,7 @@ function EditUsers(props) {
         setIsActive(true)
         e.preventDefault();
         console.log(e)
-        axios.patch("https://media-kokrokooad.herokuapp.com/api/super-admin/update/"+props.location.state.admin_id+"/details",{
+        axios.patch(`${domain}/api/super-admin/update/${props.location.state.admin_id}/details`,{
             name,email,phone1,phone2,role,title},{headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);

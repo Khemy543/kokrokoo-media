@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
@@ -35,12 +18,10 @@ import UserHeader from "components/Headers/UserHeader.js";
 import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
+import Header from "components/Headers/Header";
 
-let user =null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-if(all_data !== null){
-  user = all_data[0];
-}
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 
 class CompanyProfile extends React.Component {
@@ -58,7 +39,6 @@ class CompanyProfile extends React.Component {
     logo:"",
     media_house:"",
     media_type:"",
-    industry_type:"",
     operation_cert:"",
     purpose:"", 
     website:"",
@@ -71,7 +51,7 @@ class CompanyProfile extends React.Component {
 
 componentDidMount(){
   this.setState({isActive:true})
-  axios.get("https://media-kokrokooad.herokuapp.com/api/user",{
+  axios.get(`${domain}/api/user`,{
     headers:{ 'Authorization':`Bearer ${user}`}
         }
         )
@@ -87,10 +67,11 @@ componentDidMount(){
             logo:res.data.company.logo,
             media_house:res.data.company.media_house,
             media_type:res.data.company.media_type,
-            industry_type:res.data.company.industry_type,
+            purpose:res.data.company.purpose,
             operation_cert:res.data.company.operation_cert,
             purpose:res.data.company.purpose, 
-            website:res.data.company.website
+            website:res.data.company.website,
+            isActive:false
           })
         }
 
@@ -98,7 +79,7 @@ componentDidMount(){
         console.log(error.response.data)
         });
 
-        axios.get("https://media-kokrokooad.herokuapp.com/api/super-admin/get-bank/details",{
+        axios.get(`${domain}/api/super-admin/get-bank/details`,{
         headers:{ 'Authorization':`Bearer ${user}`}
         }
         )
@@ -109,14 +90,13 @@ componentDidMount(){
             bank_branch:res.data.bank_branch,
             account_name:res.data.account_name,
             account_number:res.data.account_number,
-            isActive:false
           })
 
         }).catch(error=>{
         console.log(error.response.data)
         });
 
-        axios.get("https://kokrokooad.herokuapp.com/api/media-types")
+        axios.get("https://backend.kokrokooad.com/api/media-types")
         .then(res=>{
           console.log(res.data);
           this.setState({media:res.data})
@@ -134,7 +114,7 @@ handleSubmitCompany=(e)=>{
   e.preventDefault();
   console.log(e);
   console.log(this.state.company_id)
-  axios.post("https://media-kokrokooad.herokuapp.com/api/super-admin/update-company/"+this.state.company_id+"",{
+  axios.post(`${domain}/api/super-admin/update-company/${this.state.company_id}`,{
     company_name:this.state.company_name,
     business_cert:this.state.business_cert, 
     address:this.state.address,
@@ -142,7 +122,7 @@ handleSubmitCompany=(e)=>{
     logo:this.state.logo,
     media_house:this.state.media_house,
     media_type:this.state.media_type,
-    industy_type:this.state.industy_type,
+    purpose:this.state.purpose,
     operation_cert:this.state.operation_cert,
     purpose:this.state.purpose, 
     website:this.state.website,
@@ -165,7 +145,7 @@ handleSubmitCompany=(e)=>{
 
 handleBankEdit=(e)=>{
     e.preventDefault();
-    axios.patch("https://media-kokrokooad.herokuapp.com/api/super-admin/update-bank/details",{
+    axios.patch(`${domain}/api/super-admin/update-bank/details`,{
         bank_name:this.state.bank_name,
         bank_branch:this.state.bank_branch,
         account_name:this.state.account_name,
@@ -187,7 +167,7 @@ handleBankEdit=(e)=>{
       active = {this.state.isActive}
       spinner={<FadeLoader color={'#4071e1'}/>}
       >
-        <UserHeader userName={this.state.company_name}/>
+      <Header/>
         {/* Page content */}
         <Container className="mt--7" fluid>
             <Row>
@@ -302,15 +282,15 @@ handleBankEdit=(e)=>{
                           className="form-control-label"
                           htmlFor="input-last-name"
                         >
-                          Industry Type
+                          Purpose
                         </label>
                         <Input
                           className="form-control-alternative"
-                          value={this.state.industry_type}
+                          value={this.state.purpose}
                           id="input-last-name"
-                          placeholder="Industry Type"
+                          placeholder="Purpose"
                           type="text"
-                          onChange={e=>this.setState({industry_type:e.target.value})}
+                          onChange={e=>this.setState({purpose:e.target.value})}
                         />
                       </FormGroup>
                     </Col>

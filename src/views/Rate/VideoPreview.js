@@ -1,4 +1,5 @@
 import React from "react";
+import  { Prompt } from 'react-router-dom';
 // reactstrap components
 import {
   Card,
@@ -16,12 +17,8 @@ import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";/* 
 import history from "../../history.js"; */
 
-let user = null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if (all_data !== null) {
-  user = all_data[0];
-}
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 class VideoPreview extends React.Component{
 
@@ -35,18 +32,19 @@ class VideoPreview extends React.Component{
     timeCheck:false,
     units:[],
     title:"",
-    id:1
+    id:1,
+    allow:true
   }
 
   componentDidMount(){
     this.setState({isActiveSpinner:true})
-    axios.get("https://media-kokrokooad.herokuapp.com/api/fetch-days-and-units")
+    axios.get(`${domain}/api/fetch-days-and-units`)
     .then(res=>{
         console.log(res.data)
         this.setState({days:res.data.days, units:res.data.units})
     });
 
-    axios.get("https://media-kokrokooad.herokuapp.com/api/ratecard/" +this.props.location.state.title_id + "/preview",
+    axios.get(`${domain}/api/ratecard/${this.props.location.state.title_id}/preview`,
       { headers: { 'Authorization': `Bearer ${user}` } })
       .then(res => {
         console.log(res.data);
@@ -115,7 +113,7 @@ class VideoPreview extends React.Component{
   }
 
   handleDelete=(id,index)=>{
-    axios.delete("https://media-kokrokooad.herokuapp.com/api/ratecard/"+id+"/delete-duration",
+    axios.delete(`${domain}/api/ratecard/${id}/delete-duration`,
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);
@@ -166,7 +164,7 @@ class VideoPreview extends React.Component{
 
   handleDeleteSegment=(id)=>{
     this.setState({isActive:true});
-    axios.delete("https://media-kokrokooad.herokuapp.com/api/ratecard/detail/"+id+"/delete",
+    axios.delete(`${domain}/api/ratecard/detail/${id}/delete`,
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);
@@ -187,7 +185,7 @@ class VideoPreview extends React.Component{
     let selected = tempDetails.find(item=>item.id === id);
     console.log(selected);
     this.setState({isActive:true})
-    axios.patch("https://media-kokrokooad.herokuapp.com/api/ratecard/"+id+"/update",
+    axios.patch(`${domain}/api/ratecard/${id}/update`,
     {start_time:selected.start_time, end_time:selected.end_time, no_of_spots:selected.no_of_spots,day_id:selected.day.id, durations:selected.duration},
     { headers: { 'Authorization': `Bearer ${user}`}})
     .then(res=>{
@@ -205,10 +203,12 @@ class VideoPreview extends React.Component{
 
   handleComplete=()=>{
     console.log("completing...")
-    axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/complete/create",null,
+    axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/complete/create`,null,
     { headers: { 'Authorization': `Bearer ${user}`}})
     .then(res=>{
       console.log(res.data);
+      this.setState({allow:false})
+      this.props.history.push('/media/view-ratecards')
     })
     .catch(error=>{
       console.log(error.response.data)
@@ -223,6 +223,10 @@ class VideoPreview extends React.Component{
         active={this.state.isActive}
         spinner={<FadeLoader color={'#4071e1'}/>}
       >
+      <Prompt
+        when={this.state.allow}
+        message="You have unsaved changes, are you sure you want to leave?"
+        />
         <Header />
         <Container className=" mt--8" fluid>
         {this.state.isActiveSpinner?
@@ -396,7 +400,16 @@ class VideoPreview extends React.Component{
             <CardFooter >
                     <Button
                     style={{float:"right"}}
-                    onClick={()=>this.props.history.push("/media/rate-details",{title_id:this.props.location.state.title_id, rate_title:this.state.title})}
+                    onClick={()=>{
+                      this.setState({allow:false});
+                      setTimeout(
+                    function(){
+                        
+                      this.props.history.push("/media/rate-details",{title_id:this.props.location.state.title_id, rate_title:this.state.title})
+                    }
+                    .bind(this),
+                    500
+                )}}
                     color="primary"
                     >
                     Add New Segment

@@ -39,6 +39,10 @@ import ActiveSubscriptions from "views/Subscription/ActiveSubscriptions";
 import ApprovedSubscriptions from "views/Subscription/ApprovedSubscriptions";
 import RejectedSubscriptions from "views/Subscription/RejectedSubscriptions";
 import CompanyProfile from "views/examples/CompanyProfile.js";
+import RejectionMessages from "views/Subscription/RejectionMessages";
+import VolumeDiscount from "views/VolumeDiscount/VolumeDiscount";
+import ApprovedDetails from "views/Subscription/ApprovedDetails";
+import ChangePassword from "views/ChangePassword/ChangePassword";
 
 
 var routes = [
@@ -131,7 +135,7 @@ var routes = [
   {
     
     path: "/view-subscription",
-    name: "All Subscriptions",
+    name: "All Campaigns",
     header:"subscriptions",
     component: ViewSubscription,
     layout: "/media"
@@ -139,7 +143,7 @@ var routes = [
   {
     
     path: "/pending-subscription",
-    name: "Pending Subscriptions",
+    name: "Pending Campaigns",
     header:"subscriptions",
     component: PendingSubscriptions,
     layout: "/media"
@@ -147,7 +151,7 @@ var routes = [
   {
     
     path: "/active-subscription",
-    name: "Active Subscriptions",
+    name: "Active Campaigns",
     header:"subscriptions",
     component: ActiveSubscriptions,
     layout: "/media"
@@ -155,15 +159,23 @@ var routes = [
   {
     
     path: "/approved-subscription",
-    name: "Apporved Subscriptions",
+    name: "Apporved Campaigns",
     header:"subscriptions",
     component: ApprovedSubscriptions,
     layout: "/media"
   },
   {
     
+    path: "/volume-discount",
+    name: "Volume Discount",
+    header:"volume",
+    component: VolumeDiscount,
+    layout: "/media"
+  },
+  {
+    
     path: "/rejected-subscription",
-    name: "Rejected Subscriptions",
+    name: "Rejected Campaigns",
     header:"subscriptions",
     component: RejectedSubscriptions,
     layout: "/media"
@@ -171,10 +183,28 @@ var routes = [
   {
     
     path: "/subscription-details",
-    name: "Subscriptions",
+    name: "Campaigns",
     header:"subscriptions",
     invisible:true,
     component: SubscriptionDetails,
+    layout: "/media"
+  },
+  {
+    
+    path: "/approved-details",
+    name: "Campaigns",
+    header:"subscriptions",
+    invisible:true,
+    component: ApprovedDetails,
+    layout: "/media"
+  },
+  {
+    
+    path: "/rejected-messages",
+    name: "Reject Campaign",
+    header:"subscriptions",
+    invisible:true,
+    component: RejectionMessages,
     layout: "/media"
   },
   {
@@ -210,6 +240,13 @@ var routes = [
     name: "Create New Users",
     header:"user",
     component: CreateUser,
+    layout: "/media"
+  },
+  {
+    path: "/change-password",
+    name: "Change Password",
+    header:"user",
+    component: ChangePassword,
     layout: "/media"
   },
   {

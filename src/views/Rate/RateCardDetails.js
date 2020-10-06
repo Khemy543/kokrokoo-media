@@ -1,8 +1,6 @@
 
 import React from "react";
 import  { Prompt } from 'react-router-dom';
-// react component that copies the given text inside your clipboard
-import { CopyToClipboard } from "react-copy-to-clipboard";
 // reactstrap components
 import {
   Card,
@@ -23,12 +21,8 @@ import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
-let user =null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if(all_data !== null){
-  user = all_data[0];
-}
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 class RateCardDetails extends React.Component{
     state={
@@ -39,6 +33,7 @@ class RateCardDetails extends React.Component{
         days:[],
         units:[],
         title:"",
+        allow:true,
 
         slotValue:2,
         newSlot:[],
@@ -129,7 +124,7 @@ class RateCardDetails extends React.Component{
         }
         
 
-        axios.get("https://media-kokrokooad.herokuapp.com/api/fetch-days-and-units")
+        axios.get(`${domain}/api/fetch-days-and-units`)
         .then(res=>{
             console.log(res.data)
             this.setState({days:res.data.days, units:res.data.units,isActiveSpinner:false})
@@ -215,7 +210,7 @@ class RateCardDetails extends React.Component{
         let tempSlot = [...this.state.newSlot];
         tempSlot.unshift({id:1,duration:this.state.duration,unit_id:this.state.unit,rate:this.state.rate});
          console.log(tempSlot);
-         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+         axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
          {start_time:this.state.startTime, end_time:this.state.EndTime, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumber,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
@@ -260,7 +255,7 @@ class RateCardDetails extends React.Component{
             let tempSlot = [...this.state.newSlot];
             tempSlot.unshift({id:1,duration:this.state.duration,unit_id:this.state.unit,rate:this.state.rate});
              console.log(tempSlot);
-             axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+             axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
              {start_time:this.state.startTime, end_time:this.state.EndTime, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumber,rate_card_title:this.state.title},
              {headers:{ 'Authorization':`Bearer ${user}`}}) 
              .then(res=>{
@@ -359,7 +354,7 @@ class RateCardDetails extends React.Component{
         let tempSlot = [...this.state.newSlotTues];
         tempSlot.unshift({id:1,duration:this.state.durationTues,unit_id:this.state.unitTues,rate:this.state.rateTues});
          console.log(tempSlot);
-         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+         axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
          {start_time:this.state.startTimeTues, end_time:this.state.EndTimeTues, day_id:2, durations:tempSlot, no_of_spots:this.state.slotNumberTues,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
@@ -404,7 +399,7 @@ class RateCardDetails extends React.Component{
                 let tempSlot = [...this.state.newSlotTues];
                 tempSlot.unshift({id:1,duration:this.state.durationTues,unit_id:this.state.unitTues,rate:this.state.rateTues});
                  console.log(tempSlot);
-                 axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                 axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
                  {start_time:this.state.startTimeTues, end_time:this.state.EndTimeTues, day_id:2, durations:tempSlot, no_of_spots:this.state.slotNumberTues,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
@@ -507,7 +502,7 @@ class RateCardDetails extends React.Component{
         let tempSlot = [...this.state.newSlotWed];
         tempSlot.unshift({id:1,duration:this.state.durationWed,unit_id:this.state.unitWed,rate:this.state.rateWed});
          console.log(tempSlot);
-         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+         axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
          {start_time:this.state.startTimeWed, end_time:this.state.EndTimeWed, day_id:3, durations:tempSlot, no_of_spots:this.state.slotNumberWed,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
@@ -551,7 +546,7 @@ class RateCardDetails extends React.Component{
                 let tempSlot = [...this.state.newSlotWed];
                 tempSlot.unshift({id:1,duration:this.state.durationWed,unit_id:this.state.unitWed,rate:this.state.rateWed});
                  console.log(tempSlot);
-                 axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                 axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
                  {start_time:this.state.startTimeWed, end_time:this.state.EndTimeWed, day_id:3, durations:tempSlot, no_of_spots:this.state.slotNumberWed,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
@@ -649,7 +644,7 @@ class RateCardDetails extends React.Component{
         let tempSlot = [...this.state.newSlotThurs];
         tempSlot.unshift({id:1,duration:this.state.durationThurs,unit_id:this.state.unitThurs,rate:this.state.rateThurs});
          console.log(tempSlot);
-         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+         axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
          {start_time:this.state.startTimeThurs, end_time:this.state.EndTimeThurs, day_id:4, durations:tempSlot, no_of_spots:this.state.slotNumberThurs,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
@@ -693,7 +688,7 @@ class RateCardDetails extends React.Component{
                 let tempSlot = [...this.state.newSlotThurs];
                 tempSlot.unshift({id:1,duration:this.state.durationThurs,unit_id:this.state.unitThurs,rate:this.state.rateThurs});
                  console.log(tempSlot);
-                 axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                 axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
                  {start_time:this.state.startTimeThurs, end_time:this.state.EndTimeThurs, day_id:4, durations:tempSlot, no_of_spots:this.state.slotNumberThurs,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
@@ -790,7 +785,7 @@ class RateCardDetails extends React.Component{
         let tempSlot = [...this.state.newSlotFri];
         tempSlot.unshift({id:1,duration:this.state.durationFri,unit_id:this.state.unitFri,rate:this.state.rateFri});
          console.log(tempSlot);
-         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+         axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
          {start_time:this.state.startTimeFri, end_time:this.state.EndTimeFri, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberFri,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
@@ -834,7 +829,7 @@ class RateCardDetails extends React.Component{
                 let tempSlot = [...this.state.newSlotFri];
                 tempSlot.unshift({id:1,duration:this.state.durationFri,unit_id:this.state.unitFri,rate:this.state.rateFri});
                  console.log(tempSlot);
-                 axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                 axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
                  {start_time:this.state.startTimeFri, end_time:this.state.EndTimeFri, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberFri,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
@@ -932,7 +927,7 @@ class RateCardDetails extends React.Component{
         let tempSlot = [...this.state.newSlotSat];
         tempSlot.unshift({id:1,duration:this.state.durationSat,unit_id:this.state.unitSat,rate:this.state.rateSat});
          console.log(tempSlot);
-         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+         axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
          {start_time:this.state.startTimeSat, end_time:this.state.EndTimeSat, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberSat,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
@@ -976,7 +971,7 @@ class RateCardDetails extends React.Component{
                 let tempSlot = [...this.state.newSlotSat];
                 tempSlot.unshift({id:1,duration:this.state.durationSat,unit_id:this.state.unitSat,rate:this.state.rateSat});
                  console.log(tempSlot);
-                 axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                 axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
                  {start_time:this.state.startTimeSat, end_time:this.state.EndTimeSat, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberSat,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
@@ -1073,7 +1068,7 @@ class RateCardDetails extends React.Component{
         let tempSlot = [...this.state.newSlotSun];
         tempSlot.unshift({id:1,duration:this.state.durationSun,unit_id:this.state.unitSat,rate:this.state.rateSun});
          console.log(tempSlot);
-         axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+         axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
          {start_time:this.state.startTimeSun, end_time:this.state.EndTimeSun, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumberSun,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
@@ -1117,7 +1112,7 @@ class RateCardDetails extends React.Component{
                 let tempSlot = [...this.state.newSlotSun];
                 tempSlot.unshift({id:1,duration:this.state.durationSun,unit_id:this.state.unitSat,rate:this.state.rateSun});
                  console.log(tempSlot);
-                 axios.post("https://media-kokrokooad.herokuapp.com/api/ratecard/"+this.props.location.state.title_id+"/add-details",
+                 axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
                  {start_time:this.state.startTimeSun, end_time:this.state.EndTimeSun, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumberSun,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
@@ -1149,15 +1144,15 @@ class RateCardDetails extends React.Component{
     render(){
     return (
       <React.Fragment>
-        <Prompt
-        when={true}
-        message="You have unsaved changes, are you sure you want to leave?"
-        />
         <>
       <LoadingOverlay 
       active = {this.state.isActive}
       spinner={<FadeLoader color={'#4071e1'}/>}
       >
+      <Prompt
+        when={this.state.allow}
+        message="You have unsaved changes, are you sure you want to leave?"
+        />
       <Header/>
         <Container className=" mt--9" fluid>
         {this.state.isActiveSpinner?
@@ -1939,7 +1934,17 @@ class RateCardDetails extends React.Component{
                 <Button
                 style={{float:"right"}}
                 color="primary"
-                onClick={()=>this.props.history.push("/media/edit-ratecards",{title_id:this.props.location.state.title_id})}
+                onClick={()=>{
+                this.setState({allow:false});
+                setTimeout(
+                    function(){
+                        
+                            this.props.history.push("/media/edit-ratecards",{title_id:this.props.location.state.title_id})
+                    }
+                    .bind(this),
+                    500
+                )
+                }}
                 >
                     PREVIEW
                 </Button>

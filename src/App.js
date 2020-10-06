@@ -29,6 +29,7 @@ import AdminLayout from "layouts/Admin.js";
 import Login from "./views/examples/Login.js";
 import ProtectedLoginRoute from "./ProtectedLoginRoute.js";
 import "./index.css";
+import ForgetPassword from "views/PasswordReset/ForgetPassword";
 
 
 class App extends React.Component{
@@ -38,6 +39,7 @@ class App extends React.Component{
     <Switch>
       <Route path="/media" render={props => <AdminLayout {...props} history={history}/>} />
       <ProtectedLoginRoute exact path="/" component = {Login}/>
+      <Route exact path="/auth/forget-password" component={ForgetPassword} />
       <Redirect from="/homepage" to="/media/index" />
     </Switch>
   </BrowserRouter>

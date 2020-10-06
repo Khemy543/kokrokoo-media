@@ -8,7 +8,7 @@ class ProtectedRoute extends React.Component {
         const Component = this.props.component;
         const path = this.props.path;
         const key = this.props.key;
-        const isAuthenticated = localStorage.getItem('storageData')
+        const isAuthenticated = localStorage.getItem('access_token')
         
         if(isAuthenticated === null){
             return (

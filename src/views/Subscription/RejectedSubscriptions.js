@@ -32,32 +32,32 @@ import {
   Table,
   Container,
   Row,
-  Col
+  Col,
+  Spinner
 } from "reactstrap";
 
 
 import Header from "components/Headers/Header.js";
 import axios from "axios";
 
-let user = null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-console.log("all_data:", all_data)
-if (all_data !== null) {
-  user = all_data[0];
-}
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 function RejectedSubscriptions (props){
   const [subscriptions, setSubscription] = React.useState([]);
+  const [isActiveSpinner, setIsActiveSpinner] = React.useState(false)
 
   React.useEffect(()=>{
-    axios.get("https://media-kokrokooad.herokuapp.com/api/rejected-subscriptions",
+    setIsActiveSpinner(true)
+    axios.get(`${domain}/api/rejected-subscriptions`,
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);
       setSubscription(res.data)
+      setIsActiveSpinner(false)
     })
     .catch(error=>{
-      console.log(error.response.data)
+      console.log(error)
     })
   },[])
 
@@ -70,6 +70,13 @@ function RejectedSubscriptions (props){
         <Header />
         {/* Page content */}
         <Container className="mt--7" fluid>
+        {isActiveSpinner?
+          <Row>
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
           <Row>
             <Col className="mb-5 mb-xl-0" lg="12">
             <Card>
@@ -96,7 +103,7 @@ function RejectedSubscriptions (props){
                       <th scope="row">{index +1}</th>
                       <td>{value.id}</td>
                       <td>{value.title}</td>
-                      <td>{value.rate_card_title_id}</td>
+                      <td>{value.rate_card_title}</td>
                       <td>{value.status}</td>
                       <td>{value.time}</td>
                       <td>{value.comapny_id}</td>
@@ -114,6 +121,7 @@ function RejectedSubscriptions (props){
             </Card>  
             </Col>
           </Row>
+        }
         </Container>
       </>
     );

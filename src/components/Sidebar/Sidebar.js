@@ -54,6 +54,7 @@ class Sidebar extends React.Component {
     reportCollapse:false,
     userCollapse:false,
     profileCollapse:false,
+    volumeCollapse:false,
     published:localStorage.getItem('published'),
     modal:false,
     message:"",
@@ -89,7 +90,8 @@ class Sidebar extends React.Component {
       rateCollapse:false,
       reportCollapse:false,
       userCollapse:false,
-      profileCollapse:false
+      profileCollapse:false,
+      volumeCollapse:false
     })
   }
 
@@ -101,7 +103,8 @@ class Sidebar extends React.Component {
       rateCollapse:false,
       reportCollapse:false,
       userCollapse:false,
-      profileCollapse:false
+      profileCollapse:false,
+      volumeCollapse:false
     })
   }
   toggleTransCollapse=()=>{
@@ -112,7 +115,8 @@ class Sidebar extends React.Component {
       rateCollapse:false,
       reportCollapse:false,
       userCollapse:false,
-      profileCollapse:false
+      profileCollapse:false,
+      volumeCollapse:false
     })
   }
   toggleRateCollapse=()=>{
@@ -123,7 +127,9 @@ class Sidebar extends React.Component {
       dashboardCollapse:false,
       reportCollapse:false,
       userCollapse:false,
-      profileCollapse:false
+      profileCollapse:false,
+      volumeCollapse:false
+
     })
   }
   toggleReportCollapse=()=>{
@@ -134,7 +140,9 @@ class Sidebar extends React.Component {
       rateCollapse:false,
       dashboardCollapse:false,
       userCollapse:false,
-      profileCollapse:false
+      profileCollapse:false,
+      volumeCollapse:false
+
     })
   }
   toggleUserCollapse=()=>{
@@ -145,7 +153,9 @@ class Sidebar extends React.Component {
       rateCollapse:false,
       reportCollapse:false,
       dashboardCollapse:false,
-      profileCollapse:false
+      profileCollapse:false,
+      volumeCollapse:false
+
     })
   }
 
@@ -157,7 +167,24 @@ class Sidebar extends React.Component {
       rateCollapse:false,
       reportCollapse:false,
       userCollapse:false,
-      dashboardCollapse:false
+      dashboardCollapse:false,
+      volumeCollapse:false
+
+    })
+  }
+
+  toggleVolumeCollapse=()=>{
+    this.setState({
+      profileCollapse:false,
+      subscriptionsCollapse:false,
+      transactionCollapse:false,
+      rateCollapse:false,
+      reportCollapse:false,
+      userCollapse:false,
+      dashboardCollapse:false,
+      volumeCollapse:!this.state.volumeCollapse
+
+
     })
   }
   // creates the links that appear in the left menu / Sidebar
@@ -310,6 +337,30 @@ class Sidebar extends React.Component {
         return null
       }
       else if(prop.header === "profile"){
+      return (
+        <NavItem key={key}>
+          <NavLink
+            to={prop.layout + prop.path}
+            tag={NavLinkRRD}
+            onClick={this.closeCollapse}
+            activeClassName="active"
+            style={{fontSize:"14px", fontWeight:600,color:"white"}}
+          >
+          <i className = "fa fa-chevron-right" style={{fontSize:"10px"}}/>
+            {prop.name}
+          </NavLink>
+        </NavItem>
+      )
+    }
+    })
+  }
+
+  createVolumeRoutes = routes => {
+    return routes.map((prop, key) => {
+      if(prop.invisible){
+        return null
+      }
+      else if(prop.header === "volume"){
       return (
         <NavItem key={key}>
           <NavLink
@@ -562,7 +613,7 @@ class Sidebar extends React.Component {
 
                 <NavItem onClick={this.toggleSubscriptionCollapse}>
                 <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer",color:"white"}}>
-                <i className="fa fa-briefcase"/>Subscriptions
+                <i className="fa fa-briefcase"/>Campaigns
                 </NavLink>
               </NavItem>
               <Collapse isOpen={this.state.subscriptionsCollapse}>
@@ -576,6 +627,15 @@ class Sidebar extends React.Component {
               </NavItem>
               <Collapse isOpen={this.state.transactionCollapse}>
                 {this.createTransLinks(routes)}
+                </Collapse> 
+
+                <NavItem onClick={this.toggleVolumeCollapse}>
+                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer",color:"white"}}>
+                <i className="fa fa-thumbs-down"/>Volume Discount
+                </NavLink>
+              </NavItem>
+              <Collapse isOpen={this.state.volumeCollapse}>
+                {this.createVolumeRoutes(routes)}
                 </Collapse> 
 
               <NavItem onClick={this.toggleReportCollapse}>

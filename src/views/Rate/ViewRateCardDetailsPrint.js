@@ -34,11 +34,8 @@ import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
-let user =null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-if(all_data !== null){
-  user = all_data[0];
-}
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 class ViewRateCardDetailsPrint extends React.Component{
 
@@ -55,12 +52,12 @@ class ViewRateCardDetailsPrint extends React.Component{
 
       componentDidMount(){
         this.setState({isActive:true})
-        axios.get("https://media-kokrokooad.herokuapp.com/api/fetch-days-and-units")
+        axios.get(`${domain}/api/fetch-days-and-units`)
         .then(res=>{
             this.setState({days:res.data.days, units:res.data.units})
         });
 
-        axios.get("https://media-kokrokooad.herokuapp.com/api/ratecard/" +this.props.location.state.title_id + "/preview",
+        axios.get(`${domain}/api/ratecard/${this.props.location.state.title_id}/preview`,
       { headers: { 'Authorization': `Bearer ${user}` } })
       .then(res => {
         console.log("fitsdy",res.data.details);
