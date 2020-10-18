@@ -19,17 +19,24 @@ export default function ForgetPassword(props){
     const [message, setMessage] = React.useState("");
     const [visible, setVisible] = React.useState(false);
     const [email,setEmail]= React.useState("");
+    const [color, setColor] = React.useState("");
 
     const toggle=()=>setVisible(!visible);
 
     const handleSubmit=(e)=>{
         e.preventDefault();
-        axios.post(`${domain}/api/request/password/reset`, {email:email})
+        axios.post(`${domain}/api/auth/request/password/reset`, {email:email})
         .then(res=>{
             console.log(res.data);
+            setMessage(res.data.status);
+            setVisible(true)
+            setColor("success")
         })
         .catch(error=>{
-            console.log(error.response)
+            console.log(error.response.data)
+            setMessage(error.response.data.status);
+            setVisible(true)
+            setColor("danger")
         })
     }
    
@@ -45,11 +52,11 @@ export default function ForgetPassword(props){
             <Container style={{marginTop:"100px"}}>
             <Row>
              <Col md="6" lg="6" sm="12" xs="12" className="ml-auto mr-auto">
-                   {/*  <div>
-                    <Alert isOpen={visible} toggle={toggle}  color="danger" fade={true} style={{fontWeight:500, textTransform:"capitalize"}}>
+                    <div>
+                    <Alert isOpen={visible} toggle={toggle}  color={`${color}`} fade={true} style={{fontWeight:500, textTransform:"capitalize"}}>
                         {message}
                     </Alert>
-                    </div> */}
+                    </div>
                     <h4 style={{fontSize:"14px", textAlign:"center", fontWeight:500, marginBottom:"10px"}}>Forgot your password?</h4>
                     <Card className="card-plain shadow" style={{backgroundColor:"white", borderRadius:"5px"}}>
                         <CardBody style={{margin:"15px"}}>
@@ -62,7 +69,7 @@ export default function ForgetPassword(props){
                             <br/>
                             <form onSubmit={handleSubmit}>
                             <label style={{fontWeight:500}}>Email Address</label>
-                            <Input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="eg: example@gmail.com"/>
+                            <Input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="eg: example@gmail.com" required/>
                             <Button type="submit" style={{marginTop:"50px"}} block color='success'>Reset Password</Button>
                             </form>
                         </CardBody>

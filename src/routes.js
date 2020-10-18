@@ -43,6 +43,8 @@ import RejectionMessages from "views/Subscription/RejectionMessages";
 import VolumeDiscount from "views/VolumeDiscount/VolumeDiscount";
 import ApprovedDetails from "views/Subscription/ApprovedDetails";
 import ChangePassword from "views/ChangePassword/ChangePassword";
+import RegistrationPayment from "views/Payment/RegistrationPayment";
+import PaymentVerification from "views/Payment/PaymentStatus";
 
 
 var routes = [
@@ -245,7 +247,7 @@ var routes = [
   {
     path: "/change-password",
     name: "Change Password",
-    header:"user",
+    header:"profile",
     component: ChangePassword,
     layout: "/media"
   },
@@ -274,6 +276,21 @@ var routes = [
     name:"Company Profile",
     header:"profile",
     component: CompanyProfile,
+    layout: "/media"
+  },
+  {
+    path: "/payment/registration-payment",
+    name:"Payment",
+    header:"payment",
+    component: RegistrationPayment,
+    layout: "/media"
+  },
+  {
+    path: "/payment/status",
+    name:"Payment",
+    header:"payment",
+    invisible:true,
+    component: PaymentVerification,
     layout: "/media"
   }
 ];

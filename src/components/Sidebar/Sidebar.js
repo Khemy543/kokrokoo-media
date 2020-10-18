@@ -39,11 +39,9 @@ import {
 } from "reactstrap";
 import {RateConsumer} from "../../context.js";
 
-let user =null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-if(all_data !== null){
-  user = all_data[0];
-}
+let user = localStorage.getItem('access_token')
+var domain = "https://media.test.backend.kokrokooad.com";
+
 class Sidebar extends React.Component {
   state = {
     collapseOpen: false,
@@ -55,6 +53,7 @@ class Sidebar extends React.Component {
     userCollapse:false,
     profileCollapse:false,
     volumeCollapse:false,
+    paymentCollapse:false,
     published:localStorage.getItem('published'),
     modal:false,
     message:"",
@@ -91,7 +90,8 @@ class Sidebar extends React.Component {
       reportCollapse:false,
       userCollapse:false,
       profileCollapse:false,
-      volumeCollapse:false
+      volumeCollapse:false,
+      paymentCollapse:false
     })
   }
 
@@ -104,7 +104,8 @@ class Sidebar extends React.Component {
       reportCollapse:false,
       userCollapse:false,
       profileCollapse:false,
-      volumeCollapse:false
+      volumeCollapse:false,
+      paymentCollapse:false
     })
   }
   toggleTransCollapse=()=>{
@@ -116,7 +117,8 @@ class Sidebar extends React.Component {
       reportCollapse:false,
       userCollapse:false,
       profileCollapse:false,
-      volumeCollapse:false
+      volumeCollapse:false,
+      paymentCollapse:false
     })
   }
   toggleRateCollapse=()=>{
@@ -128,7 +130,8 @@ class Sidebar extends React.Component {
       reportCollapse:false,
       userCollapse:false,
       profileCollapse:false,
-      volumeCollapse:false
+      volumeCollapse:false,
+      paymentCollapse:false
 
     })
   }
@@ -141,7 +144,8 @@ class Sidebar extends React.Component {
       dashboardCollapse:false,
       userCollapse:false,
       profileCollapse:false,
-      volumeCollapse:false
+      volumeCollapse:false,
+      paymentCollapse:false
 
     })
   }
@@ -154,7 +158,8 @@ class Sidebar extends React.Component {
       reportCollapse:false,
       dashboardCollapse:false,
       profileCollapse:false,
-      volumeCollapse:false
+      volumeCollapse:false,
+      paymentCollapse:false
 
     })
   }
@@ -168,7 +173,8 @@ class Sidebar extends React.Component {
       reportCollapse:false,
       userCollapse:false,
       dashboardCollapse:false,
-      volumeCollapse:false
+      volumeCollapse:false,
+      paymentCollapse:false
 
     })
   }
@@ -182,7 +188,23 @@ class Sidebar extends React.Component {
       reportCollapse:false,
       userCollapse:false,
       dashboardCollapse:false,
-      volumeCollapse:!this.state.volumeCollapse
+      volumeCollapse:!this.state.volumeCollapse,
+      paymentCollapse:false
+
+
+    })
+  }
+  togglePaymentCollapse=()=>{
+    this.setState({
+      profileCollapse:false,
+      subscriptionsCollapse:false,
+      transactionCollapse:false,
+      rateCollapse:false,
+      reportCollapse:false,
+      userCollapse:false,
+      dashboardCollapse:false,
+      volumeCollapse:false,
+      paymentCollapse:!this.state.paymentCollapse
 
 
     })
@@ -379,9 +401,34 @@ class Sidebar extends React.Component {
     })
   }
 
+  createPaymentRoutes = routes => {
+    return routes.map((prop, key) => {
+      if(prop.invisible){
+        return null
+      }
+      else if(prop.header === "payment"){
+      return (
+        <NavItem key={key}>
+          <NavLink
+            to={prop.layout + prop.path}
+            tag={NavLinkRRD}
+            onClick={this.closeCollapse}
+            activeClassName="active"
+            style={{fontSize:"14px", fontWeight:600,color:"white"}}
+          >
+          <i className = "fa fa-chevron-right" style={{fontSize:"10px"}}/>
+            {prop.name}
+          </NavLink>
+        </NavItem>
+      )
+    }
+    })
+  }
+
+
 
   handlePublish=()=>{
-    axios.post("https://media-kokrokooad.herokuapp.com/api/super-admin/publish-company",null,
+    axios.post(`${domain}/api/super-admin/publish-company`,null,
     {headers:{ 'Authorization':`Bearer ${user}`}})
     .then(res=>{
       console.log(res.data);
@@ -403,7 +450,7 @@ class Sidebar extends React.Component {
   
   handleUnPublish=()=>{
     this.setState({modal:false})
-    axios.post("https://media-kokrokooad.herokuapp.com/api/super-admin/unpublish-company",null,
+    axios.post(`${domain}/api/super-admin/unpublish-company`,null,
     {headers:{ 'Authorization':`Bearer ${user}`}})
     .then(res=>{
       console.log(res.data);
@@ -638,14 +685,24 @@ class Sidebar extends React.Component {
                 {this.createVolumeRoutes(routes)}
                 </Collapse> 
 
-              <NavItem onClick={this.toggleReportCollapse}>
+                <NavItem onClick={this.togglePaymentCollapse}>
+                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer",color:"white"}}>
+                <i className="fa fa-money"/>Payment
+                </NavLink>
+              </NavItem>
+              <Collapse isOpen={this.state.paymentCollapse}>
+                {this.createPaymentRoutes(routes)}
+                </Collapse> 
+
+
+              {/* <NavItem onClick={this.toggleReportCollapse}>
                 <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer",color:"white"}}>
                 <i className="fa fa-book"/>Report
                 </NavLink>
               </NavItem>
               <Collapse isOpen={this.state.reportCollapse}>
                 {this.createReportLinks(routes)}
-                </Collapse> 
+                </Collapse> */} 
 
               <NavItem onClick={this.toggleUserCollapse}>
                 <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer",color:"white"}}>
@@ -658,7 +715,7 @@ class Sidebar extends React.Component {
 
                 <NavItem onClick={this.toggleProfile}>
                 <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer",color:"white"}}>
-                <i className="fa fa-user"/>Profile
+                <i className="fa fa-cog"/>Settings
                 </NavLink>
               </NavItem>
               <Collapse isOpen={this.state.profileCollapse}>

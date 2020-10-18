@@ -3,8 +3,42 @@ import {
     Container,Row,Col, Table
 } from "reactstrap";
 import Header from "components/Headers/Header.js";
+import axios from "axios";
 
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 class VolumeDiscount extends React.Component{
+
+    state={
+        volume:[],
+        company_name:"",
+        media_house:""
+    }
+
+    componentDidMount(){
+        axios.get(`${domain}/api/company/volume-discount`,
+        {headers:{ 'Authorization':`Bearer ${user}`}})
+        .then(res=>{
+            console.log(res.data);
+            this.setState({volume:res.data})
+        })
+        .catch(error=>{
+            console.log(error)
+            
+        })
+
+        axios.get(`${domain}/api/company-profile`,{
+            headers:{ 'Authorization':`Bearer ${user}`}
+                })
+            .then(res=>{
+                console.log(res.data);
+                this.setState({
+                    company_name:res.data.company_name,
+                    media_house:res.data.media_house
+                })
+            })
+    }
+
     render(){
         return(
             <>
@@ -15,8 +49,8 @@ class VolumeDiscount extends React.Component{
             >See All <span style={{color:"red"}}>Discounts</span> Your Offer The Media Houses.</p>
             <Row style={{marginTop:"20px"}}>
             <Col lg="12" xs="12" md="12" sm="12" xl="12">
-            <h3>THE VINE COMPANY</h3>
-            <p style={{fontWeight:500,fontSize:"13px"}}>Radio Vine FM</p>
+            <h3>{this.state.company_name}</h3>
+            <p style={{fontWeight:500,fontSize:"13px"}}>{this.state.media_house}</p>
             <Table striped bordered>
             <thead>
                 <tr>
@@ -26,21 +60,13 @@ class VolumeDiscount extends React.Component{
                 </tr>
             </thead>
             <tbody>
+            {this.state.volume.map((value,key)=>(
                 <tr>
-                <th scope="row">1</th>
-                <td>GH¢ 2000 - GH¢ 5000</td>
-                <td>10%</td>
+                <th scope="row">{key+1}</th>
+                <td>GH¢ {value.amount_range}</td>
+                <td>{value.percentile}%</td>
                 </tr>
-                <tr>
-                <th scope="row">2</th>
-                <td>Gh¢ 5000 - GH¢ 10000</td>
-                <td>15%</td>
-                </tr>
-                <tr>
-                <th scope="row">3</th>
-                <td>GH¢ 10000 - GH¢ 15000</td>
-                <td>20%</td>
-                </tr>
+                ))}
             </tbody>
             </Table>
             </Col>

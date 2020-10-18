@@ -28,12 +28,10 @@ import {
   Input,
   Container,
   Row,
-  Col,Modal,ModalBody
+  Col,Modal,ModalHeader,
+  ModalFooter, Spinner
 } from "reactstrap";
 // core components
-import UserHeader from "components/Headers/UserHeader.js";
-import LoadingOverlay from "react-loading-overlay";
-import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 import Header from "components/Headers/Header";
 
@@ -53,6 +51,7 @@ class Profile extends React.Component {
     isActive:false,
     modal:false,
     message:"",
+    role:[]
   }
 
 componentDidMount(){
@@ -63,20 +62,19 @@ componentDidMount(){
         )
         .then(res=>{
         console.log(res.data)
-        if(res.data.user !== null){
           this.setState({
-            name:res.data.user.name, 
-            email:res.data.user.email,
-            phone1:res.data.user.phone1,
-            phone2:res.data.user.phone2,
-            title:res.data.user.title,
-            id:res.data.user.id,
+            name:res.data.name, 
+            email:res.data.email,
+            phone1:res.data.phone1,
+            phone2:res.data.phone2,
+            title:res.data.title,
+            id:res.data.id,
+            role:res.data.role,
             isActive:false
           })
-        }
 
         }).catch(error=>{
-        console.log(error.response.data)
+        console.log(error)
         });
 
         axios.get("https://backend.kokrokooad.com/api/media-types")
@@ -92,29 +90,28 @@ componentDidMount(){
 toggleModal=()=>this.setState({modal:!this.state.modal});
 
 handleSubmit=(e)=>{
-  this.setState({isActive:true})
   e.preventDefault();
   console.log(e);
   console.log(this.state.id)
   axios.patch(`${domain}/api/update/${this.state.id}`,{
-  name:this.state.name, email:this.state.email,phone1:this.state.phone1,phone1:this.state.phone2,title:this.state.title},{
+  name:this.state.name, email:this.state.email, phone1:this.state.phone1,phone2:this.state.phone2,title:this.state.title},{
     headers:{ 'Authorization':`Bearer ${user}`}})
   .then(res=>{
     console.log(res.data)
-    this.setState({message:"UPDATED!!",isActive:false,modal:true});
+    this.setState({message:"UPDATED!!",modal:true});
 
     setTimeout(
       function(){
           this.setState({modal:false})
-      }.bind(this),2000)
+      }.bind(this),1500)
   
   })
   .catch(error=>{
     console.log(error)
     if(error){
       this.setState({message:error.response.data.errors.email || error.response.data.errors.phone1 || error.response.data.errors.phone2,
-      modal:true,isActive:false
-      })
+      modal:true
+      });
       
     }
   })
@@ -123,13 +120,16 @@ handleSubmit=(e)=>{
   render() {
     return (
       <>
-      <LoadingOverlay 
-      active = {this.state.isActive}
-      spinner={<FadeLoader color={'#4071e1'}/>}
-      >
       <Header/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+        {this.state.isActive?
+          <Row>
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
           <Row>
             <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
               <Card className="card-profile shadow">
@@ -154,16 +154,13 @@ handleSubmit=(e)=>{
                   <br/>
                   <br/>
                   <div className="text-center">
-                    <h3>
-                      {this.state.username}
-                    </h3>
-                    <div className="h5 font-weight-300">
-                      <i className="ni location_pin mr-2" />
-                      {this.state.name}
-                    </div>
                     <div className="h5 mt-4">
                       <i className="ni business_briefcase-24 mr-2" />
                       {this.state.title}
+                    </div>
+                    <div className="h5 font-weight-300">
+                      <i className="ni location_pin mr-2" />
+                      {this.state.name}
                     </div>
                     </div>
                 </CardBody>
@@ -229,13 +226,13 @@ handleSubmit=(e)=>{
                               className="form-control-label"
                               htmlFor="input-first-name"
                             >
-                              Phone
+                              Phone 1
                             </label>
                             <Input
                               className="form-control-alternative"
                               value={this.state.phone1}
                               id="input-first-name"
-                              placeholder="First name"
+                              placeholder="Phone"
                               type="text"
                               onChange={e=>this.setState({phone1:e.target.value})}
                             />
@@ -247,13 +244,13 @@ handleSubmit=(e)=>{
                               className="form-control-label"
                               htmlFor="input-last-name"
                             >
-                              Phone
+                              Phone 2
                             </label>
                             <Input
                               className="form-control-alternative"
                               value={this.state.phone2}
                               id="input-last-name"
-                              placeholder="Last name"
+                              placeholder="Phone 2"
                               type="text"
                               onChange={e=>this.setState({phone2:e.target.value})}
                             />
@@ -272,10 +269,29 @@ handleSubmit=(e)=>{
                             <Input
                               className="form-control-alternative"
                               value={this.state.title}
-                              id="input-title"
-                              placeholder="Title"
-                              type="text"
+                              type="select"
                               onChange={e=>this.setState({title:e.target.value})}
+                            >
+                            <option value="Mr">Mr</option>
+                            <option value="Mrs">Mrs</option>
+                            <option value="Miss">Miss</option>
+                            </Input>
+                          </FormGroup>
+                        </Col>
+                        <Col lg="6">
+                        <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-title"
+                            >
+                              Role
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              value={this.state.role.role}
+                              placeholder="Role"
+                              type="text"
+                              disabled
                             />
                           </FormGroup>
                         </Col>
@@ -299,13 +315,18 @@ handleSubmit=(e)=>{
               </Card>
             </Col>
             </Row>
+        }
         </Container>
-        <Modal isOpen={this.state.modal} toggle={()=>this.toggleModal} style={{maxHeight:"40px", maxWidth:"300px",backgroundColor:"#404E67"}} className="alert-modal">
-            <ModalBody>
-            <h4 style={{textAlign:"center", marginTop:"-3%", fontWeight:"500", color:"white"}}>{this.state.message}</h4>
-            </ModalBody>
+        <Modal isOpen={this.state.modal}>
+        <ModalHeader style={{display:"block"}}>
+        <h4>{this.state.message}</h4>
+        </ModalHeader>
+        <ModalFooter>
+            <Button color="danger" onClick={()=>this.setState({modal:false})}>
+              close
+            </Button>
+            </ModalFooter>
         </Modal>
-        </LoadingOverlay>
       </>
     );
   }

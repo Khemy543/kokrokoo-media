@@ -62,15 +62,17 @@ componentDidMount(){
         )
         .then(res=>{
         console.log(res.data)
-        if(res.data.user !== null){
-          this.setState({username:res.data.user.name, published:res.data.company.isPublished});
-          localStorage.setItem('media_type',res.data.company.media_type);
-          localStorage.setItem('published',res.data.company.isPublished)
-        }
+          this.setState({username:res.data.name});
+  })
 
-        }).catch(error=>{
-        console.log(error)
-        });
+  axios.get(`${domain}/api/company-profile`,{
+    headers:{ 'Authorization':`Bearer ${user}`}
+        }
+        )
+        .then(res=>{
+        console.log(res.data)
+          this.setState({published:res.data.isPublished});
+      })
 }
 
 handlePublish=()=>{
@@ -79,18 +81,11 @@ handlePublish=()=>{
   .then(res=>{
     console.log(res.data);
     if(res.data.status === "Company is live already" || res.data.status === "Turned services on"){
-      this.setState({published:true,messageModal:true, message:res.data.status});
-      setTimeout(
-        function() {
-            this.setState({ messageModal: false });
-        }
-        .bind(this),
-        1500
-    );
+      this.setState({published:1,messageModal:true, message:res.data.status});
     }
   })
   .catch(error=>{
-    console.log(error.response.data)
+    console.log(error)
   })
 }
 
@@ -101,15 +96,7 @@ handleUnPublish=()=>{
   .then(res=>{
     console.log(res.data);
     if(res.data.status === "Turned services off" || res.data.status ==="Services are already off"){
-      this.setState({published:false,messageModal:true, message:res.data.status});
-      setTimeout(
-        function() {
-            this.setState({ messageModal: false });
-        }
-        .bind(this),
-        1500
-    );
-
+      this.setState({published:0,messageModal:true, message:res.data.status});
     }
   })
   .catch(error=>{
@@ -168,7 +155,7 @@ handleUnPublish=()=>{
                     <i className="ni ni-single-02" />
                     <span>My profile</span>
                   </DropdownItem>
-                  {!this.state.published?
+                  {this.state.published === 0?
                   <DropdownItem onClick={()=>{this.handlePublish()}}>
                     <i className="fa fa-bell-o" />
                     <span>Publish</span>
@@ -190,22 +177,21 @@ handleUnPublish=()=>{
               </UncontrolledDropdown>
             </Nav>
             <Modal isOpen={this.state.modal}>
-            <ModalBody>
+            <ModalHeader>
               Do You Want To Unpublish Your Media House?
-            </ModalBody>
+            </ModalHeader>
             <ModalFooter>
               <Button color="danger" onClick={()=>{this.handleUnPublish()}}>Yes</Button>
               <Button color="info" onClick={()=>this.setState({moda:false})}>No</Button>
             </ModalFooter>
             </Modal>
             <Modal isOpen={this.state.messageModal}>
-            <ModalHeader style={{borderBottom:"1px solid rgb(64 78 103 / 30%)"}}>
-              Message
-            </ModalHeader>
-              <ModalBody style={{textAlign:"center"}}>
+              <ModalHeader style={{textAlign:"center"}}>
                 {this.state.message}
-              </ModalBody>
-
+              </ModalHeader>
+                <ModalFooter>
+                  <Button color="danger" onClick={()=>this.setState({messageModal:false})}>Close</Button>
+                </ModalFooter>
             </Modal>
           </Container>
         </Navbar>

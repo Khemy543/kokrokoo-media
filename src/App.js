@@ -30,6 +30,7 @@ import Login from "./views/examples/Login.js";
 import ProtectedLoginRoute from "./ProtectedLoginRoute.js";
 import "./index.css";
 import ForgetPassword from "views/PasswordReset/ForgetPassword";
+import ResetPassword from "views/PasswordReset/PasswordReset.js"
 
 
 class App extends React.Component{
@@ -39,7 +40,8 @@ class App extends React.Component{
     <Switch>
       <Route path="/media" render={props => <AdminLayout {...props} history={history}/>} />
       <ProtectedLoginRoute exact path="/" component = {Login}/>
-      <Route exact path="/auth/forget-password" component={ForgetPassword} />
+      <Route exact path="/auth/forget-password" component ={ForgetPassword} />
+      <Route exact path="/auth/reset-password" component ={ResetPassword} />
       <Redirect from="/homepage" to="/media/index" />
     </Switch>
   </BrowserRouter>

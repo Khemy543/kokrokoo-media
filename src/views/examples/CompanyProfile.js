@@ -35,51 +35,57 @@ class CompanyProfile extends React.Component {
     company_name:"",
     business_cert:"", 
     address:"",
-    company_profile:"",
+    regions:[],
+    languages:[],
     logo:"",
     media_house:"",
     media_type:"",
     operation_cert:"",
     purpose:"", 
     website:"",
+    imagePreviewUrl: '',
+    percentage:0,
+    country:"Ghana"
 
-    bank_name:"",
+    /* bank_name:"",
     bank_branch:"",
     account_name:"",
-    account_number:""
+    account_number:"" */
   }
 
+  
 componentDidMount(){
   this.setState({isActive:true})
-  axios.get(`${domain}/api/user`,{
+  axios.get(`${domain}/api/company-profile`,{
     headers:{ 'Authorization':`Bearer ${user}`}
         }
         )
         .then(res=>{
         console.log(res.data)
-        if(res.data.user !== null){
+        
           this.setState({
-            company_id:res.data.company.id,
-            company_name:res.data.company.company_name,
-            business_cert:res.data.company.business_cert, 
-            address:res.data.company.address,
-            company_profile:res.data.company.company_profile,
-            logo:res.data.company.logo,
-            media_house:res.data.company.media_house,
-            media_type:res.data.company.media_type,
-            purpose:res.data.company.purpose,
-            operation_cert:res.data.company.operation_cert,
-            purpose:res.data.company.purpose, 
-            website:res.data.company.website,
+            company_id:res.data.id,
+            company_name:res.data.company_name,
+            business_cert:res.data.business_cert, 
+            address:res.data.address,
+            logo:res.data.logo,
+            imagePreviewUrl:`${domain}${res.data.logo}`,
+            media_house:res.data.media_house,
+            media_type:res.data.media_type,
+            purpose:res.data.purpose,
+            operation_cert:res.data.operation_cert,
+            purpose:res.data.purpose, 
+            website:res.data.website,
+            languages:res.data.languages,
+            regions:res.data.region,
             isActive:false
           })
-        }
 
         }).catch(error=>{
         console.log(error.response.data)
         });
 
-        axios.get(`${domain}/api/super-admin/get-bank/details`,{
+       /*  axios.get(`${domain}/api/super-admin/get-bank/details`,{
         headers:{ 'Authorization':`Bearer ${user}`}
         }
         )
@@ -94,7 +100,7 @@ componentDidMount(){
 
         }).catch(error=>{
         console.log(error.response.data)
-        });
+        }); */
 
         axios.get("https://backend.kokrokooad.com/api/media-types")
         .then(res=>{
@@ -109,41 +115,93 @@ componentDidMount(){
 toggleModal=()=>this.setState({modal:!this.state.modal});
 
 
-handleSubmitCompany=(e)=>{
-  this.setState({isActive:true})
-  e.preventDefault();
-  console.log(e);
-  console.log(this.state.company_id)
-  axios.post(`${domain}/api/super-admin/update-company/${this.state.company_id}`,{
-    company_name:this.state.company_name,
-    business_cert:this.state.business_cert, 
-    address:this.state.address,
-    company_profile:this.state.company_profile,
-    logo:this.state.logo,
-    media_house:this.state.media_house,
-    media_type:this.state.media_type,
-    purpose:this.state.purpose,
-    operation_cert:this.state.operation_cert,
-    purpose:this.state.purpose, 
-    website:this.state.website,
-},{
-    headers:{ 'Authorization':`Bearer ${user}`}})
-  .then(res=>{
-    console.log(res.data);
-    this.setState({message:"UPDATED!!",isActive:false,modal:true});
+    handleSubmitCompany=(e)=>{
+      e.preventDefault()
+        this.setState({isActive:true})
+        let tempLanguages = this.state.languages.split(",");
+        let tempRegions = this.state.regions.split(",");
+        console.log(tempRegions)
+        console.log(tempLanguages)
+        var bodyFormData = new FormData();
+        bodyFormData.append('business_cert',this.state.business_cert);
+        bodyFormData.append('operation_cert',this.state.operational_cert);
+        bodyFormData.append('logo',this.state.logo);
+        bodyFormData.append('company_email',this.state.company_email);
+        bodyFormData.append('company_name',this.state.company_name);
+        bodyFormData.append('address',this.state.address);
+        bodyFormData.append('address',this.state.address);
+        bodyFormData.append('media_house',this.state.media_house);
+        bodyFormData.append('media_type',this.state.media_type);
+        bodyFormData.append('website',this.state.website);
+        bodyFormData.append('purpose',this.state.purpose);
+        bodyFormData.append('languagues',tempLanguages);
+        bodyFormData.append('region',tempRegions);
+        bodyFormData.append('country',this.state.country);
+        bodyFormData.append('company_profile', "its me")
+        
+            for(var pair of bodyFormData.entries()) {
+                console.log(pair[0]+ ': '+ pair[1]); 
+            }
 
-    setTimeout(
-      function(){
-          this.setState({modal:false})
-      }.bind(this),2000)
-  
-  })
-  .catch(error=>{
-    console.log(error.response.data)
-  })
+            axios({
+                method:'post',
+                url:`${domain}/api/super-admin/update-company/${this.state.company_id}`,
+                data:bodyFormData,
+                headers: {'Content-Type': 'multipart/form-data','Authorization':`Bearer ${user}` },
+                onUploadProgress: (progressEvent) => {
+                    const {loaded , total} = progressEvent;
+                    let percentage = Math.floor(loaded * 100 / total);
+                    console.log(percentage)
+                    if(percentage<100){
+                        this.setState({percentage:percentage});
+                    }
+                    else{
+                        this.setState({percentage:100})
+                    }
+            }})
+            .then(res=>{
+                console.log("data",res.data);
+                /* this.setState({isActive:false, message:"Registration Successful!", modal:true
+                })
+                setTimeout(
+                    function(){
+                        this.setState({modal:false});
+                        this.props.history.push("/auth/await-verification",{
+                            email:this.state.email
+                        })
+                    }
+                    .bind(this),
+                    2000
+                ) */
+            })
+            .catch(error=>{
+                console.log(error.response.data)
+                /* if(error.response){
+                    console.log(error.response.data);
+                    this.setState({
+                        modal:true, isActive:false, message:error.response.data.errors.business_cert || error.response.data.errors.operation_cert || error.response.data.errors.logo || error.response.data.errors.company_name || error.response.data.errors.media_house || error.response.data.errors.website
+                    })
+                } */
+            })
+
 }
 
-handleBankEdit=(e)=>{
+_handleImageChange(e) {
+  e.preventDefault();
+
+  let reader = new FileReader();
+  let file = e.target.files[0];
+
+  reader.onloadend = () => {
+    this.setState({
+      logo: file,
+      imagePreviewUrl: reader.result
+    });
+  }
+
+  reader.readAsDataURL(file)
+}
+/* handleBankEdit=(e)=>{
     e.preventDefault();
     axios.patch(`${domain}/api/super-admin/update-bank/details`,{
         bank_name:this.state.bank_name,
@@ -158,7 +216,40 @@ handleBankEdit=(e)=>{
     .catch(error=>{
       console.log(error.response.data)
     })
+} */
+
+pushType = (value,checked)=>{
+  let tempRegions = this.state.regions;
+  if(checked){
+      tempRegions.push(value);
+      this.setState({regions:tempRegions})
+  }else{
+     let index = tempRegions.indexOf(value);
+     if(index!==-1){
+         tempRegions.splice(index,1);
+         this.setState({regions:tempRegions})
+     }
+  }
+  
+  console.log(tempRegions)
 }
+
+pushLanguages = (value,checked)=>{
+  let tempLanguages = this.state.languages;
+  if(checked){
+      tempLanguages.push(value);
+      this.setState({languages:tempLanguages})
+  }else{
+     let index = tempLanguages.indexOf(value);
+     if(index!==-1){
+         tempLanguages.splice(index,1);
+         this.setState({languages:tempLanguages})
+     }
+  }
+  
+  console.log(tempLanguages)
+}
+
 
   render() {
     return (
@@ -202,25 +293,47 @@ handleBankEdit=(e)=>{
                     </FormGroup>
                   </Col>
                   <Col lg="6">
-                    <FormGroup>
-                      <label
-                        className="form-control-label"
-                        htmlFor="input-last-name"
-                      >
-                        Company Profile
-                      </label>
-                      <Input
-                        className="form-control-alternative"
-                        value={this.state.company_profile}
-                        id="input-last-name"
-                        placeholder="Company Profile"
-                        type="text"
-                        onChange={e=>this.setState({company_profile:e.target.value})}
-                      />
-                    </FormGroup>
-                  </Col>
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-last-name"
+                        >
+                          Media House
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          value={this.state.media_house}
+                          id="input-last-name"
+                          placeholder="Media House"
+                          type="text"
+                          onChange={e=>this.setState({media_house:e.target.value})}
+                        />
+                      </FormGroup>
+                    </Col>
                 </Row>
                 <Row>
+                <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-last-name"
+                        >
+                          Purpose
+                        </label>
+                       {/*  <Input type="select" placeholder="Purpose"  value={this.state.purpose} onChange={e=>this.setState({purpose:e.target.value})}>
+                            <option value="Public">Public</option>
+                            <option value="Public(Foreign)">Public(Foreign)</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Kids Entertainment">Kids Entertainment</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Lifestyle">Lifestyle</option>
+                            <option value="News & Business">News & Business</option>
+                            <option value="Others">Others</option>
+                            </Input> */}
+                            <Input className="form-control-alternative" type="text" value={this.state.purpose} onChange={e=>this.setState({purpose:e.target.value})} placeholder="Purpose"/>
+                      </FormGroup>
+                    </Col>
                     <Col lg="6">
                       <FormGroup>
                         <label
@@ -239,24 +352,7 @@ handleBankEdit=(e)=>{
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-last-name"
-                        >
-                          Media House
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          value={this.state.media_house}
-                          id="input-last-name"
-                          placeholder="Media House"
-                          type="text"
-                          onChange={e=>this.setState({media_house:e.target.value})}
-                        />
-                      </FormGroup>
-                    </Col>
+                   
                   </Row>
                   <Row>
                     <Col lg="6">
@@ -268,51 +364,14 @@ handleBankEdit=(e)=>{
                           Media Type
                         </label>
                         <Input
+                        className="form-control-alternative"
                           value={this.state.media_type}
                           type="select"
                           onChange={e=>this.setState({media_type:e.target.value})}
+                          disabled
                         >
                           {this.state.media.map(value=>(<option value={value.id} key={value.id}>{value.mediaType}</option>))}
                         </Input>
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-last-name"
-                        >
-                          Purpose
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          value={this.state.purpose}
-                          id="input-last-name"
-                          placeholder="Purpose"
-                          type="text"
-                          onChange={e=>this.setState({purpose:e.target.value})}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                 
-                  <Row>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-first-name"
-                        >
-                          Policy
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          value={this.state.policy}
-                          id="input-first-name"
-                          placeholder="Policy"
-                          type="text"
-                          onChange={e=>this.setState({policy:e.target.value})}
-                        />
                       </FormGroup>
                     </Col>
                     <Col lg="6">
@@ -333,7 +392,50 @@ handleBankEdit=(e)=>{
                         />
                       </FormGroup>
                     </Col>
+                    
                   </Row>
+                  <Row>
+                  <Col md="12">
+                  <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-last-name"
+                        >
+                          Coverage Regions
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          value={this.state.regions}
+                          id="input-last-name"
+                          placeholder="Coverage Regions"
+                          type="textarea"
+                          onChange={e=>this.setState({regions:e.target.value})}
+                        />
+                      </FormGroup>
+                      </Col>
+                  </Row>
+                  <Row>
+                  <Col md="12">
+                  <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-last-name"
+                        >
+                          Languages
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          value={this.state.languages}
+                          id="input-last-name"
+                          placeholder="Languages"
+                          type="textarea"
+                          onChange={e=>this.setState({languages:e.target.value})}
+                        />
+                      </FormGroup>
+                      </Col>
+                  </Row>
+                  
+                  <br/>
                   <Row>
                     <Col lg="6">
                       <FormGroup>
@@ -382,23 +484,21 @@ handleBankEdit=(e)=>{
                       </FormGroup>
                     </Col>
                   </Row>
-                  <Row>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-first-name"
-                            >
-                              logo
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              value=""
-                              type="file"
-                              onChange={e=>this.setState({logo:e.target.value})}
-                            />
-                          </FormGroup>
-                        </Col>
+                  <Row> 
+                  <Col sm="12" xs="12">
+                      <small className=" d-block text-uppercase font-weight-bold mb-4">
+                        Company Logo
+                      </small>
+                      <img
+                        alt="..."
+                        className=" img-fluid rounded-circle shadow"
+                        src={this.state.imagePreviewUrl}
+                        style={ {width: "150px",marginBottom:"20px"} }
+                      ></img>
+                      <br/>
+                  <input type="file" 
+                                onChange={(e)=>this._handleImageChange(e)} />
+                    </Col>
                         
                       </Row>
                 <hr className="my-4" />
@@ -418,7 +518,7 @@ handleBankEdit=(e)=>{
             </Col>
           </Row>
 
-          <Row>
+         {/*  <Row>
             <Col className="order-xl-1 mt-3" xl="10">
               <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
@@ -522,7 +622,7 @@ handleBankEdit=(e)=>{
                 </CardBody>
                 </Card>
             </Col>
-          </Row>
+          </Row> */}
           
         </Container>
         <Modal isOpen={this.state.modal} toggle={()=>this.toggleModal} style={{maxHeight:"40px", maxWidth:"300px",backgroundColor:"#404E67"}} className="alert-modal">

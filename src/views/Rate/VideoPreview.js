@@ -410,7 +410,7 @@ class VideoPreview extends React.Component{
                     .bind(this),
                     500
                 )}}
-                    color="primary"
+                    color="info"
                     >
                     Add New Segment
                     </Button>
