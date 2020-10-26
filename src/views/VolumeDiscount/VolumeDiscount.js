@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    Container,Row,Col, Table
+    Container,Row,Col, Table,Spinner
 } from "reactstrap";
 import Header from "components/Headers/Header.js";
 import axios from "axios";
@@ -12,7 +12,8 @@ class VolumeDiscount extends React.Component{
     state={
         volume:[],
         company_name:"",
-        media_house:""
+        media_house:"",
+        isActive:true
     }
 
     componentDidMount(){
@@ -20,7 +21,7 @@ class VolumeDiscount extends React.Component{
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
-            this.setState({volume:res.data})
+            this.setState({volume:res.data, isActive:false})
         })
         .catch(error=>{
             console.log(error)
@@ -44,11 +45,26 @@ class VolumeDiscount extends React.Component{
             <>
             <Header />
             <Container className="mt--7" fluid>
-            <p
-            style={{fontSize:"13px", fontWeight:500}}
-            >See All <span style={{color:"red"}}>Discounts</span> Your Offer The Media Houses.</p>
+        {this.state.isActive?
+          <Row>
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
+          <>
+          {this.state.volume.length<=0?
+          <Row>
+              <Col md="12" style={{textAlign:"center"}}>
+              <h4>No Volume Discount Offered To Clients</h4>
+              </Col>
+          </Row>
+          :
             <Row style={{marginTop:"20px"}}>
             <Col lg="12" xs="12" md="12" sm="12" xl="12">
+            <p
+            style={{fontSize:"13px", fontWeight:500}}
+            >See All <span style={{color:"red"}}>Discounts</span> You Offer The Clients.</p>
             <h3>{this.state.company_name}</h3>
             <p style={{fontWeight:500,fontSize:"13px"}}>{this.state.media_house}</p>
             <Table striped bordered>
@@ -71,6 +87,9 @@ class VolumeDiscount extends React.Component{
             </Table>
             </Col>
             </Row>
+            }
+            </>
+            }
             </Container>
             </>
         )

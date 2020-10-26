@@ -81,17 +81,17 @@ function CreateNewTitle(props) {
             console.log(res.data);
             if(res.data.status === "succes"){
                 if(res.data.media.id === 3){
-                    props.history.push("/media/edit-ratecards/print",{title_id:props.location.state.id})
+                    props.history.push("/media/preview/print",{title_id:res.data.rate_card_title_id})
                 }
                 else{
-                    props.history.push("/media/edit-ratecards",{title_id:props.location.state.id})
+                    props.history.push("/media/preview/video",{title_id:res.data.rate_card_title_id})
                 }
                 setIsActive(false)
                
             }
         })
         .catch(error=>{
-            console.log(error);
+            console.log(error.response.data);
             setIsActive(false)
         })
     }
@@ -129,31 +129,31 @@ function CreateNewTitle(props) {
                     <FormGroup check>
                         <Label check>
                         <Input type="checkbox" value="video" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
-                        Video
+                        <h3 style={{fontWeight:600, fontSize:"14px"}}>Video</h3>
                         </Label>
                     </FormGroup>
                     <FormGroup check>
                         <Label check>
                         <Input type="checkbox" value="audio" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
-                        Audio
+                        <h3 style={{fontWeight:600, fontSize:"14px"}}>Audio</h3>
                         </Label>
                     </FormGroup>
                     <FormGroup check>
                         <Label check>
                         <Input type="checkbox" value="application" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
-                        Document
+                        <h3 style={{fontWeight:600, fontSize:"14px"}}>Document</h3>
                         </Label>
                     </FormGroup>
                     <FormGroup check>
                         <Label check>
                         <Input type="checkbox"value="image" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
-                        Image
+                        <h3 style={{fontWeight:600, fontSize:"14px"}}>Image</h3>
                         </Label>
                     </FormGroup>
       
-
+                    <br/>
                     <Button
-                    style={{marginTop:"20px",color:"white",backgroundColor:"#404E67"}}
+                    color="info"
                     type="submit"
                     >
                     Next

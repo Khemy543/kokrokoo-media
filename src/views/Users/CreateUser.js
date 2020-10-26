@@ -91,7 +91,7 @@ function CreateUser(props) {
         <Container className=" mt--7" fluid>
       <Row>
         <Col lg="7" className="ml-auto mr-auto">
-        <p style={{fontSize:"13px", fontWeight:500}}>Create A New User for Your Company</p>
+        <p style={{fontSize:"13px", fontWeight:500}}>Create A New User for Your Media House</p>
         <Card>
             <Form onSubmit={handleSubmit}>
             <CardHeader>

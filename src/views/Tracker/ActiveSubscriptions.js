@@ -44,7 +44,7 @@ var domain = "https://media.test.backend.kokrokooad.com";
 
 function ActiveSubscriptions (props){
   const [subscriptions, setSubscription] = React.useState([]);
-  const [isActiveSpinner, setIsActiveSpinner] = React.useState(false)
+  const [isActiveSpinner, setIsActiveSpinner] = React.useState(true)
 
   React.useEffect(()=>{
     setIsActiveSpinner(true)
@@ -61,7 +61,7 @@ function ActiveSubscriptions (props){
   },[])
 
   const getDetails=(id)=>{
-    props.history.push("/media/subscription-details",{id:id})
+    props.history.push("/media/approved-details",{id:id})
   }
 
     return (
@@ -84,12 +84,11 @@ function ActiveSubscriptions (props){
                   <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
                     <tr>
                       <th>#</th>
-                      <th>Subscription ID</th>
-                      <th>Subscription Title</th>
+                      <th>Campaign ID</th>
+                      <th>Campaign Title</th>
                       <th>Rate Card</th>
                       <th>Status</th>
                       <th>Created Date</th>
-                      <th>Company</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -102,9 +101,8 @@ function ActiveSubscriptions (props){
                       <td>{value.rate_card_title}</td>
                       <td>{value.status}</td>
                       <td>{value.time}</td>
-                      <td>{value.comapny_id}</td>
                       <td style={{textAlign:"center"}}>
-                      <i className="fa fa-eye" style={{fontSize:"17px",color:"#1a0080",cursor:"pointer"}} onClick={()=>getDetails(value.id)}/>
+                      <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id)}><i className="fa fa-eye"/></Button>
                       </td>
                     </tr>
                     ))}

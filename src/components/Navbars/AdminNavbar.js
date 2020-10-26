@@ -52,7 +52,8 @@ state={
     published:false,
     modal:false,
     message:"",
-    messageModal:false
+    messageModal:false,
+    logo:""
   }
 
 componentDidMount(){
@@ -71,7 +72,7 @@ componentDidMount(){
         )
         .then(res=>{
         console.log(res.data)
-          this.setState({published:res.data.isPublished});
+          this.setState({published:res.data.isPublished, logo:res.data.logo});
       })
 }
 
@@ -135,7 +136,7 @@ handleUnPublish=()=>{
                     <span className="avatar avatar-sm rounded-circle">
                       <img
                         alt="..."
-                        src={require("assets/img/new_logo.png")}
+                        src={`https://uploads.kokrokooad.com/${this.state.logo}`}
                       />
                     </span>
                     <Media className="ml-2 d-none d-lg-block">

@@ -42,7 +42,7 @@ import history from "../../history.js"; */
 let user = localStorage.getItem("access_token");
 var domain = "https://media.test.backend.kokrokooad.com";
 
-class PrintRateDetails extends React.Component {
+class EditPrintDetails extends React.Component {
     
     state = {
         isActive:false,
@@ -1244,7 +1244,7 @@ class PrintRateDetails extends React.Component {
                 <Button
                 style={{backgroundColor:"#404E67",color:"white"}}
                 block
-                onClick={()=>this.props.history.push("/media/preview/print",{title_id:this.props.location.state.title_id})}
+                onClick={()=>this.props.history.push("/media/edit-ratecards/print",{title_id:this.props.location.state.title_id})}
                 >
                     PREVIEW
                 </Button>
@@ -1258,7 +1258,7 @@ class PrintRateDetails extends React.Component {
 }
 
 
-export default PrintRateDetails;
+export default EditPrintDetails;
 
 
 

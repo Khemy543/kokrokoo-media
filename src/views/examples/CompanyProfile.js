@@ -11,7 +11,7 @@ import {
   Input,
   Container,
   Row,
-  Col,Modal,ModalBody
+  Col,Modal,ModalBody, ModalHeader, ModalFooter
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
@@ -45,7 +45,10 @@ class CompanyProfile extends React.Component {
     website:"",
     imagePreviewUrl: '',
     percentage:0,
-    country:"Ghana"
+    country:"Ghana",
+    newBusinessCert:"",
+    newOperationalCert:"",
+    company_email:"companyemail@email.com"
 
     /* bank_name:"",
     bank_branch:"",
@@ -62,23 +65,23 @@ componentDidMount(){
         )
         .then(res=>{
         console.log(res.data)
-        
+
           this.setState({
             company_id:res.data.id,
             company_name:res.data.company_name,
-            business_cert:res.data.business_cert, 
+            business_cert:`https://uploads.kokrokooad.com/${res.data.business_cert}`, 
             address:res.data.address,
             logo:res.data.logo,
-            imagePreviewUrl:`${domain}${res.data.logo}`,
             media_house:res.data.media_house,
             media_type:res.data.media_type,
             purpose:res.data.purpose,
-            operation_cert:res.data.operation_cert,
+            operation_cert:`https://uploads.kokrokooad.com/${res.data.operation_cert}`,
             purpose:res.data.purpose, 
             website:res.data.website,
             languages:res.data.languages,
             regions:res.data.region,
-            isActive:false
+            isActive:false,
+            imagePreviewUrl:`https://uploads.kokrokooad.com/${res.data.logo}`
           })
 
         }).catch(error=>{
@@ -117,38 +120,51 @@ toggleModal=()=>this.setState({modal:!this.state.modal});
 
     handleSubmitCompany=(e)=>{
       e.preventDefault()
-        this.setState({isActive:true})
-        let tempLanguages = this.state.languages.split(",");
-        let tempRegions = this.state.regions.split(",");
-        console.log(tempRegions)
+        let tempLanguages = this.state.languages.split(",");/* 
+        let tempRegions = this.state.regions.split(","); */
+       
         console.log(tempLanguages)
-        var bodyFormData = new FormData();
-        bodyFormData.append('business_cert',this.state.business_cert);
-        bodyFormData.append('operation_cert',this.state.operational_cert);
-        bodyFormData.append('logo',this.state.logo);
-        bodyFormData.append('company_email',this.state.company_email);
-        bodyFormData.append('company_name',this.state.company_name);
-        bodyFormData.append('address',this.state.address);
-        bodyFormData.append('address',this.state.address);
-        bodyFormData.append('media_house',this.state.media_house);
-        bodyFormData.append('media_type',this.state.media_type);
-        bodyFormData.append('website',this.state.website);
-        bodyFormData.append('purpose',this.state.purpose);
-        bodyFormData.append('languagues',tempLanguages);
-        bodyFormData.append('region',tempRegions);
-        bodyFormData.append('country',this.state.country);
-        bodyFormData.append('company_profile', "its me")
-        
-            for(var pair of bodyFormData.entries()) {
-                console.log(pair[0]+ ': '+ pair[1]); 
-            }
 
-            axios({
+            axios.post(`${domain}/api/super-admin/update-company/${this.state.company_id}`,
+            {
+              company_name:this.state.company_name,
+              address:this.state.address,
+              region:this.state.regions,
+              company_email:this.state.company_email,
+              languagues:tempLanguages,
+              media_house:this.state.media_house,
+              media_type:this.state.media_type,
+              purpose:this.state.purpose, 
+              website:this.state.website,
+              country:"Ghana"
+            },
+            {headers: {'Authorization':`Bearer ${user}` }})
+            .then(res=>{
+                console.log("data",res.data);
+               
+            })
+            .catch(error=>{
+                console.log(error.response.data)
+                if(error.response){
+                    console.log(error.response.data);
+                    this.setState({
+                        modal:true, isActive:false, message:error.response.data.errors.company_name || error.response.data.errors.media_house || error.response.data.errors.website
+                        || error.response.data.errors.company_email || error.response.data.errors.region || error.response.data.errors.languagues
+                    })
+                }
+            })
+
+            let bodyFormData = new FormData();
+            bodyFormData.append('business_cert',this.state.newBusinessCert);
+            bodyFormData.append('operation_cert', this.state.newOperationalCert);
+            bodyFormData.append('logo', this.state.logo);
+            bodyFormData.append('_method', 'PATCH');
+              axios({
                 method:'post',
-                url:`${domain}/api/super-admin/update-company/${this.state.company_id}`,
+                url:`${domain}/api/auth/company/${this.state.company_id}/files-update`,
                 data:bodyFormData,
                 headers: {'Content-Type': 'multipart/form-data','Authorization':`Bearer ${user}` },
-                onUploadProgress: (progressEvent) => {
+                /* onUploadProgress: (progressEvent) => {
                     const {loaded , total} = progressEvent;
                     let percentage = Math.floor(loaded * 100 / total);
                     console.log(percentage)
@@ -158,30 +174,15 @@ toggleModal=()=>this.setState({modal:!this.state.modal});
                     else{
                         this.setState({percentage:100})
                     }
-            }})
+            } */})
             .then(res=>{
-                console.log("data",res.data);
-                /* this.setState({isActive:false, message:"Registration Successful!", modal:true
-                })
-                setTimeout(
-                    function(){
-                        this.setState({modal:false});
-                        this.props.history.push("/auth/await-verification",{
-                            email:this.state.email
-                        })
-                    }
-                    .bind(this),
-                    2000
-                ) */
+              console.log(res.data)
+              this.setState({
+                modal:true, message:"Profile Updated"
+              })
             })
             .catch(error=>{
-                console.log(error.response.data)
-                /* if(error.response){
-                    console.log(error.response.data);
-                    this.setState({
-                        modal:true, isActive:false, message:error.response.data.errors.business_cert || error.response.data.errors.operation_cert || error.response.data.errors.logo || error.response.data.errors.company_name || error.response.data.errors.media_house || error.response.data.errors.website
-                    })
-                } */
+              console.log(error.response.data)
             })
 
 }
@@ -298,15 +299,15 @@ pushLanguages = (value,checked)=>{
                           className="form-control-label"
                           htmlFor="input-last-name"
                         >
-                          Media House
+                          Company Email
                         </label>
                         <Input
                           className="form-control-alternative"
-                          value={this.state.media_house}
+                          value={this.state.company_email}
                           id="input-last-name"
-                          placeholder="Media House"
+                          placeholder="Company Email"
                           type="text"
-                          onChange={e=>this.setState({media_house:e.target.value})}
+                          onChange={e=>this.setState({company_email:e.target.value})}
                         />
                       </FormGroup>
                     </Col>
@@ -395,6 +396,44 @@ pushLanguages = (value,checked)=>{
                     
                   </Row>
                   <Row>
+                  <Col md="6">
+                  <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-last-name"
+                        >
+                          Country
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          value={this.state.country}
+                          type="select"
+                          onChange={e=>this.setState({country:e.target.value})}
+                        >
+                        <option value="Ghana">Ghana</option>
+                        </Input>
+                      </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-last-name"
+                        >
+                          Media House
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          value={this.state.media_house}
+                          id="input-last-name"
+                          placeholder="Media House"
+                          type="text"
+                          onChange={e=>this.setState({media_house:e.target.value})}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
                   <Col md="12">
                   <FormGroup>
                         <label
@@ -445,18 +484,19 @@ pushLanguages = (value,checked)=>{
                         >
                           Business Certificate
                         </label>
-                        <a href={`${this.state.business_cert}`}
-                        style={{marginLeft:"10px"}}
+                        <br/>
+                        <br/>
+                        <a href={this.state.business_cert}
                         target="_blank"
-                        width="100%" height="100%"
                         >
-                        <i className="fa fa-download"/>
+                        <Button color="info"><i className="fa fa-file-text"/> Open File</Button>
                         </a>
+                        <br/>
                         <br/>
                         <Input
                           className="form-control-alternative"
                           type="file"
-                          onChange={e=>this.setState({business_cert:e.target.files[0]})}
+                          onChange={e=>this.setState({newBusinessCert:e.target.files[0]})}
                         />
                       </FormGroup>
                     </Col>
@@ -468,18 +508,19 @@ pushLanguages = (value,checked)=>{
                         >
                           Operation Certificate
                         </label>
-                        <a href={`${this.state.operation_cert}`}
-                        style={{marginLeft:"10px"}}
+                        <br/>
+                        <br/>
+                        <a href={this.state.operation_cert}
                         target="_blank"
-                        width="100%" height="100%"
                         >
-                        <i className="fa fa-download"/>
+                        <Button color="info"><i className="fa fa-file-text"/> Open File</Button>
                         </a>
+                        <br/>
                         <br/>
                         <Input
                           className="form-control-alternative"
                           type="file"
-                          onChange={e=>this.setState({operation_cert:e.target.files[0]})}
+                          onChange={e=>this.setState({newOperationalCert:e.target.files[0]})}
                         />
                       </FormGroup>
                     </Col>
@@ -493,10 +534,10 @@ pushLanguages = (value,checked)=>{
                         alt="..."
                         className=" img-fluid rounded-circle shadow"
                         src={this.state.imagePreviewUrl}
-                        style={ {width: "150px",marginBottom:"20px"} }
+                        style={ {width: "150px",height:"150px",marginBottom:"20px"} }
                       ></img>
                       <br/>
-                  <input type="file" 
+                  <Input type="file" 
                                 onChange={(e)=>this._handleImageChange(e)} />
                     </Col>
                         
@@ -625,10 +666,13 @@ pushLanguages = (value,checked)=>{
           </Row> */}
           
         </Container>
-        <Modal isOpen={this.state.modal} toggle={()=>this.toggleModal} style={{maxHeight:"40px", maxWidth:"300px",backgroundColor:"#404E67"}} className="alert-modal">
-            <ModalBody>
-            <h4 style={{textAlign:"center", marginTop:"-3%", fontWeight:"500", color:"white"}}>{this.state.message}</h4>
-            </ModalBody>
+        <Modal isOpen={this.state.modal}>
+        <ModalHeader>
+          {this.state.message}
+        </ModalHeader>
+            <ModalFooter>
+              <Button color="danger" onClick={()=>this.setState({modal:false})}>Cancel</Button>
+            </ModalFooter>
         </Modal>
         </LoadingOverlay>
       </>

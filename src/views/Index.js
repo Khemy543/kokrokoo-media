@@ -37,21 +37,18 @@ import axios from "axios";
 
 import Header from "components/Headers/Header.js";
 
-
-let user =null;
-let all_data = JSON.parse(localStorage.getItem('storageData'));
-if(all_data !== null){
-  user = all_data[0];
-}
+let user = localStorage.getItem("access_token");
+var domain = "https://media.test.backend.kokrokooad.com";
 
 
 function Index (props){
-
-  /* React.useEffect(()=>{
-    axios.get("https://media-kokrokooad.herokuapp.com/api/user",{
+const [statData, setStatData] = React.useState([])
+  React.useEffect(()=>{
+    axios.get(`${domain}/api/dashboard/stat`,{
       headers:{ 'Authorization':`Bearer ${user}`}})
       .then(res=>{
-          console.log(res.data)
+          console.log(res.data);
+          setStatData(res.data)
       })
       .catch(error=>{
           if(!error.response){
@@ -65,7 +62,9 @@ function Index (props){
           }
           } 
       })
-  },[]) */
+  },[])
+
+  const {active, expired, approved, pending, rejected} = statData;
     return (
       <>
         <Header />
@@ -79,7 +78,7 @@ function Index (props){
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
-                    <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-th-list mr-2"/>5</h1> 
+                    <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-th-list mr-2"/>0</h1> 
                     <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>All Campaigns</p>
                     </Col>
                   </Row>  
@@ -94,7 +93,7 @@ function Index (props){
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
-                    <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-thumbs-up mr-2"/>5</h1>
+                    <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-thumbs-up mr-2"/>{approved}</h1>
                     <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>Approved Campaigns</p>
                     </Col>
                   </Row>  
@@ -109,7 +108,7 @@ function Index (props){
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
-                    <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-thumbs-down mr-2"/>5</h1>
+                    <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-thumbs-down mr-2"/>{rejected}</h1>
                     <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>Rejected Campaigns</p>
                     </Col>
                   </Row>  
@@ -124,7 +123,7 @@ function Index (props){
                 <CardBody style={{padding:"5px 10px 5px 10px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
-                    <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-star mr-2"/>5</h1>
+                    <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-star mr-2"/>{expired}</h1>
                     <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>Completed Campaigns</p>
                     </Col>
                   </Row>  
@@ -139,7 +138,7 @@ function Index (props){
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
-                    <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-hand-paper mr-2"/>5</h1>
+                    <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-hand-paper mr-2"/>{pending}</h1>
                     <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>Pending Campaigns</p>
                     </Col>
                   </Row>  
@@ -154,8 +153,8 @@ function Index (props){
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
-                    <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-heart mr-2"/>5</h1>
-                    <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>Live Campaigns</p>
+                    <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-heart mr-2"/>{active}</h1>
+                    <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>Active Campaigns</p>
                     </Col>
                   </Row>  
                 </CardBody>  
@@ -164,7 +163,7 @@ function Index (props){
               </Card>  
               </Col>
 
-              <Col md="3" className="mb-4">
+              {/* <Col md="3" className="mb-4">
               <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"#fe9365",cursor:"pointer"}} onClick={()=>props.history.push('/media/active-subscription')}>
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
@@ -177,7 +176,7 @@ function Index (props){
                 <CardFooter style={{background:"#fe9365", borderTop:"1px solid white",padding:"10px 10px 10px 10px"}}>
                 </CardFooter>  
               </Card>  
-              </Col>
+              </Col> */}
 
               <Col md="3" className="mb-4">
               {/* <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"#0ac282"}}>

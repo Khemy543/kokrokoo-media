@@ -34,6 +34,7 @@ class ViewRateCardDetails extends React.Component{
 
 
       componentDidMount(){
+        console.log(this.props.location.state)
         this.setState({isActive:true})
         axios.get(`${domain}/api/fetch-days-and-units`)
         .then(res=>{
@@ -63,7 +64,7 @@ class ViewRateCardDetails extends React.Component{
         
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response.data)
       });
     
 
@@ -159,7 +160,7 @@ class ViewRateCardDetails extends React.Component{
                                         <tr> 
                                             <th style={{fontWeight:1000,backgroundColor:"#01a9ac",color:"black"}}>DURATION</th>
                                             {value.duration.map((item, index)=>(
-                                            <td>{item.duration} {item.unit_id}</td>
+                                            <td>{item.duration} {item.unit.unit}</td>
                                             ))}
 
                                         </tr>

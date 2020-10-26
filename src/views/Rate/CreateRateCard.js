@@ -130,25 +130,25 @@ function CreateRateCard(props) {
                     <FormGroup check>
                         <Label check>
                         <Input type="checkbox" value="video" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
-                        Video
+                        <h3 style={{fontWeight:600, fontSize:"14px"}}>Video</h3>
                         </Label>
                     </FormGroup>
                     <FormGroup check>
                         <Label check>
                         <Input type="checkbox" value="audio" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
-                        Audio
+                        <h3 style={{fontWeight:600, fontSize:"14px"}}>Audio</h3>
                         </Label>
                     </FormGroup>
                     <FormGroup check>
                         <Label check>
                         <Input type="checkbox" value="application" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
-                        Document
+                        <h3 style={{fontWeight:600, fontSize:"14px"}}>Document</h3>
                         </Label>
                     </FormGroup>
                     <FormGroup check>
                         <Label check>
                         <Input type="checkbox"value="image" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
-                        Image
+                        <h3 style={{fontWeight:600, fontSize:"14px"}}>Image</h3>
                         </Label>
                     </FormGroup>
       

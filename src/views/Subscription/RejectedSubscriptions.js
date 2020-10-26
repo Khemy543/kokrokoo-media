@@ -45,7 +45,7 @@ var domain = "https://media.test.backend.kokrokooad.com";
 
 function RejectedSubscriptions (props){
   const [subscriptions, setSubscription] = React.useState([]);
-  const [isActiveSpinner, setIsActiveSpinner] = React.useState(false)
+  const [isActiveSpinner, setIsActiveSpinner] = React.useState(true)
 
   React.useEffect(()=>{
     setIsActiveSpinner(true)
@@ -77,23 +77,30 @@ function RejectedSubscriptions (props){
             </Col>
           </Row>
           :
+          <>
+          {!isActiveSpinner && subscriptions.length<=0?
+                <Row>
+                <Col md="12" style={{textAlign:"center"}}>
+                <h4>No Rejected Campaigns</h4> 
+                </Col>
+              </Row>
+              :
+            <>
           <Row>
             <Col className="mb-5 mb-xl-0" lg="12">
             <Card>
-              <CardHeader>
+              {/* <CardHeader>
                 Show Entries
-              </CardHeader>
+              </CardHeader> */}
               <CardBody style={{overflowX:"scroll"}}>
               <Table striped bordered>
                   <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
                     <tr>
                       <th>#</th>
-                      <th>Subscription ID</th>
-                      <th>Subscription Title</th>
+                      <th>Campaign ID</th>
+                      <th>Campaign Title</th>
                       <th>Rate Card</th>
-                      <th>Status</th>
                       <th>Created Date</th>
-                      <th>Company</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -104,11 +111,9 @@ function RejectedSubscriptions (props){
                       <td>{value.id}</td>
                       <td>{value.title}</td>
                       <td>{value.rate_card_title}</td>
-                      <td>{value.status}</td>
                       <td>{value.time}</td>
-                      <td>{value.comapny_id}</td>
                       <td style={{textAlign:"center"}}>
-                      <i className="fa fa-eye" style={{fontSize:"17px",color:"#1a0080",cursor:"pointer"}} onClick={()=>getDetails(value.id)}/>
+                      <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id)}><i className="fa fa-eye"/></Button>
                       </td>
                     </tr>
                     ))}
@@ -121,6 +126,9 @@ function RejectedSubscriptions (props){
             </Card>  
             </Col>
           </Row>
+          </>
+          }
+          </>
         }
         </Container>
       </>

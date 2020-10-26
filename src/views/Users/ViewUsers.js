@@ -29,7 +29,7 @@ let user = localStorage.getItem("access_token");
 var domain = "https://media.test.backend.kokrokooad.com";
 
 function ViewUsers({history}) {
-    const [isActive, setIsActive] = React.useState(false);
+    const [isActive, setIsActive] = React.useState(true);
     const [users, setUsers] = React.useState([]);
     const [data, setData] = React.useState([])
     const [modal, setModal] = React.useState(false);
@@ -129,10 +129,10 @@ function ViewUsers({history}) {
         </Row>
           :
         <>
-          {!isActive && user.data && users.data.length<=0?
+          {!isActive && data.length<=0?
             <Row>
             <Col md="12" style={{textAlign:"center"}}>
-             <h4>You Not Created Any User Yet</h4> 
+             <h4>No User Created</h4> 
             </Col>
           </Row>
           :
@@ -169,9 +169,9 @@ function ViewUsers({history}) {
                 <td>
                   <Row>
                     <Col md="6" lg="6" sm="6" xs="6" >
-                    <Button color="info" style={{padding:"5px 10px 5px 10px"}}
+                    {/* <Button color="info" style={{padding:"5px 10px 5px 10px"}}
                     onClick={()=>this.handleView(value.id,value.title)}
-                    ><i className="fa fa-eye"/></Button>
+                    ><i className="fa fa-eye"/></Button> */}
                     {value.isActive === "active"?
                     <Button color="warning" style={{padding:"5px 10px 5px 10px"}}
                     onClick={()=>handleBlock(value.id)}
@@ -217,6 +217,9 @@ function ViewUsers({history}) {
               <ModalHeader>
               <h4 style={{textAlign:"center"}}>{alertmessage}</h4>
               </ModalHeader>
+              <ModalFooter>
+                <Button color="danger" onClick={()=>setAlertModal(false)}>Cancel</Button>
+              </ModalFooter>
             </Modal>
 
             <Modal isOpen={modal}>

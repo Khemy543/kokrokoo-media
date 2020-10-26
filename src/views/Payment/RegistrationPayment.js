@@ -66,7 +66,7 @@ const handleSubmit=(e)=>{/*
     })
 }
 
-const handlePOSubmit=(e)=>{
+/* const handlePOSubmit=(e)=>{
   e.preventDefault();
   if(file !== null){
     var bodyFormData = new FormData();
@@ -96,7 +96,7 @@ const handlePOSubmit=(e)=>{
   }
 
 }
-
+ */
 
 const toggle = tab => {
   if(activeTab !== tab) setActiveTab(tab);
@@ -111,36 +111,6 @@ const toggle = tab => {
       <Header />
       <Container className=" mt--9" fluid>
       <Row>
-        <Col>
-        <div className="nav-tabs-navigation">
-          <div className="nav-tabs-wrapper">
-            <Nav role="tablist" tabs>
-                <NavItem>
-                  <NavLink
-                    style={{ cursor: "pointer", textTransform: "uppercase", fontSize:"14px" , fontWeight:600 }}
-                    className={classnames({ active: activeTab === "1" })}
-                    onClick={() => toggle("1")}
-                  >
-                    Card Payment
-                  </NavLink>
-                  </NavItem>
-                  <NavItem>
-                  <NavLink
-                    style={{ cursor: "pointer", textTransform: "uppercase",fontSize:"14px", fontWeight:600 }}
-                    className={classnames({ active: activeTab === "2" })}
-                    onClick={() => toggle("2")}
-                  >
-                    Upload P.O
-                  </NavLink>
-                </NavItem>
-            </Nav>
-          </div>
-        </div>
-        <br/>
-        <TabContent activeTab={activeTab}>
-        <TabPane tabId="1">
-        <Container >
-          <Row>
             <Col md="5" className="ml-auto mr-auto">
             <Row>
                 <Col md ="6" className="ml-auto mr-auto">
@@ -208,63 +178,6 @@ const toggle = tab => {
             </Col>
           </Row>
         </Container>
-        </TabPane>
-        <TabPane tabId="2">
-        <Container >
-          <Row>
-            <Col md="5" className="ml-auto mr-auto">
-            <Row>
-                <Col md ="6" className="ml-auto mr-auto">
-                <div style={{textAlign:"center"}}>
-                <span>
-                <img src={require("../../assets/img/brand/kokro-yellow.png")} alt="#" style={{height:"50px", width:"auto"}}/>
-                </span>
-                </div>
-                </Col>
-            </Row>
-            <Row>
-              
-            <Col md="6" className="ml-auto mr-auto">
-                    <p style={{fontSize:"12px", fontWeight:600}}>Registration Payment Details</p>
-
-                </Col>
-            </Row>
-                
-                
-              <Card style={{border:"1px solid #0000001f", borderRadius:"0px"}}>
-                <CardBody>
-                  <Form onSubmit={handlePOSubmit}>
-                    <Row>
-                        <Col>
-                        <label  style={{fontSize:"13px" , fontWeight:600}}>Upload P.O</label>
-                        <Input type="file" required onChange={e=>setFile(e.target.value)} />
-                        </Col>
-                    </Row>
-                    
-                    <Row style={{marginTop:"30px"}}>
-                        <Col> 
-                            <Button color="primary" type="submit">Proceed</Button>
-                        </Col>
-                    </Row>
-                    <p style={{textAlign:"center", marginTop:"15px", fontSize:"12px",fontWeight:600}}>Contact <a href="!#">support@kokrokooad.com</a> for any questions</p>
-                  </Form>
-                </CardBody>
-              </Card>
-              <Row style={{marginTop:"20px"}}>
-                  <Col md="6" className="ml-auto mr-auto">
-                      <img src={require("assets/img/brand/mastercard.png")} alt="#" style={{width:"60px", height:"auto"}}/>
-                      <img src={require("assets/img/brand/visa.png")} alt="#" style={{width:"60px", height:"auto"}}/>
-                      <img src={require("assets/img/brand/mobilemoney.png")} alt="#" style={{width:"80px", height:"auto"}}/>
-                  </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
-        </TabPane>
-        </TabContent>
-        </Col>
-      </Row>
-      </Container>
       </LoadingOverlay>
     </>
   );

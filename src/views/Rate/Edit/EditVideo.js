@@ -21,7 +21,7 @@ import history from "../../history.js"; */
 let user = localStorage.getItem("access_token");
 var domain = "https://media.test.backend.kokrokooad.com";
 
-class VideoPreview extends React.Component{
+class EditVideo extends React.Component{
 
   state={
     isActive:false,
@@ -193,15 +193,16 @@ class VideoPreview extends React.Component{
     .then(res=>{
       console.log(res.data);
       if(res.data.status === "saved"){
+        
         this.setState({
-          isActive:false,
-          alertMessage:"Changes Saved",
-          modal:true
+            isActive:false,
+            modal:true,
+            alertMessage:"Changed Saved"
         })
       }
     })
     .catch(error=>{
-      console.log(error);
+      console.log(error.response.data);
       this.setState({isActive:false})
     })
   }
@@ -238,7 +239,7 @@ class VideoPreview extends React.Component{
         spinner={<FadeLoader color={'#4071e1'}/>}
       >
 
-        <NavigationPrompt when={this.state.allow} 
+        {/* <NavigationPrompt when={this.state.allow} 
         afterConfirm={()=>this.handleDeleteRatecard()}
         
         >
@@ -253,7 +254,7 @@ class VideoPreview extends React.Component{
                 </ModalFooter>
             </Modal>
         )}
-        </NavigationPrompt>;
+        </NavigationPrompt>; */}
         <Header />
         <Container className=" mt--8" fluid>
         {this.state.isActiveSpinner?
@@ -432,7 +433,7 @@ class VideoPreview extends React.Component{
                       setTimeout(
                     function(){
                         
-                      this.props.history.push("/media/rate-details",{title_id:this.props.location.state.title_id, rate_title:this.state.title})
+                      this.props.history.push("/media/edit/details/video",{title_id:this.props.location.state.title_id, rate_title:this.state.title})
                     }
                     .bind(this),
                     500
@@ -441,14 +442,14 @@ class VideoPreview extends React.Component{
                     >
                     Add New Segment
                     </Button>
-
+{/* 
                     <Button
                     style={{float:"right", marginRight:"10px"}}
                     onClick={()=>this.handleComplete()}
                     color="success"
                     >
                    Complete
-                    </Button>
+                    </Button> */}
             </CardFooter>
             </Card>    
             </Col>
@@ -456,7 +457,7 @@ class VideoPreview extends React.Component{
           </>
         }
         </Container>
-        <Modal isOpen={this.state.modal}>
+            <Modal isOpen={this.state.modal}>
                 <ModalHeader>
                     {this.state.alertMessage}
                 </ModalHeader>
@@ -471,6 +472,6 @@ class VideoPreview extends React.Component{
 }
 
 
-export default VideoPreview;
+export default EditVideo;
 
 /* onChange={e=>{e.target.value <= this.state.startTime? this.setState({timeCheck:true, EndTime:e.target.value}) : this.setState({timeCheck:false,EndTime:e.target.value})}} */

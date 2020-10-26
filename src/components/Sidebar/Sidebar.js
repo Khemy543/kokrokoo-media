@@ -57,7 +57,8 @@ class Sidebar extends React.Component {
     published:localStorage.getItem('published'),
     modal:false,
     message:"",
-    messageModal:false
+    messageModal:false,
+    trackerCollapse:false
   };
   constructor(props) {
     super(props);
@@ -91,7 +92,8 @@ class Sidebar extends React.Component {
       userCollapse:false,
       profileCollapse:false,
       volumeCollapse:false,
-      paymentCollapse:false
+      paymentCollapse:false,
+      trackerCollapse:false
     })
   }
 
@@ -105,7 +107,8 @@ class Sidebar extends React.Component {
       userCollapse:false,
       profileCollapse:false,
       volumeCollapse:false,
-      paymentCollapse:false
+      paymentCollapse:false,
+      trackerCollapse:false
     })
   }
   toggleTransCollapse=()=>{
@@ -118,7 +121,8 @@ class Sidebar extends React.Component {
       userCollapse:false,
       profileCollapse:false,
       volumeCollapse:false,
-      paymentCollapse:false
+      paymentCollapse:false,
+      trackerCollapse:false
     })
   }
   toggleRateCollapse=()=>{
@@ -131,7 +135,8 @@ class Sidebar extends React.Component {
       userCollapse:false,
       profileCollapse:false,
       volumeCollapse:false,
-      paymentCollapse:false
+      paymentCollapse:false,
+      trackerCollapse:false
 
     })
   }
@@ -145,7 +150,8 @@ class Sidebar extends React.Component {
       userCollapse:false,
       profileCollapse:false,
       volumeCollapse:false,
-      paymentCollapse:false
+      paymentCollapse:false,
+      trackerCollapse:false
 
     })
   }
@@ -159,7 +165,8 @@ class Sidebar extends React.Component {
       dashboardCollapse:false,
       profileCollapse:false,
       volumeCollapse:false,
-      paymentCollapse:false
+      paymentCollapse:false,
+      trackerCollapse:false
 
     })
   }
@@ -174,7 +181,8 @@ class Sidebar extends React.Component {
       userCollapse:false,
       dashboardCollapse:false,
       volumeCollapse:false,
-      paymentCollapse:false
+      paymentCollapse:false,
+      trackerCollapse:false
 
     })
   }
@@ -189,7 +197,8 @@ class Sidebar extends React.Component {
       userCollapse:false,
       dashboardCollapse:false,
       volumeCollapse:!this.state.volumeCollapse,
-      paymentCollapse:false
+      paymentCollapse:false,
+      trackerCollapse:false
 
 
     })
@@ -204,7 +213,24 @@ class Sidebar extends React.Component {
       userCollapse:false,
       dashboardCollapse:false,
       volumeCollapse:false,
-      paymentCollapse:!this.state.paymentCollapse
+      paymentCollapse:!this.state.paymentCollapse,
+      trackerCollapse:false
+
+
+    })
+  }
+  toggleTrackerCollapse=()=>{
+    this.setState({
+      profileCollapse:false,
+      subscriptionsCollapse:false,
+      transactionCollapse:false,
+      rateCollapse:false,
+      reportCollapse:false,
+      userCollapse:false,
+      dashboardCollapse:false,
+      volumeCollapse:false,
+      paymentCollapse:false,
+      trackerCollapse:!this.state.trackerCollapse
 
 
     })
@@ -426,6 +452,31 @@ class Sidebar extends React.Component {
   }
 
 
+  createTrackerRoutes = routes => {
+    return routes.map((prop, key) => {
+      if(prop.invisible){
+        return null
+      }
+      else if(prop.header === "tracker"){
+      return (
+        <NavItem key={key}>
+          <NavLink
+            to={prop.layout + prop.path}
+            tag={NavLinkRRD}
+            onClick={this.closeCollapse}
+            activeClassName="active"
+            style={{fontSize:"14px", fontWeight:600,color:"white"}}
+          >
+          <i className = "fa fa-chevron-right" style={{fontSize:"10px"}}/>
+            {prop.name}
+          </NavLink>
+        </NavItem>
+      )
+    }
+    })
+  }
+
+
 
   handlePublish=()=>{
     axios.post(`${domain}/api/super-admin/publish-company`,null,
@@ -513,7 +564,7 @@ class Sidebar extends React.Component {
           ) : null}
           {/* User */}
           <Nav className="align-items-center d-md-none">
-            <UncontrolledDropdown nav>
+           {/*  <UncontrolledDropdown nav>
               <DropdownToggle nav className="nav-link-icon">
                 <i className="ni ni-bell-55" />
               </DropdownToggle>
@@ -527,14 +578,14 @@ class Sidebar extends React.Component {
                 <DropdownItem divider />
                 <DropdownItem>Something else here</DropdownItem>
               </DropdownMenu>
-            </UncontrolledDropdown>
+            </UncontrolledDropdown> */}
             <UncontrolledDropdown nav>
               <DropdownToggle nav>
                 <Media className="align-items-center">
                   <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
-                      src={require("assets/img/theme/team-1-800x800.jpg")}
+                      src="#"
                     />
                   </span>
                 </Media>
@@ -620,7 +671,7 @@ class Sidebar extends React.Component {
               </Row>
             </div>
             {/* Form */}
-            <Form className="mt-4 mb-3 d-md-none">
+            {/* <Form className="mt-4 mb-3 d-md-none">
               <InputGroup className="input-group-rounded input-group-merge">
                 <Input
                   aria-label="Search"
@@ -634,7 +685,7 @@ class Sidebar extends React.Component {
                   </InputGroupText>
                 </InputGroupAddon>
               </InputGroup>
-            </Form>
+            </Form> */}
             <h4>Navigations</h4>
             <hr className="my-3" />
             {/*<Nav navbar>{this.createLinks(routes)}</Nav> */}
@@ -667,6 +718,15 @@ class Sidebar extends React.Component {
                 {this.createSubLinks(routes)}
                 </Collapse>
 
+                <NavItem onClick={this.toggleTrackerCollapse}>
+                <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer",color:"white"}}>
+                <i className="fa fa-send"/>Ad Schedule Tracker
+                </NavLink>
+              </NavItem>
+              <Collapse isOpen={this.state.trackerCollapse}>
+                {this.createTrackerRoutes(routes)}
+                </Collapse>
+
                 <NavItem onClick={this.toggleTransCollapse}>
                 <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer",color:"white"}}>
                 <i className="fa fa-credit-card"/>Transactions
@@ -678,7 +738,7 @@ class Sidebar extends React.Component {
 
                 <NavItem onClick={this.toggleVolumeCollapse}>
                 <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer",color:"white"}}>
-                <i className="fa fa-thumbs-down"/>Volume Discount
+                <i className="fa fa-thumbs-o-up"/>Volume Discount
                 </NavLink>
               </NavItem>
               <Collapse isOpen={this.state.volumeCollapse}>

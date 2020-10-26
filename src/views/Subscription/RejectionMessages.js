@@ -32,7 +32,8 @@ import {
   Container,
   Row,
   Col,
-  Spinner
+  Spinner,
+  Form
 } from "reactstrap";
 
 
@@ -44,9 +45,11 @@ var domain = "https://media.test.backend.kokrokooad.com";
 
 function RejectionMessages (props){
 const [messages, setMessages] = React.useState([]);
-const [isActiveSpinner, setIsActiveSpinner] = React.useState(false)
-const [rejection_message, setRejectionMessage] = React.useState("")
+const [isActiveSpinner, setIsActiveSpinner] = React.useState(true)
+const [rejection_message, setRejectionMessage] = React.useState("");
+const [messageData,setMessageData]=  React.useState([])
   React.useEffect(()=>{
+    console.log(props.location)
     setIsActiveSpinner(true)
     axios.get(`${domain}/api/rejected-messages`,
     { headers: { 'Authorization': `Bearer ${user}` } })
@@ -61,6 +64,34 @@ const [rejection_message, setRejectionMessage] = React.useState("")
 
     
   },[])
+
+  const handlePush=(checked,id)=>{
+    let tempMessages = messageData;
+    if(checked === true){
+      tempMessages.push(id)
+      console.log(tempMessages)
+    }
+    else{
+      let index = tempMessages.indexOf(id);
+      if(index!==-1){
+          tempMessages.splice(index,1);
+         console.log(tempMessages)
+      }
+    }
+  }
+
+  const handelSubmit=(e)=>{
+    e.preventDefault()
+    axios.post(`${domain}/api/reject/${props.location.state.id}/subscriptions`,
+    {message_id:messageData, message:rejection_message},
+    { headers: { 'Authorization': `Bearer ${user}` } })
+    .then(res=>{
+      console.log(res.data);
+    })
+    .catch(error=>{
+      console.log(error.response.data)
+    })
+  }
   
  
     return (
@@ -80,6 +111,7 @@ const [rejection_message, setRejectionMessage] = React.useState("")
             <p style={{fontSize:"13px", fontWeight:500}}
             >State Reasons For <span style={{color:"red"}}>Rejecting</span> Campiagn</p>
             <Card>
+              <Form onSubmit={handelSubmit}>
               <CardHeader>
               <h3>Reason For Rejection</h3>
               </CardHeader>
@@ -87,7 +119,7 @@ const [rejection_message, setRejectionMessage] = React.useState("")
                 {messages.map((value)=>(
                     <FormGroup check key={value.id} style={{marginBottom:"5px"}}>
                         <Label check>
-                        <Input type="checkbox" value="video"/>{' '}
+                        <Input type="checkbox" value={value.message} onChange={(e)=>handlePush(e.target.checked,value.id)}/>{' '}
                         <p style={{fontSize:"14px", fontWeight:600}}>{value.message}</p>
                         </Label>
                     </FormGroup>
@@ -109,9 +141,11 @@ const [rejection_message, setRejectionMessage] = React.useState("")
               <CardFooter>
                     <Button
                     color="info"
+                    type="submit"
                 
                     >Submit</Button>
               </CardFooter>
+                </Form>
             </Card>  
             </Col>
           </Row>

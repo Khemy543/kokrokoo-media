@@ -133,10 +133,10 @@ function EditRateTitle(props) {
             console.log(res.data[1]);
             if(res.data[1] === "saved"){
                 if(localStorage.getItem('media_type') === "Print"){
-                    props.history.push("/media/edit-ratecards/print",{title_id:props.location.state.title_id});
+                    props.history.push("/media/edit/print",{title_id:props.location.state.title_id});
                 }
                 else{
-                    props.history.push("/media/edit-ratecards",{title_id:props.location.state.title_id});
+                    props.history.push("/media/edit/video",{title_id:props.location.state.title_id});
                 }
                 
             }
@@ -150,10 +150,10 @@ function EditRateTitle(props) {
 
     const handleEdit=()=>{
         if(localStorage.getItem('media_type') === "Print"){
-            props.history.push("/media/edit-ratecards/print",{title_id:props.location.state.title_id});
+            props.history.push("/media/edit/print",{title_id:props.location.state.title_id});
         }
         else{
-            props.history.push("/media/edit-ratecards",{title_id:props.location.state.title_id});
+            props.history.push("/media/edit/video",{title_id:props.location.state.title_id});
         }
     }
     return (

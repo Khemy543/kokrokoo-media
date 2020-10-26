@@ -35,7 +35,6 @@ import ViewRateCardDetailsPrint from "views/Rate/ViewRateCardDetailsPrint.js";
 import EditRateTitle from "views/Rate/EditRateTitle.js";
 import SubscriptionDetails from "views/Subscription/SubscriptionDetails";
 import PendingSubscriptions from "views/Subscription/PendingSubscriptions";
-import ActiveSubscriptions from "views/Subscription/ActiveSubscriptions";
 import ApprovedSubscriptions from "views/Subscription/ApprovedSubscriptions";
 import RejectedSubscriptions from "views/Subscription/RejectedSubscriptions";
 import CompanyProfile from "views/examples/CompanyProfile.js";
@@ -45,6 +44,13 @@ import ApprovedDetails from "views/Subscription/ApprovedDetails";
 import ChangePassword from "views/ChangePassword/ChangePassword";
 import RegistrationPayment from "views/Payment/RegistrationPayment";
 import PaymentVerification from "views/Payment/PaymentStatus";
+import Transactions from "views/Transactions/Transactions";
+import TransactionDetails from "views/Transactions/TransactionDetails";
+import ActiveSubscriptions from "views/Tracker/ActiveSubscriptions";
+import EditVideo from "views/Rate/Edit/EditVideo";
+import EditPrint from "views/Rate/Edit/EditPrint";
+import EditPrintDetails from "views/Rate/Edit/EditPrintDetails";
+import EditRateCardDetails from "views/Rate/Edit/EditRateCardDetails";
 
 
 var routes = [
@@ -72,7 +78,7 @@ var routes = [
   },
   {
     path: "/view-ratecards",
-    name: "Manage RateCards",
+    name: "Manage Rate Card",
     header:"rate",
     component: ViewRateCards,
     layout: "/media"
@@ -99,7 +105,7 @@ var routes = [
     layout: "/media"
   },
   {
-    path: "/edit-ratecards/print",
+    path: "/preview/print",
     name: "Edit Details",
     invisible:true,
     component: Preview,
@@ -107,14 +113,46 @@ var routes = [
   },
   {
     path: "/edit-ratecard-title",
-    name: "Manage RateCards",
+    name: "Manage Rate Card",
     invisible:true,
     header:"rate",
     component: EditRateTitle,
     layout: "/media"
   },
   {
-    path: "/edit-ratecards",
+    path: "/edit/print",
+    name: "Manage Rate Card",
+    invisible:true,
+    header:"rate",
+    component: EditPrint,
+    layout: "/media"
+  },
+  {
+    path: "/edit/video",
+    name: "Manage Rate Card",
+    invisible:true,
+    header:"rate",
+    component: EditVideo,
+    layout: "/media"
+  },
+  {
+    path: "/edit/details/print",
+    name: "Manage Rate Card",
+    invisible:true,
+    header:"rate",
+    component: EditPrintDetails,
+    layout: "/media"
+  },
+  {
+    path: "/edit/details/video",
+    name: "Manage Rate Card",
+    invisible:true,
+    header:"rate",
+    component: EditRateCardDetails,
+    layout: "/media"
+  },
+  {
+    path: "/preview/video",
     name: "Edit Details",
     invisible:true,
     component: VideoPreview,
@@ -134,14 +172,14 @@ var routes = [
     component: ViewRateCardDetailsPrint,
     layout: "/media"
   },
-  {
+/*   {
     
     path: "/view-subscription",
     name: "All Campaigns",
     header:"subscriptions",
     component: ViewSubscription,
     layout: "/media"
-  },
+  }, */
   {
     
     path: "/pending-subscription",
@@ -153,15 +191,15 @@ var routes = [
   {
     
     path: "/active-subscription",
-    name: "Active Campaigns",
-    header:"subscriptions",
+    name: "Ad Schedule Tracker",
+    header:"tracker",
     component: ActiveSubscriptions,
     layout: "/media"
   },
   {
     
     path: "/approved-subscription",
-    name: "Apporved Campaigns",
+    name: "Approved Campaigns",
     header:"subscriptions",
     component: ApprovedSubscriptions,
     layout: "/media"
@@ -213,9 +251,17 @@ var routes = [
     path: "/transactions",
     name: "Transactions",
     header:"transactions",
-    component: Index,
+    component: Transactions,
     layout: "/media"
   }, 
+  {
+    path: "/transactions",
+    name: "Transactions",
+    header:"transactions",
+    invisible:true,
+    component: TransactionDetails,
+    layout: "/media"
+  },
   {
     path: "/daily-reports",
     name: "Daily Reports",

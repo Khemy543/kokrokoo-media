@@ -25,7 +25,7 @@ import axios from "axios";
 let user = localStorage.getItem("access_token");
 var domain = "https://media.test.backend.kokrokooad.com";
 
-class RateCardDetails extends React.Component{
+class EditRateCardDetails extends React.Component{
     state={
         dataUnsaved:true,
         isActive:false,
@@ -1142,14 +1142,14 @@ class RateCardDetails extends React.Component{
     }
 
 
- handleDeleteRatecard=()=>{
+ /* handleDeleteRatecard=()=>{
         axios.delete(`${domain}/api/ratecard/${this.props.location.state.title_id}/delete`,
         {headers:{ 'Authorization':`Bearer ${user}`}})
         .then(res=>{
             console.log(res.data);
             this.setState({allow:false})
         })
-    }
+    } */
     
     render(){
     return (
@@ -1163,7 +1163,7 @@ class RateCardDetails extends React.Component{
         when={this.state.allow}
         message="You have unsaved changes, are you sure you want to leave?"
         /> */}
-        <NavigationPrompt when={this.state.allow} 
+        {/* <NavigationPrompt when={this.state.allow} 
         afterConfirm={()=>this.handleDeleteRatecard()}
         disableNative={true}
         >
@@ -1178,7 +1178,7 @@ class RateCardDetails extends React.Component{
                 </ModalFooter>
             </Modal>
         )}
-        </NavigationPrompt>;
+        </NavigationPrompt>; */}
       <Header/>
         <Container className=" mt--9" fluid>
         {this.state.isActiveSpinner?
@@ -1965,7 +1965,7 @@ class RateCardDetails extends React.Component{
                 setTimeout(
                     function(){
                         
-                            this.props.history.push("/media/preview/video",{title_id:this.props.location.state.title_id})
+                            this.props.history.push("/media/edit/video",{title_id:this.props.location.state.title_id})
                     }
                     .bind(this),
                     500
@@ -1998,4 +1998,4 @@ class RateCardDetails extends React.Component{
 }
 
 
-export default RateCardDetails;
+export default EditRateCardDetails;

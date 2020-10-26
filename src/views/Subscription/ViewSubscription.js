@@ -39,7 +39,7 @@ var domain = "https://media.test.backend.kokrokooad.com";
 
 function ViewSubscription (props){
   const [subscriptions, setSubscription] = React.useState([]);
-  const [isActiveSpinner, setIsActiveSpinner] = React.useState(false)
+  const [isActiveSpinner, setIsActiveSpinner] = React.useState(true)
 
   React.useEffect(()=>{
     setIsActiveSpinner(true)
@@ -71,6 +71,15 @@ function ViewSubscription (props){
             </Col>
           </Row>
           :
+          <>
+          {!isActiveSpinner && subscriptions.length<=0?
+                <Row>
+                <Col md="12" style={{textAlign:"center"}}>
+                <h4>No Campaigns Available</h4> 
+                </Col>
+              </Row>
+              :
+            <>
           <Row>
             <Col className="mb-5 mb-xl-0" lg="12" md="12" xs="12" sm="12" xl="12">
             <p style={{fontSize:"13px", fontWeight:500}}
@@ -86,7 +95,6 @@ function ViewSubscription (props){
                       <th>Rate Card</th>
                       <th>Status</th>
                       <th>Created Date</th>
-                      <th>Company</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -99,9 +107,8 @@ function ViewSubscription (props){
                       <td>{value.rate_card_title}</td>
                       <td>{value.status}</td>
                       <td>{value.time}</td>
-                      <td>{value.comapny_id}</td>
                       <td style={{textAlign:"center"}}>
-                      <i className="fa fa-eye" style={{fontSize:"17px",color:"#1a0080",cursor:"pointer"}} onClick={()=>getDetails(value.id, value.title)}/>
+                      <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id, value.title)}><i className="fa fa-eye"/></Button>
                       </td>
                     </tr>
                     ))}
@@ -111,6 +118,9 @@ function ViewSubscription (props){
             </Card>  
             </Col>
           </Row>
+          </>
+          }
+          </>
         }
         </Container>
       </>

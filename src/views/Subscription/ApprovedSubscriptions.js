@@ -32,7 +32,7 @@ import {
   Table,
   Container,
   Row,
-  Col
+  Col,Spinner
 } from "reactstrap";
 
 
@@ -44,16 +44,19 @@ var domain = "https://media.test.backend.kokrokooad.com";
 
 function ApprovedSubscriptions (props){
   const [subscriptions, setSubscription] = React.useState([]);
+  const [isActiveSpinner, setIsActiveSpinner] = React.useState(true);
 
   React.useEffect(()=>{
+    setIsActiveSpinner(true)
     axios.get(`${domain}/api/approved-subscriptions`,
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);
       setSubscription(res.data)
+      setIsActiveSpinner(false)
     })
     .catch(error=>{
-      console.log(error.response.data)
+      console.log(error)
     })
   },[])
 
@@ -66,23 +69,37 @@ function ApprovedSubscriptions (props){
         <Header />
         {/* Page content */}
         <Container className="mt--7" fluid>
+        {isActiveSpinner?
+          <Row>
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
+          <>
+           {!isActiveSpinner && subscriptions.length<=0?
+                <Row>
+                <Col md="12" style={{textAlign:"center"}}>
+                <h4>No Approved Campaigns</h4> 
+                </Col>
+              </Row>
+              :
+            <>
           <Row>
             <Col className="mb-5 mb-xl-0" lg="12">
             <Card>
-              <CardHeader>
+              {/* <CardHeader>
                 Show Entries
-              </CardHeader>
+              </CardHeader> */}
               <CardBody style={{overflowX:"scroll"}}>
               <Table striped bordered>
                   <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
                     <tr>
                       <th>#</th>
-                      <th>Subscription ID</th>
-                      <th>Subscription Title</th>
+                      <th>Campaign ID</th>
+                      <th>Campaign Title</th>
                       <th>Rate Card</th>
-                      <th>Status</th>
                       <th>Created Date</th>
-                      <th>Company</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -93,23 +110,22 @@ function ApprovedSubscriptions (props){
                       <td>{value.id}</td>
                       <td>{value.title}</td>
                       <td>{value.rate_card_title}</td>
-                      <td>{value.status}</td>
                       <td>{value.time}</td>
-                      <td>{value.comapny_id}</td>
                       <td style={{textAlign:"center"}}>
-                      <i className="fa fa-eye" style={{fontSize:"17px",color:"#1a0080",cursor:"pointer"}} onClick={()=>getDetails(value.id,value.title)}/>
+                      <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id,value.title)}><i className="fa fa-eye"/></Button>
                       </td>
                     </tr>
                     ))}
                   </tbody>
                 </Table>
-              </CardBody>
-              <CardFooter>
-                Showing 1 to 5 of Entries
-              </CardFooter>   
+              </CardBody>  
             </Card>  
             </Col>
           </Row>
+          </>
+           }
+          </>
+        }
         </Container>
       </>
     );

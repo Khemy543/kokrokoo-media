@@ -11,7 +11,8 @@ import {
   Button,Table,
   Modal,
   ModalBody,Spinner,
-  ModalFooter
+  ModalFooter,
+  ModalHeader
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -80,10 +81,6 @@ function ViewRateCards(props) {
 
     return (
       <>
-      <LoadingOverlay 
-      active = {isActive}
-      spinner={<FadeLoader color={'#4071e1'}/>}
-      >
       <Header/>
         <Container className=" mt--8" fluid>
         {isActiveSpinner?
@@ -97,14 +94,14 @@ function ViewRateCards(props) {
           <Row>
             <Col lg="12" md="12" sm="12" md="12" xs="12">
             <p style={{fontSize:"13px", fontWeight:500}}
-            >Edit, Delete and View RateCards</p>
+            >Edit, Delete and View RateCard Services</p>
             <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
             <CardBody style={{overflowX:"scroll"}}>
             <Table stripped bordered>
             <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
             <tr>
-              <th>#</th>
-              <th>Rate Card ID</th>
+              <th>#</th>{/* 
+              <th>Rate Card ID</th> */}
               <th>Rate Card</th>
               <th>Description</th>
               <th>Action</th>
@@ -113,18 +110,17 @@ function ViewRateCards(props) {
           <tbody>
             {rateCards.map((value, index)=>(
               <tr>
-              <td>{index+1}</td>
-              <td>{value.id}</td>
+              <td>{index+1}</td>{/* 
+              <td>{value.id}</td> */}
               <td>{value.rate_card_title}</td>
               <td>{value.service_description}</td>
               <td>
                 <Row>
                   <Col md="6" lg="6" sm="6" xs="6" >
-                  <div style={{textAlign:"center"}}>
-                  <i className="fa fa-eye mr-3" style={{cursor:"pointer", color:"green",fontSize:"20px"}} onClick={()=>handleView(value.id)}/>
+                  <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>handleView(value.id)}><i className="fa fa-eye"/></Button>
                  
                   
-                  <i className="fa fa-pencil mr-3"
+                  <Button color="success" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}}
                     onClick={()=>props.history.push("/media/edit-ratecard-title",
                             {
                               title_id:value.id,
@@ -133,14 +129,11 @@ function ViewRateCards(props) {
                               title:value.rate_card_title
                               
                             })}
-                            style={{cursor:'pointer', color:"blue",fontSize:"20px"}}
-                  />
+                  ><i className="fa fa-pencil"/></Button>
                   
-                  <i className="fa fa-close mr-3"
-                  style={{cursor:"pointer", color:"red", fontSize:"20px"}}
+                  <Button color="danger" style={{borderRadius:"100%", padding:"2px 6px 2px 6px"}}
                   onClick={()=>{setModal(true); setId(value.id)}}
-                  />
-                  </div>
+                  ><i className="fa fa-trash"/></Button>
                   
                   </Col>
                 </Row>  
@@ -157,9 +150,9 @@ function ViewRateCards(props) {
         }
         </Container>
         <Modal isOpen={modal}>
-          <ModalBody>
+          <ModalHeader>
             Do you want to Delete?
-          </ModalBody>
+          </ModalHeader>
           <ModalFooter>
             <Button color="danger"
             onClick={()=>hanldeDelete()}
@@ -173,7 +166,6 @@ function ViewRateCards(props) {
             </Button>
           </ModalFooter>
         </Modal>
-        </LoadingOverlay>
       </>
     );
   }

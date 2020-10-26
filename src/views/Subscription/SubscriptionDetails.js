@@ -43,7 +43,7 @@ function SubscriptionDetails (props){
 const [subscription, setSubscription] = React.useState([]);
 const  [title, setTitle] = React.useState("");
 const [file, setFile] = React.useState("");
-const [isActiveSpinner, setIsActiveSpinner] = React.useState(false)
+const [isActiveSpinner, setIsActiveSpinner] = React.useState(true)
 const [modal, setModal] = React.useState(false);
 const [total, setTotal] = React.useState(0);
 
@@ -80,13 +80,14 @@ const [total, setTotal] = React.useState(0);
         'responseType': 'blob'
       } 
     })
-    .then(res=>{
+    .then(({data})=>{/* 
       console.log(res);
-      console.log(res.headers)
-      const downloadUrl = window.URL.createObjectURL(new Blob([res.data]));
+      console.log(props.location.state.title)
+      console.log(res.headers) */
+      const downloadUrl = window.URL.createObjectURL(new Blob([data]));
       const link = document.createElement('a');
       link.href = downloadUrl;
-      link.setAttribute('download', `${props.location.state.title}.mp4`);
+      link.setAttribute('download','again.mp3');
       document.body.appendChild(link);
       link.click();
       link.remove();
