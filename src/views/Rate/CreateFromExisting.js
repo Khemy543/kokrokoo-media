@@ -13,7 +13,7 @@ import {
   Input,
   Button,
   Spinner,
-  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label
+  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label, Modal, ModalHeader, ModalFooter
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -28,7 +28,9 @@ function CreateFromExisting(props) {
     const [isActive, setIsActive] = React.useState(false);
     const [isActiveSpinner, setIsActiveSpinner] = React.useState(false);
     const [titles, setTitles] = React.useState([]);
-    const [id,setId] = React.useState(1)
+    const [id,setId] = React.useState(1);
+    const [modal, setModal] = React.useState(false);
+    const [message, setMessage] = React.useState("")
 
 
     React.useEffect(()=>{
@@ -41,7 +43,11 @@ function CreateFromExisting(props) {
             setIsActiveSpinner(false)
         })
         .catch(error=>{
-            console.log(error)
+            console.log(error);
+            if(error.response.data.status === "Forbidden"){
+              setModal(true);
+              setMessage("Access Denied")
+            }
         })
     },[])
 
@@ -109,6 +115,14 @@ function CreateFromExisting(props) {
         }
 
         </Container>
+        <Modal isOpen={modal}>
+          <ModalHeader>
+            {message}
+          </ModalHeader>
+          <ModalFooter>
+            <Button color="danger" onClick={()=>setModal(false)}>Close</Button>
+          </ModalFooter>
+        </Modal>
         </LoadingOverlay>
       </>
     );

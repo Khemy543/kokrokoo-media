@@ -32,7 +32,8 @@ import {
   Table,
   Container,
   Row,
-  Col,Spinner
+  Col,
+  Spinner
 } from "reactstrap";
 
 
@@ -43,32 +44,33 @@ import Pagination from "react-js-pagination";
 let user = localStorage.getItem("access_token");
 var domain = "https://media.test.backend.kokrokooad.com";
 
-function PendingSubscriptions (props){
+function CompletedCampaigns (props){
   const [subscriptions, setSubscription] = React.useState([]);
   const [isActiveSpinner, setIsActiveSpinner] = React.useState(true);
   const [data, setData] = React.useState([]);
   const [meta, setMeta] = React.useState([])
 
   React.useEffect(()=>{
-   getSubsctiptions()
+    getSubscriptions()
   },[])
 
-  function getSubsctiptions(pageNumber=1){
+  function getSubscriptions(pageNumber=1){
     setIsActiveSpinner(true)
-    axios.get(`${domain}/api/pending-subscriptions?page=${pageNumber}`,
+    axios.get(`${domain}/api/completed-subscriptions?page=${pageNumber}`,
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);
       setData(res.data.data)
-      setMeta(res.data.meta);
+      setMeta(res.data.meta)
       setIsActiveSpinner(false)
     })
     .catch(error=>{
-      console.log(error.response.data)
+      console.log(error)
     })
   }
-  const getDetails=(id, title, file_path)=>{
-    props.history.push("/media/subscription-details",{id:id, title:title, file_path:file_path})
+
+  const getDetails=(id)=>{
+    props.history.push("/media/completed-details",{id:id})
   }
 
     return (
@@ -87,7 +89,7 @@ function PendingSubscriptions (props){
           {!isActiveSpinner && data.length<=0?
                 <Row>
                 <Col md="12" style={{textAlign:"center"}}>
-                <h4>No Pending Campaigns</h4> 
+                <h4>No Completed Campaigns</h4> 
                 </Col>
               </Row>
               :
@@ -95,6 +97,9 @@ function PendingSubscriptions (props){
           <Row>
             <Col className="mb-5 mb-xl-0" lg="12">
             <Card>
+              {/* <CardHeader>
+                Show Entries
+              </CardHeader> */}
               <CardBody style={{overflowX:"scroll"}}>
               <Table striped bordered>
                   <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
@@ -116,25 +121,28 @@ function PendingSubscriptions (props){
                       <td>{value.rate_card_title}</td>
                       <td>{value.date}</td>
                       <td style={{textAlign:"center"}}>
-                      <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id, value.title, value.ad_duration.file_path)}><i className="fa fa-eye"/></Button>
+                      <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id)}><i className="fa fa-eye"/></Button>
                       </td>
                     </tr>
                     ))}
                   </tbody>
                 </Table>
-              </CardBody> 
+              </CardBody>
               <CardBody>
               <Pagination
                 totalItemsCount={meta&&meta.total}
                 activePage={meta&&meta.current_page}
                 itemsCountPerPage={meta&&meta.per_page}
-                onChange={(pageNumber)=>getSubsctiptions(pageNumber)}
+                onChange={(pageNumber)=>getSubscriptions(pageNumber)}
                 itemClass="page-item"
                 linkClass="page-link"
                 firstPageText="First"
                 lastPageText = "Last"
                 />
               </CardBody>
+              {/* <CardFooter>
+                Showing 1 to 5 of Entries
+              </CardFooter>    */}
             </Card>  
             </Col>
           </Row>
@@ -147,4 +155,4 @@ function PendingSubscriptions (props){
     );
   }
 
-export default PendingSubscriptions;
+export default CompletedCampaigns;

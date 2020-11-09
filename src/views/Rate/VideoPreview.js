@@ -70,6 +70,9 @@ class VideoPreview extends React.Component{
       })
       .catch(error => {
         console.log(error)
+        if(error.response.data.status === "Forbidden"){
+          this.setState({modal:true, alertMessage:"Access Denied"})
+        }
       });
   }
 
@@ -240,7 +243,7 @@ class VideoPreview extends React.Component{
 
         <NavigationPrompt when={this.state.allow} 
         afterConfirm={()=>this.handleDeleteRatecard()}
-        
+        disableNative={true}
         >
         {({ onConfirm, onCancel }) => (
             <Modal isOpen={this.state.allow}>
@@ -340,8 +343,8 @@ class VideoPreview extends React.Component{
                         <Col md="12">
                         <Row>
                         <Col>
-                        <Label id="boldstyle">Number of Slots</Label>
-                        <Input type="number" min="0" placeholder="number of slots" value={value.no_of_spots} onChange={e=>this.handleSpotChange(value.id,e.target.value)}/>
+                        <Label id="boldstyle">Number of Spots</Label>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={value.no_of_spots} onChange={e=>this.handleSpotChange(value.id,e.target.value)}/>
                         </Col>
                         <Col>
                         <Button

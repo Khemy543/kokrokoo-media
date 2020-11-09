@@ -121,7 +121,6 @@ class TransactionDetails extends React.Component{
                         {this.state.cart&&this.state.cart.map((thing,index)=>(
                           <div key={index}>
                           <h3 style={{textTransform:"capitalize"}}>Subscription Title - {thing.title}</h3>
-                          <h3>Start Date -  End Date - </h3>
                          
                         <Row  style={{marginBottom:"30px"}}>
                           <Col md="12">
@@ -132,7 +131,7 @@ class TransactionDetails extends React.Component{
                                 <td>duration</td>
                                 <td>Rate</td>
                                 <td>Selected Spots</td>
-                                <td>Roll over</td>
+                                <td>Time Segment</td>
                                 <td>Date</td>
                                 <td>Amount</td>
                                 </tr>
@@ -146,7 +145,7 @@ class TransactionDetails extends React.Component{
                                     <td>{value.duration.duration} {value.duration.unit.unit}</td>
                                     <td>{value.duration.rate}</td>
                                     <td>{value.selected_spots}</td>
-                                    <td>{item.no_of_weeks}</td>
+                                    <td>{value.ratecard.start_time} - {value.ratecard.end_time}</td>
                                     <td>{item.selected_date} - {item.day.day}</td>
                                     <td>{Number(value.amount) * (item.no_of_weeks+1)}</td>
                                   </tr>
@@ -154,6 +153,7 @@ class TransactionDetails extends React.Component{
                                  </>
                                 ))}
                                 <tr>
+                                  <td></td>
                                   <td></td>
                                   <td></td>
                                   <td></td>

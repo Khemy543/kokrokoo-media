@@ -80,20 +80,20 @@ const [total, setTotal] = React.useState(0);
         'responseType': 'blob'
       } 
     })
-    .then(({data})=>{/* 
+    .then(res=>{/* 
       console.log(res);
       console.log(props.location.state.title)
       console.log(res.headers) */
-      const downloadUrl = window.URL.createObjectURL(new Blob([data]));
+      console.log(res)
+      const downloadUrl = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement('a');
       link.href = downloadUrl;
-      link.setAttribute('download','again.mp3');
-      document.body.appendChild(link);
+      link.download='file 2.png';
       link.click();
       link.remove();
     })
     .catch(error=>{
-      console.log(error.response.data)
+      console.log(error)
     })
   }/* 
   response.headers["content-disposition"].split("filename=")[1] */
@@ -153,6 +153,7 @@ const [total, setTotal] = React.useState(0);
                       <td>Duration</td>
                       <td>Rate</td>
                       <td>Selected Spots</td>
+                      <td>Time Segment</td>
                       <td>Amount</td>
                       </tr>
                       </thead>
@@ -163,6 +164,7 @@ const [total, setTotal] = React.useState(0);
                           <td>{value.duration.duration} {value.duration.unit.unit}</td>
                           <td>{value.duration.rate}</td>
                           <td>{value.selected_spots}</td>
+                          <td>{value.ratecard.start_time} - {value.ratecard.end_time}</td>
                           <td>{Number(value.duration.rate) * value.selected_spots}.00</td>
                         </tr>
                         ))}
@@ -173,12 +175,13 @@ const [total, setTotal] = React.useState(0);
                 
                   ))}
                   <div>
+                    <a href={`https://uploads.kokrokooad.com/${props.location.state.file_path}`} target="_blank">
                     <Button
                     color="info"
-                    onClick={()=>downloadFile()}
                     >
                       <i className="fa fa-download"/> Download File
                     </Button>
+                    </a>
                   </div>
               </CardBody>
               <CardFooter >

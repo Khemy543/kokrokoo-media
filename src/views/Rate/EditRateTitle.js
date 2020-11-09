@@ -30,7 +30,7 @@ import {
   Input,
   Button,
   CardTitle,
-  Nav,NavItem,NavLink,TabContent,CardFooter,Form,FormGroup,Label
+  Nav,NavItem,NavLink,TabContent,CardFooter,Form,FormGroup,Label, Modal, ModalHeader, ModalFooter
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -38,6 +38,7 @@ import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";/* 
 import history from "../../history.js"; */
+import { RateConsumer } from "../../context.js";
 
 let user = localStorage.getItem("access_token");
 var domain = "https://media.test.backend.kokrokooad.com";
@@ -47,7 +48,7 @@ function EditRateTitle(props) {
     const [rate_card_title, setTitle] = React.useState(props.location.state.title);
     const [service_description,setDescription] = React.useState(props.location.state.description);
     const [file_types,setFile_types] = React.useState(props.location.state.file_types);
-
+    const [modal, setModal] = React.useState(false)
 
     const videoCheck=()=>{
         let myChecked = file_types
@@ -130,7 +131,8 @@ function EditRateTitle(props) {
         {headers:{ 'Authorization':`Bearer ${user}`}}
         )
         .then(res=>{
-            console.log(res.data[1]);
+            console.log(res.data);
+            console.log(localStorage.getItem("media_type"))
             if(res.data[1] === "saved"){
                 if(localStorage.getItem('media_type') === "Print"){
                     props.history.push("/media/edit/print",{title_id:props.location.state.title_id});
@@ -143,6 +145,9 @@ function EditRateTitle(props) {
         })
         .catch(error=>{
             console.log(error.response.data);
+            if(error.response.data.status === "Forbidden"){
+                setModal(true);
+            }
             setIsActive(false)
         })
     }
@@ -175,6 +180,8 @@ function EditRateTitle(props) {
             <Form role="form" onSubmit={handlTitleSubmit}>
             <CardBody>
             <Row>
+            <RateConsumer>
+            {value=>(
                 <Col md="12">
                     <FormGroup>
                     <Input type="input" placeholder="Enter Rate Card Title" value={rate_card_title} onChange={e=>setTitle(e.target.value)} required/>
@@ -184,6 +191,8 @@ function EditRateTitle(props) {
                     <Input type="textarea" placeholder="Enter Description" value={service_description} onChange={e=>setDescription(e.target.value)} required/>
                     </FormGroup>
                     <Label>File Type</Label>
+                    {value.media_type !== "Print"?
+                    <>
                     <FormGroup check>
                         <Label check>
                         <Input type="checkbox" value="video" onChange={(e)=>pushType(e.target.value)} checked={videoCheck()}/>{' '}
@@ -196,6 +205,10 @@ function EditRateTitle(props) {
                         Audio
                         </Label>
                     </FormGroup>
+                    </>
+                    :
+                    <></>
+                    }
                     <FormGroup check>
                         <Label check>
                         <Input type="checkbox" value="application" onChange={(e)=>pushType(e.target.value)} checked={DocumentCheck()}/>{' '}
@@ -210,6 +223,8 @@ function EditRateTitle(props) {
                     </FormGroup>
 
                 </Col>    
+                )}
+                </RateConsumer>  
                 </Row>
             </CardBody>  
             <CardFooter>
@@ -232,6 +247,14 @@ function EditRateTitle(props) {
             </Col>
             </Row>
         </Container>
+        <Modal isOpen={modal}>
+            <ModalHeader>
+                Access Denied
+            </ModalHeader>
+            <ModalFooter>
+                <Button color="danger" onClick={()=>setModal(false)}>Close</Button>
+            </ModalFooter>
+        </Modal>
         </LoadingOverlay>
       </>
     );

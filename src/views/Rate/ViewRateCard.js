@@ -26,10 +26,11 @@ var domain = "https://media.test.backend.kokrokooad.com";
 
 function ViewRateCards(props) {
     const [isActive, setIsActive] = React.useState(false);
-    const [isActiveSpinner, setIsActiveSpinner] = React.useState(false);
+    const [isActiveSpinner, setIsActiveSpinner] = React.useState(true);
     const [rateCards, setRateCards] = React.useState([]);
     const [modal, setModal] = React.useState(false);
     const [deleteID, setId]=React.useState(null);
+    const [alertModal, setAlertModal] = React.useState(false)
 
 
 
@@ -75,7 +76,10 @@ function ViewRateCards(props) {
       })
       .catch(error=>{
         console.log(error);
-        setIsActive(false)
+        if(error.response.data.status === "Forbidden"){
+          setAlertModal(true)
+          setIsActive(false)
+        }
       })
     }
 
@@ -164,6 +168,15 @@ function ViewRateCards(props) {
             >
               No
             </Button>
+          </ModalFooter>
+        </Modal>
+
+        <Modal isOpen={alertModal}>
+          <ModalHeader>
+            Access Denied
+          </ModalHeader>
+          <ModalFooter>
+            <Button color="danger" onClick={()=>setAlertModal(false)}>Close</Button>
           </ModalFooter>
         </Modal>
       </>

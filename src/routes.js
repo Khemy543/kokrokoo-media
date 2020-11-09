@@ -51,6 +51,9 @@ import EditVideo from "views/Rate/Edit/EditVideo";
 import EditPrint from "views/Rate/Edit/EditPrint";
 import EditPrintDetails from "views/Rate/Edit/EditPrintDetails";
 import EditRateCardDetails from "views/Rate/Edit/EditRateCardDetails";
+import CompletedCampaigns from "views/Subscription/CompletedCampaigns";
+import CompletedDetails from "views/Subscription/CompletedDetails";
+import RejectedDetails from "views/Subscription/RejectedDetails";
 
 
 var routes = [
@@ -220,6 +223,23 @@ var routes = [
     component: RejectedSubscriptions,
     layout: "/media"
   },
+   {
+    
+    path: "/completed-subscription",
+    name: "Completed Campaigns",
+    header:"subscriptions",
+    component: CompletedCampaigns,
+    layout: "/media"
+  },
+  {
+    
+    path: "/completed-details",
+    name: "Completed Campaigns",
+    header:"subscriptions",
+    component: CompletedDetails,
+    invisible:true,
+    layout: "/media"
+  },
   {
     
     path: "/subscription-details",
@@ -236,6 +256,15 @@ var routes = [
     header:"subscriptions",
     invisible:true,
     component: ApprovedDetails,
+    layout: "/media"
+  },
+  {
+    
+    path: "/rejected-campaign-details",
+    name: "Campaigns",
+    header:"subscriptions",
+    invisible:true,
+    component: RejectedDetails,
     layout: "/media"
   },
   {

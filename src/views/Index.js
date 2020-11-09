@@ -55,7 +55,7 @@ const [statData, setStatData] = React.useState([])
               alert("please check your internet connection")
           }
           else{
-          console.log(error.response.status);
+          console.log(error.response.data);
           if(error.response.status === 401){
               localStorage.clear();
               window.location.reload("/")
@@ -73,7 +73,7 @@ const [statData, setStatData] = React.useState([])
           <Row>
             <Col className="mb-5 mb-xl-0" lg="12">
             <Row>
-              <Col md="3" className="mb-4">
+              {/* <Col md="3" className="mb-4">
               <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"linear-gradient(to right, #fe9365, #feb798)",cursor:"pointer"}} onClick={()=>props.history.push('/media/view-subscription')}>
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
@@ -84,9 +84,9 @@ const [statData, setStatData] = React.useState([])
                   </Row>  
                 </CardBody>  
                 <CardFooter style={{background:"linear-gradient(to right, #fe9365, #feb798)", borderTop:"1px solid white",padding:"10px 10px 10px 10px"}}>
-                </CardFooter>  
+                </CardFooter>   
               </Card>  
-              </Col>
+              </Col> */}
 
               <Col md="3" className="mb-4">
               <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"linear-gradient(to right, #0ac282, #0df3a3)",cursor:"pointer"}}  onClick={()=>props.history.push('/media/approved-subscription')}>
@@ -119,7 +119,7 @@ const [statData, setStatData] = React.useState([])
               </Col>
 
               <Col md="3" className="mb-4">
-              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"linear-gradient(to right, #01a9ac, #01dbdf)",cursor:"pointer"}} >
+              <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"linear-gradient(to right, #01a9ac, #01dbdf)",cursor:"pointer"}} onClick={()=>props.history.push('/media/completed-subscription')}>
                 <CardBody style={{padding:"5px 10px 5px 10px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
@@ -148,7 +148,7 @@ const [statData, setStatData] = React.useState([])
               </Card>  
               </Col>
 
-              <Col md="3" className="mb-4">
+              {/* <Col md="3" className="mb-4">
               <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"#01a9ac",cursor:"pointer"}} >
                 <CardBody style={{padding:"5px 15px 5px 15px"}}>
                   <Row>
@@ -161,7 +161,7 @@ const [statData, setStatData] = React.useState([])
                 <CardFooter style={{background:"#01a9ac", borderTop:"1px solid white",padding:"10px 10px 10px 10px"}}>
                 </CardFooter>  
               </Card>  
-              </Col>
+              </Col> */}
 
               {/* <Col md="3" className="mb-4">
               <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"#fe9365",cursor:"pointer"}} onClick={()=>props.history.push('/media/active-subscription')}>

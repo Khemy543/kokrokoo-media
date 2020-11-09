@@ -18,6 +18,7 @@
 import React from "react";
 // react component that copies the given text inside your clipboard
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import NavigationPrompt from "react-router-navigation-prompt";
 // reactstrap components
 import {
   Card,
@@ -26,11 +27,10 @@ import {
   Container,
   Row,
   Col,
-  UncontrolledTooltip,
   Input,
   Button,
   CardTitle,
-  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label
+  Nav,NavItem,NavLink,TabContent,TabPane,Label,Spinner,Modal,ModalHeader,ModalFooter
 } from "reactstrap";
 import classnames from 'classnames';
 // core components
@@ -46,8 +46,11 @@ class PrintRateDetails extends React.Component {
     
     state = {
         isActive:false,
+        isActiveSpinner:true,
         days:[],
         activeTab:"1",
+        allow:true,
+        modal:false,
 
         newSlot:[],
         slotValue:2,
@@ -93,7 +96,7 @@ class PrintRateDetails extends React.Component {
     }
 
     componentDidMount(){
-        this.setState({isActive:true});
+        this.setState({isActiveSpinner:true});
         console.log(this.props.location)
         if(this.props.location.state !== undefined){
             this.setState({title:this.props.location.state.rate_title});
@@ -106,7 +109,7 @@ class PrintRateDetails extends React.Component {
         axios.get(`${domain}/api/fetch-days-and-units`)
         .then(res=>{
             console.log(res.data)
-            this.setState({days:res.data.days, units:res.data.units,isActive:false})
+            this.setState({days:res.data.days, units:res.data.units,isActiveSpinner:false})
         })
     }
 
@@ -193,9 +196,10 @@ class PrintRateDetails extends React.Component {
                   rate:"",
                   page_section:"First Page",
                   newSlot:[],
-                  title:res.data.rate_card_title
+                  title:res.data.rate_card_title,
+                  modal:true
                  });
-              alert("saved");
+              
               }
           })
           .catch(error=>{
@@ -283,9 +287,9 @@ class PrintRateDetails extends React.Component {
                       rateTues:"",
                       newSlotTues:[],
                       page_sectionTues:'First Page',
-                      title:res.data.rate_card_title
+                      title:res.data.rate_card_title,
+                      modal:true
                      });
-                  alert("saved");
                   }
               })
               .catch(error=>{
@@ -373,9 +377,9 @@ class PrintRateDetails extends React.Component {
                           rateWed:"",
                           newSlotWed:[],
                           page_sectionWed:"First Page",
-                          title:res.data.rate_card_title
+                          title:res.data.rate_card_title,
+                          modal:true
                          });
-                      alert("saved");
                       }
                   })
                   .catch(error=>{
@@ -462,9 +466,9 @@ class PrintRateDetails extends React.Component {
                               rateThurs:"",
                               newSlotThurs:[],
                               page_sectionThurs:"First Page",
-                              title:res.data.rate_card_title
+                              title:res.data.rate_card_title,
+                              modal:true
                              });
-                          alert("saved");
                           }
                       })
                       .catch(error=>{
@@ -551,9 +555,9 @@ class PrintRateDetails extends React.Component {
                                   rateFri:"",
                                   newSlotFri:[],
                                   page_sectionFri:"First Page",
-                                  title:res.data.rate_card_title
+                                  title:res.data.rate_card_title,
+                                  modal:true
                                  });
-                              alert("saved");
                               }
                           })
                           .catch(error=>{
@@ -640,9 +644,9 @@ class PrintRateDetails extends React.Component {
                                       rateSat:"",
                                       newSlotSat:[],
                                       page_sectionSat:"First Page",
-                                      title:res.data.rate_card_title
+                                      title:res.data.rate_card_title,
+                                      modal:true
                                      });
-                                  alert("saved");
                                   }
                               })
                               .catch(error=>{
@@ -730,9 +734,9 @@ class PrintRateDetails extends React.Component {
                                           rateSun:"",
                                           newSlotSun:[],
                                           page_sectionSun:"First Page",
-                                          title:res.data.rate_card_title
+                                          title:res.data.rate_card_title,
+                                          modal:true
                                          });
-                                      alert("saved");
                                       }
                                   })
                                   .catch(error=>{
@@ -742,7 +746,14 @@ class PrintRateDetails extends React.Component {
                                 }
 
 
-
+                                handleDeleteRatecard=()=>{
+                                    axios.delete(`${domain}/api/ratecard/${this.props.location.state.title_id}/delete`,
+                                    {headers:{ 'Authorization':`Bearer ${user}`}})
+                                    .then(res=>{
+                                        console.log(res.data);
+                                        this.setState({allow:false})
+                                    })
+                                }
 
     render(){
     return (
@@ -751,9 +762,32 @@ class PrintRateDetails extends React.Component {
       active = {this.state.isActive}
       spinner={<FadeLoader color={'#4071e1'}/>}
       >
+      <NavigationPrompt when={this.state.allow} 
+        afterConfirm={()=>this.handleDeleteRatecard()}
+        disableNative={true}
+        >
+        {({ onConfirm, onCancel }) => (
+            <Modal isOpen={this.state.allow}>
+                <ModalHeader>
+                You have unsaved changes, are you sure you want to leave?
+                </ModalHeader>
+                <ModalFooter>
+                    <Button color="danger" onClick={onConfirm}>Yes</Button>
+                    <Button color="info" onClick={onCancel}>No</Button>
+                </ModalFooter>
+            </Modal>
+        )}
+        </NavigationPrompt>;
       <Header/>
         <Container className=" mt--8" fluid>
-            
+        {this.state.isActiveSpinner?
+          <Row>
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
+          <>
           <Row>
             <Col md="10">
             <Card style={{boxShadow:"0 2px 12px rgba(0,0,0,0.1)"}}>
@@ -773,7 +807,7 @@ class PrintRateDetails extends React.Component {
                     {this.state.days.map(value=>(
                     <NavItem key={value.id}>
                     <NavLink
-                    style={{cursor:"pointer",textTransform:"uppercase"}}
+                   style={{cursor:"pointer",textTransform:"uppercase",fontSize:"14px", fontWeight:"bold"}}
                         className={classnames({ active: this.state.activeTab === `${value.id}` })}
                         onClick={() => { this.toggle(`${value.id}`); }}
                     >
@@ -790,15 +824,15 @@ class PrintRateDetails extends React.Component {
                  <Container> 
                     <Row>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Size</Label>
+                        <Label id="boldstyle">Size</Label>
                         <Input type="text" value={this.state.size} onChange={e=>this.setState({size:e.target.value})} placeholder="Eg: 2X3 "/>
                         </Col>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Rate</Label>
+                        <Label id="boldstyle">Rate</Label>
                         <Input type="number" min="0" value={this.state.rate} onChange={e=>this.setState({rate:e.target.value})}/>
                         </Col>
                         <Col md="3" sm="3" xs="3" lg="3">
-                        <Label>Page Section</Label>
+                        <Label id="boldstyle">Page Section</Label>
                         <Input type="select"  value={this.state.page_section} onChange={e=>this.setState({page_section:e.target.value})}>
                         <option value="Front Page">Front Page</option>
                         <option value="Back Page">Back Page</option>
@@ -1078,7 +1112,7 @@ class PrintRateDetails extends React.Component {
                            </Col>
                            <Col md="3" sm="3" xs="3" lg="3">
                            
-                            <Input type="select" min="0" value={this.state.newSlotSat[index].page_section} onChange={e=>this.handlePageChangeFri(value.id,e.target.value)}>
+                            <Input type="select" min="0" value={this.state.newSlotFri[index].page_section} onChange={e=>this.handlePageChangeFri(value.id,e.target.value)}>
                             <option value="Front Page">Front Page</option>
                             <option value="Back Page">Back Page</option>
                             <option value="Middle Page">Middle Page</option>
@@ -1238,19 +1272,37 @@ class PrintRateDetails extends React.Component {
             </Card>    
             </Col>
             </Row>
+        
             <Row style={{marginTop:"25px", marginBottom:"20px"}}>
                 <Col lg="10">
                 
                 <Button
-                style={{backgroundColor:"#404E67",color:"white"}}
-                block
-                onClick={()=>this.props.history.push("/media/preview/print",{title_id:this.props.location.state.title_id})}
+                style={{float:"right"}}
+                color="primary"
+                onClick={()=>{
+                    this.setState({allow:false});
+                    setTimeout(
+                        function(){
+                         this.props.history.push("/media/preview/print",{title_id:this.props.location.state.title_id})
+                    }
+                    .bind(this),500
+                    )}}
                 >
                     PREVIEW
                 </Button>
                 </Col>
             </Row> 
+            </>
+        }
         </Container>
+        <Modal isOpen={this.state.modal}>
+            <ModalHeader>
+                Saved!!
+            </ModalHeader>
+            <ModalFooter>
+                <Button color="danger" onClick={()=>this.setState({modal:false})}>Cancel</Button>
+            </ModalFooter>
+        </Modal>
         </LoadingOverlay>
       </>
     );

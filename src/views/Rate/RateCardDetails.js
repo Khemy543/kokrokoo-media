@@ -36,6 +36,7 @@ class RateCardDetails extends React.Component{
         title:"",
         allow:true,
         modal:false,
+        alertmessage:"",
 
         slotValue:2,
         newSlot:[],
@@ -178,7 +179,7 @@ class RateCardDetails extends React.Component{
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
         console.log(tempSlot)
-        selectedIndex.unit = value;
+        selectedIndex.unit_id = value;
         return(this.setState({newSlot:tempSlot}))
 
       }
@@ -228,12 +229,13 @@ class RateCardDetails extends React.Component{
                  EndTime:"",
                  slotNumber:"",
                  newSlot:[],
-                 modal:true
+                 modal:true,
+                 alertmessage:"Saved!!"
                 });
              }
          })
          .catch(error=>{
-             console.log(error.response.data)
+             console.log(error)
          })
  
        }
@@ -241,8 +243,7 @@ class RateCardDetails extends React.Component{
            var checker;
            for(var i =0; i<this.state.oldTImeFrames.length; i++){
                if(this.state.startTime < this.state.oldTImeFrames[i].end_time && this.state.EndTime>this.state.oldTImeFrames[i].start_time){
-                    alert("selected time intersects with a saved time");
-                    this.setState({isActive:false})
+                    this.setState({isActive:false, alertmessage:"Selected Time Intersects With A Saved Time", modal:true})
                     checker = false;
                     break;
                }
@@ -263,7 +264,8 @@ class RateCardDetails extends React.Component{
              .then(res=>{
                  console.log(res.data);
                  if(res.data.status === "success"){
-                 this.setState({isActive:false,
+                 this.setState({
+                    isActive:false,
                     oldTImeFrames:res.data.segments,
                     duration:"",
                     unit:1,
@@ -271,13 +273,15 @@ class RateCardDetails extends React.Component{
                     startTime:"",
                     EndTime:"",
                     slotNumber:"",
-                    modal:true
+                    newSlot:[],
+                    modal:true,
+                    alertmessage:"Saved!!"
                 });
                  
                  }
              })
              .catch(error=>{
-                 console.log(error.response.data)
+                 console.log(error)
              })
            }
            else{
@@ -326,7 +330,7 @@ class RateCardDetails extends React.Component{
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
         console.log(tempSlot)
-        selectedIndex.unit = value;
+        selectedIndex.unit_id = value;
         return(this.setState({newSlotTues:tempSlot}))
 
       }
@@ -374,21 +378,21 @@ class RateCardDetails extends React.Component{
                     EndTimeTues:"",
                     slotNumberTues:"",
                     newSlotTues:[],
-                    modal:true
+                    modal:true,
+                    alertmessage:"Saved!!"
                 });
 
              }
          })
          .catch(error=>{
-             console.log(error.response.data)
+             console.log(error)
          })
         }
         else{
             var checker;
             for(var i =0; i<this.state.oldTImeFramesTues.length; i++){
                 if(this.state.startTimeTues < this.state.oldTImeFramesTues[i].end_time){
-                     alert("selected time intersects with a saved time");
-                     this.setState({isActive:false})
+                     this.setState({isActive:false, alertmessage:"Selected Time Intersects With A Saved Time", modal:true})
                      checker = false;
                      break;
                 }
@@ -418,13 +422,14 @@ class RateCardDetails extends React.Component{
                             EndTimeTues:"",
                             slotNumberTues:"",
                             newSlotTues:[],
-                            modal:true
+                            modal:true,
+                            alertmessage:"Saved!!"
                         });
         
                      }
                  })
                  .catch(error=>{
-                     console.log(error.response.data)
+                     console.log(error)
                  })
             }
             else{
@@ -474,7 +479,7 @@ class RateCardDetails extends React.Component{
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
         console.log(tempSlot)
-        selectedIndex.unit = value;
+        selectedIndex.unit_id = value;
         return(this.setState({newSlotWed:tempSlot}))
 
       }
@@ -521,7 +526,8 @@ class RateCardDetails extends React.Component{
                     EndTimeWed:"",
                     slotNumberWed:"",
                     newSlotWed:[],
-                    modal:true
+                    modal:true,
+                    alertmessage:"Saved!!"
                 });
              }
          })
@@ -533,8 +539,7 @@ class RateCardDetails extends React.Component{
             var checker;
             for(var i =0; i<this.state.oldTImeFramesWed.length; i++){
                 if(this.state.startTimeWed < this.state.oldTImeFramesWed[i].end_time){
-                     alert("selected time intersects with a saved time");
-                     this.setState({isActive:false})
+                     this.setState({isActive:false, alertmessage:"Selected Time Intersects With A Saved Time", modal:true})
                      checker = false;
                      break;
                 }
@@ -564,7 +569,8 @@ class RateCardDetails extends React.Component{
                             EndTimeWed:"",
                             slotNumberWed:"",
                             newSlotWed:[],
-                            modal:true
+                            modal:true,
+                            alertmessage:"Saved!!"
                         });
         
                      }
@@ -615,7 +621,7 @@ class RateCardDetails extends React.Component{
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
         console.log(tempSlot)
-        selectedIndex.unit = value;
+        selectedIndex.unit_id = value;
         return(this.setState({newSlotThurs:tempSlot}))
 
       }
@@ -662,7 +668,8 @@ class RateCardDetails extends React.Component{
                     EndTimeThurs:"",
                     slotNumberThurs:"",
                     newSlotThurs:[],
-                    modal:true
+                    modal:true,
+                    alertmessage:"Saved!!"
                 });
              }
          })
@@ -674,8 +681,7 @@ class RateCardDetails extends React.Component{
             var checker;
             for(var i =0; i<this.state.oldTImeFramesThurs.length; i++){
                 if(this.state.startTimeThurs < this.state.oldTImeFramesThurs[i].end_time){
-                     alert("selected time intersects with a saved time");
-                     this.setState({isActive:false})
+                     this.setState({isActive:false, alertmessage:"Selected Time Intersects With A Saved Time", modal:true})
                      checker = false;
                      break;
                 }
@@ -705,7 +711,8 @@ class RateCardDetails extends React.Component{
                             EndTimeThurs:"",
                             slotNumberThurs:"",
                             newSlotThurs:[],
-                            modal:true
+                            modal:true,
+                            alertmessage:"Saved!!"
                         });
         
                      }
@@ -755,7 +762,7 @@ class RateCardDetails extends React.Component{
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
         console.log(tempSlot)
-        selectedIndex.unit = value;
+        selectedIndex.unit_id = value;
         return(this.setState({newSlotFri:tempSlot}))
 
       }
@@ -802,7 +809,8 @@ class RateCardDetails extends React.Component{
                     EndTimeFri:"",
                     slotNumberFri:"",
                     newSlotFri:[],
-                    modal:true
+                    modal:true,
+                    alertmessage:"Saved!!"
                     });
 
              }
@@ -815,8 +823,7 @@ class RateCardDetails extends React.Component{
             var checker;
             for(var i =0; i<this.state.oldTImeFramesFri.length; i++){
                 if(this.state.startTimeFri < this.state.oldTImeFramesFri[i].end_time){
-                     alert("selected time intersects with a saved time");
-                     this.setState({isActive:false})
+                     this.setState({isActive:false, alertmessage:"Selected Time Intersects With A Saved Time", modal:true})
                      checker = false;
                      break;
                 }
@@ -846,13 +853,14 @@ class RateCardDetails extends React.Component{
                             EndTimeFri:"",
                             slotNumberFri:"",
                             newSlotFri:[],
-                            modal:true
+                            modal:true,
+                            alertmessage:"Saved!!"
                         });
         
                      }
                  })
                  .catch(error=>{
-                     console.log(error.response.data)
+                     console.log(error)
                  })
             }
 
@@ -896,8 +904,8 @@ class RateCardDetails extends React.Component{
         const selected = tempSlot.find(item=>item.id===id);
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
-        console.log(tempSlot)
-        selectedIndex.unit = value;
+        console.log(tempSlot, value)
+        selectedIndex.unit_id = value;
         return(this.setState({newSlotSat:tempSlot}))
 
       }
@@ -944,7 +952,8 @@ class RateCardDetails extends React.Component{
                     EndTimeSat:"",
                     slotNumberSat:"",
                     newSlotSat:[],
-                    modal:true
+                    modal:true,
+                    alertmessage:"Saved!!"
                 });
 
              }
@@ -957,8 +966,7 @@ class RateCardDetails extends React.Component{
             var checker;
             for(var i =0; i<this.state.oldTImeFramesSat.length; i++){
                 if(this.state.startTimeSat < this.state.oldTImeFramesSat[i].end_time){
-                     alert("selected time intersects with a saved time");
-                     this.setState({isActive:false})
+                     this.setState({isActive:false, alertmessage:"Selected Time Intersects With A Saved Time", modal:true})
                      checker = false;
                      break;
                 }
@@ -988,7 +996,8 @@ class RateCardDetails extends React.Component{
                             EndTimeSat:"",
                             slotNumberSat:"",
                             newSlotSat:[],
-                            modal:true
+                            modal:true,
+                            alertmessage:"Saved!!"
                         });
         
                      }
@@ -1038,7 +1047,7 @@ class RateCardDetails extends React.Component{
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
         console.log(tempSlot)
-        selectedIndex.unit = value;
+        selectedIndex.unit_id = value;
         return(this.setState({newSlotSun:tempSlot}))
 
       }
@@ -1085,7 +1094,8 @@ class RateCardDetails extends React.Component{
                     EndTimeSun:"",
                     slotNumberSun:"",
                     newSlotSun:[],
-                    modal:true
+                    modal:true,
+                    alertmessage:"Saved!!"
                 });
 
              }
@@ -1098,8 +1108,7 @@ class RateCardDetails extends React.Component{
             var checker;
             for(var i =0; i<this.state.oldTImeFramesSun.length; i++){
                 if(this.state.startTimeSun < this.state.oldTImeFramesSun[i].end_time){
-                     alert("selected time intersects with a saved time");
-                     this.setState({isActive:false})
+                     this.setState({isActive:false, alertmessage:"Selected Time Intersects With A Saved Time", modal:true})
                      checker = false;
                      break;
                 }
@@ -1129,7 +1138,8 @@ class RateCardDetails extends React.Component{
                             EndTimeSun:"",
                             slotNumberSun:"",
                             newSlotSun:[],
-                            modal:true
+                            modal:true,
+                            alertmessage:"Saved!!"
                         });
         
                      }
@@ -1178,7 +1188,7 @@ class RateCardDetails extends React.Component{
                 </ModalFooter>
             </Modal>
         )}
-        </NavigationPrompt>;
+        </NavigationPrompt>
       <Header/>
         <Container className=" mt--9" fluid>
         {this.state.isActiveSpinner?
@@ -1260,10 +1270,10 @@ class RateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col>
-                        <Label id="boldstyle">Number of Slots</Label>
+                        <Label id="boldstyle">Number of Spots</Label>
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumber} onChange={e=>this.setState({slotNumber:e.target.value})}/>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={this.state.slotNumber} onChange={e=>this.setState({slotNumber:e.target.value})}/>
                         </Col>
                         </Row>    
                         </Col>
@@ -1365,10 +1375,10 @@ class RateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col  id="boldstyle">
-                        Number of Slots : 
+                        Number of Spots : 
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumberTues} onChange={e=>this.setState({slotNumberTues:e.target.value})}/>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={this.state.slotNumberTues} onChange={e=>this.setState({slotNumberTues:e.target.value})}/>
                         </Col>
                         </Row>    
                         </Col>
@@ -1469,10 +1479,10 @@ class RateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col  id="boldstyle">
-                        Number of Slots : 
+                        Number of Spots : 
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumberWed} onChange={e=>this.setState({slotNumberWed:e.target.value})}/>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={this.state.slotNumberWed} onChange={e=>this.setState({slotNumberWed:e.target.value})}/>
                         </Col>
                         </Row>    
                         </Col>
@@ -1573,10 +1583,10 @@ class RateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col id="boldstyle">
-                        Number of Slots : 
+                        Number of Spots : 
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumberThurs} onChange={e=>this.setState({slotNumberThurs:e.target.value})}/>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={this.state.slotNumberThurs} onChange={e=>this.setState({slotNumberThurs:e.target.value})}/>
                         </Col>
                         </Row>    
                         </Col>
@@ -1677,10 +1687,10 @@ class RateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col id="boldstyle">
-                        Number of Slots : 
+                        Number of Spots : 
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumberFri} onChange={e=>this.setState({slotNumberFri:e.target.value})}/>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={this.state.slotNumberFri} onChange={e=>this.setState({slotNumberFri:e.target.value})}/>
                         </Col>
                         </Row>    
                         </Col>
@@ -1781,10 +1791,10 @@ class RateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col id="boldstyle">
-                        Number of Slots : 
+                        Number of Spots : 
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumberSat} onChange={e=>this.setState({slotNumberSat:e.target.value})}/>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={this.state.slotNumberSat} onChange={e=>this.setState({slotNumberSat:e.target.value})}/>
                         </Col>
                         </Row>    
                         </Col>
@@ -1885,10 +1895,10 @@ class RateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col id="boldstyle">
-                        Number of Slots : 
+                        Number of Spots : 
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumberSun} onChange={e=>this.setState({slotNumberSun:e.target.value})}/>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={this.state.slotNumberSun} onChange={e=>this.setState({slotNumberSun:e.target.value})}/>
                         </Col>
                         </Row>    
                         </Col>
@@ -1984,7 +1994,7 @@ class RateCardDetails extends React.Component{
         </Container>
         <Modal isOpen={this.state.modal}>
             <ModalHeader>
-                Saved!!
+               {this.state.alertmessage}
             </ModalHeader>
             <ModalFooter>
                 <Button color="danger" onClick={()=>this.setState({modal:false})}>Cancel</Button>

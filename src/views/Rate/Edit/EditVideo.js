@@ -70,6 +70,9 @@ class EditVideo extends React.Component{
       })
       .catch(error => {
         console.log(error)
+        if(error.response.data.status === "Forbidden"){
+          this.setState({modal:true, alertMessage:"Access Denied"})
+        }
       });
   }
 
@@ -341,8 +344,8 @@ class EditVideo extends React.Component{
                         <Col md="12">
                         <Row>
                         <Col>
-                        <Label id="boldstyle">Number of Slots</Label>
-                        <Input type="number" min="0" placeholder="number of slots" value={value.no_of_spots} onChange={e=>this.handleSpotChange(value.id,e.target.value)}/>
+                        <Label id="boldstyle">Number of Spots</Label>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={value.no_of_spots} onChange={e=>this.handleSpotChange(value.id,e.target.value)}/>
                         </Col>
                         <Col>
                         <Button
@@ -442,14 +445,14 @@ class EditVideo extends React.Component{
                     >
                     Add New Segment
                     </Button>
-{/* 
+
                     <Button
                     style={{float:"right", marginRight:"10px"}}
-                    onClick={()=>this.handleComplete()}
+                    onClick={()=>this.props.history.push("/media/view-ratecards")}
                     color="success"
                     >
                    Complete
-                    </Button> */}
+                    </Button>
             </CardFooter>
             </Card>    
             </Col>

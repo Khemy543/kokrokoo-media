@@ -32,12 +32,22 @@ class RateProvider extends React.Component{
 
     state = {
         cart:[],
-        modal:false
+        modal:false,
+        media_type:null
     };
 
     componentDidMount(){
        this.isTokenExpired();/* 
        localStorage.clear(); */
+
+       axios.get(`${domain}/api/company-profile`,{
+        headers:{ 'Authorization':`Bearer ${user}`}
+            })
+            .then(res=>{
+            console.log(res.data)
+              this.setState({media_type:res.data.media_type.mediaType});
+              localStorage.setItem("media_type",res.data.media_type.mediaType)
+          })
     }
 
     isTokenExpired() {

@@ -26,7 +26,7 @@ import {
   Row,
   Col,
   Button,
-  Nav,NavItem,NavLink,TabContent,TabPane,Table
+  Nav,NavItem,NavLink,TabContent,TabPane,Table,Spinner
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -41,6 +41,7 @@ class ViewRateCardDetailsPrint extends React.Component{
 
     state={
         isActive:false,
+        isActiveSpinner:true,
         activeTab:"1",
         days:[],
         data:[],
@@ -51,7 +52,6 @@ class ViewRateCardDetailsPrint extends React.Component{
 
 
       componentDidMount(){
-        this.setState({isActive:true})
         axios.get(`${domain}/api/fetch-days-and-units`)
         .then(res=>{
             this.setState({days:res.data.days, units:res.data.units})
@@ -66,10 +66,10 @@ class ViewRateCardDetailsPrint extends React.Component{
               let tempData = res.data.details;
               let selectedDetaisl = tempData.find(item=> item.day.id === 1);
               if(selectedDetaisl !== undefined){
-              this.setState({data:selectedDetaisl[0], isActive:false})
+              this.setState({data:selectedDetaisl[0], isActiveSpinner:false})
               }
               else{
-                this.setState({data:[], isActive:false})
+                this.setState({data:[], isActiveSpinner:false})
               }
             }
       })
@@ -108,7 +108,14 @@ class ViewRateCardDetailsPrint extends React.Component{
       >
       <Header/>
         <Container className=" mt--8" fluid>
-            
+        {this.state.isActiveSpinner?
+          <Row>
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
+          <>
           <Row>
             <Col md="10">
             <Card className=" shadow"> 
@@ -126,7 +133,7 @@ class ViewRateCardDetailsPrint extends React.Component{
                                 {this.state.days.map((value,index)=>(
                                 <NavItem key={index}>
                                 <NavLink
-                                    style={{cursor:"pointer",textTransform: "uppercase" }}
+                                   style={{cursor:"pointer",textTransform:"uppercase",fontSize:"14px", fontWeight:"bold"}}
                                     className={this.state.activeTab === `${value.id}` ? "active" : ""}
                                     onClick={() => { this.toggle(`${value.id}`); this.getDetails(value.id)}}
                                 >
@@ -141,6 +148,14 @@ class ViewRateCardDetailsPrint extends React.Component{
                             <TabPane tabId={this.state.activeTab}>
                             <Container style={{borderBottom:"1px solid rgb(64 78 103 / 30%)"}}>
                                 <br/>
+                                {this.state.data.length<=0?
+                                <Row>
+                                  <Col md="6" className="mr-auto ml-auto" style={{textAlign:"center"}}>
+                                    <h3>No Data Saved For This Day</h3>
+                                  </Col>
+                                </Row>
+                                :
+                                <>
                             <Row>
                             <Col>
                                 <Table bordered>
@@ -170,7 +185,8 @@ class ViewRateCardDetailsPrint extends React.Component{
                             </Row>
                         
                             <br/>
-                            
+                            </>
+                                }
                             </Container>
                             </TabPane>
                             </TabContent>
@@ -191,6 +207,8 @@ class ViewRateCardDetailsPrint extends React.Component{
             </Col>
             
             </Row>
+            </>
+        }
         </Container>
         </LoadingOverlay>
       </>

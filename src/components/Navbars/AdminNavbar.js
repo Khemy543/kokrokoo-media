@@ -68,11 +68,11 @@ componentDidMount(){
 
   axios.get(`${domain}/api/company-profile`,{
     headers:{ 'Authorization':`Bearer ${user}`}
-        }
-        )
+        })
         .then(res=>{
         console.log(res.data)
           this.setState({published:res.data.isPublished, logo:res.data.logo});
+          
       })
 }
 

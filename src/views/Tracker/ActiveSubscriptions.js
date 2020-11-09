@@ -76,6 +76,15 @@ function ActiveSubscriptions (props){
             </Col>
           </Row>
           :
+          <>
+           {!isActiveSpinner && subscriptions.length<=0?
+                <Row>
+                <Col md="12" style={{textAlign:"center"}}>
+                <h4>No Live Campaigns</h4> 
+                </Col>
+              </Row>
+              :
+            <>
           <Row>
             <Col className="mb-5 mb-xl-0" lg="12">
             <Card>
@@ -88,7 +97,6 @@ function ActiveSubscriptions (props){
                       <th>Campaign Title</th>
                       <th>Rate Card</th>
                       <th>Status</th>
-                      <th>Created Date</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -100,7 +108,6 @@ function ActiveSubscriptions (props){
                       <td>{value.title}</td>
                       <td>{value.rate_card_title}</td>
                       <td>{value.status}</td>
-                      <td>{value.time}</td>
                       <td style={{textAlign:"center"}}>
                       <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id)}><i className="fa fa-eye"/></Button>
                       </td>
@@ -112,6 +119,9 @@ function ActiveSubscriptions (props){
             </Card>  
             </Col>
           </Row>
+        </>
+        }
+        </>
         }
         </Container>
       </>

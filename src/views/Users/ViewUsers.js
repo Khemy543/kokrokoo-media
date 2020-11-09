@@ -53,6 +53,12 @@ function ViewUsers({history}) {
       })
       .catch(error=>{
         console.log(error.response.data)
+        if(error.response.data.status === "Forbidden"){
+          setIsActive(false)
+          setAlertModal(true);
+          setMessage("Access Denied");
+          setData([])
+        }
       });
     }
 
@@ -111,6 +117,7 @@ function ViewUsers({history}) {
             setModal(false)
         })
         .catch(error=>{
+
             console(error.response.data)
         })
     }
@@ -129,7 +136,7 @@ function ViewUsers({history}) {
         </Row>
           :
         <>
-          {!isActive && data.length<=0?
+          {!isActive &&data&& data.length<=0?
             <Row>
             <Col md="12" style={{textAlign:"center"}}>
              <h4>No User Created</h4> 

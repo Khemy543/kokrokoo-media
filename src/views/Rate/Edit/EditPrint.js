@@ -6,7 +6,7 @@ import {
   Container,
   Row,
   Col, CardHeader, Nav, NavItem, NavLink,
-  TabContent,TabPane,Input,Button
+  TabContent,TabPane,Input,Button,Spinner,CardFooter, Modal, ModalHeader, ModalFooter
 } from "reactstrap";
 // core components
 import classnames from 'classnames';
@@ -23,6 +23,7 @@ class EditPrint extends React.Component{
 
   state={
     isActive:false,
+    isActiveSpinner:true,
     activeTab:"1",
     days:[],
     data:[],
@@ -33,11 +34,12 @@ class EditPrint extends React.Component{
       {id:2, page_section:"Back Page"},
       {id:3,page_section:"Middle Page"}
     ],
-    title:""
+    title:"",
+    modal:false,
+    alertMessage:""
   }
 
   componentDidMount(){
-    this.setState({isActive:true});
     axios.get(`${domain}/api/fetch-days-and-units`)
     .then(res=>{
         console.log(res.data)
@@ -54,15 +56,18 @@ class EditPrint extends React.Component{
           let selectedDetaisl = tempData.find(item=> item.day.id === 1);
           console.log(selectedDetaisl);
           if(selectedDetaisl !== undefined){
-          this.setState({details:selectedDetaisl[0], isActive:false})
+          this.setState({details:selectedDetaisl[0], isActiveSpinner:false})
           }
           else{
-            this.setState({details:[], isActive:false})
+            this.setState({details:[], isActiveSpinner:false})
           }
         }
       })
       .catch(error => {
         console.log(error)
+        if(error.response.data.status === "Forbidden"){
+          this.setState({modal:true, alertMessage:"Access Denied"})
+        }
       });
 
 
@@ -129,7 +134,14 @@ class EditPrint extends React.Component{
       >
         <Header />
         <Container className=" mt--8" fluid>
-
+        {this.state.isActiveSpinner?
+          <Row>
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
+          <>
           <Row>
             <Col md="12">
               <Card className="shadow">
@@ -145,7 +157,7 @@ class EditPrint extends React.Component{
                             {this.state.days.map(value => (
                               <NavItem key={value.id}>
                                 <NavLink
-                                  style={{ cursor: "pointer", textTransform: "uppercase" }}
+                                  style={{cursor:"pointer",textTransform:"uppercase",fontSize:"14px", fontWeight:"bold"}}
                                   className={classnames({ active: this.state.activeTab === `${value.id}` })}
                                   onClick={() => { this.toggle(`${value.id}`); this.getDetails(value.id)}}
                                 >
@@ -160,18 +172,26 @@ class EditPrint extends React.Component{
                       <TabContent activeTab={this.state.activeTab}>
                         <TabPane tabId={this.state.activeTab}>
                           <Container>
+                          {this.state.details.length<=0?
+                          <Row>
+                            <Col md="6" className="mr-auto ml-auto" style={{textAlign:"center"}}>
+                              <h3>No Data Saved For This Day</h3>
+                            </Col>
+                          </Row>
+                          :
+                          <>
                           <Row>
                             <Col md="3">
-                            <h3>Size</h3>
+                            <h3 id="boldstyle">Size</h3>
                             </Col>
                             <Col md="3">
-                            <h3>Cost</h3>
+                            <h3 id="boldstyle">Cost</h3>
                             </Col>
                             <Col md="3">
-                            <h3>Page Section</h3>
+                            <h3 id="boldstyle">Page Section</h3>
                             </Col>
                             <Col md="2">
-                            <h3 style={{textAlign:"center"}}>Delete</h3>
+                            <h3 id="boldstyle" style={{textAlign:"center"}}>Delete</h3>
                             </Col>
                             <Col md="1">
                             <Button
@@ -204,12 +224,14 @@ class EditPrint extends React.Component{
                             </Col>
                           </Row>
                           ))}
+                          </>
+                          }
                           <Row>
                             <Col md="5">
                               <Button
                               color="info"
                               >
-                                Edit
+                                Save Changes
                               </Button>
                             </Col>
                           </Row>
@@ -221,10 +243,47 @@ class EditPrint extends React.Component{
                 </Col>    
                 </Row>
             </CardBody>    
+            <CardFooter>
+            <Button
+                    style={{float:"right"}}
+                    onClick={()=>{
+                      this.setState({allow:false});
+                      setTimeout(
+                    function(){
+                        
+                      this.props.history.push("/media/edit/details/print",{title_id:this.props.location.state.title_id, rate_title:this.state.title})
+                    }
+                    .bind(this),
+                    500
+                )}}
+                    color="info"
+                    >
+                    Add New Segment
+                    </Button>
+
+                    <Button
+                    style={{float:"right", marginRight:"10px"}}
+                    onClick={()=>this.props.history.push("/media/view-ratecards")}
+                    color="success"
+                    >
+                   Complete
+                    </Button>
+            </CardFooter> 
             </Card>    
             </Col>
             </Row>
+            </>
+        }
         </Container>
+        <Modal isOpen={this.state.modal}>
+          <ModalHeader>
+            Access Denied
+          </ModalHeader>
+          <ModalFooter>
+            <Button color="danger" onClick={()=>this.setState({modal:false})}>Close</Button>
+          </ModalFooter>
+        </Modal>
+
         </LoadingOverlay>
       </>
     );

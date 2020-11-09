@@ -24,11 +24,6 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
-  NavItem,
-  NavLink,
-  Nav,
-  Progress,
   Table,
   Container,
   Row,
@@ -39,30 +34,38 @@ import {
 
 import Header from "components/Headers/Header.js";
 import axios from "axios";
+import Pagination from "react-js-pagination";
 
 let user = localStorage.getItem("access_token");
 var domain = "https://media.test.backend.kokrokooad.com";
 
 function RejectedSubscriptions (props){
   const [subscriptions, setSubscription] = React.useState([]);
-  const [isActiveSpinner, setIsActiveSpinner] = React.useState(true)
+  const [isActiveSpinner, setIsActiveSpinner] = React.useState(true);
+  const [data, setData] = React.useState([]);
+  const [meta, setMeta] = React.useState([])
 
   React.useEffect(()=>{
+    getSubscription()
+  },[])
+
+  function getSubscription(pageNumber=1){
     setIsActiveSpinner(true)
-    axios.get(`${domain}/api/rejected-subscriptions`,
+    axios.get(`${domain}/api/rejected-subscriptions?page=${pageNumber}`,
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);
-      setSubscription(res.data)
+      setData(res.data.data);
+      setMeta(res.data.meta)
       setIsActiveSpinner(false)
     })
     .catch(error=>{
       console.log(error)
     })
-  },[])
+  }
 
-  const getDetails=(id)=>{
-    props.history.push("/media/subscription-details",{id:id})
+  const getDetails=(id,title, file_path)=>{
+    props.history.push("/media/rejected-campaign-details",{id:id,title:title, file_path:file_path})
   }
 
     return (
@@ -78,7 +81,7 @@ function RejectedSubscriptions (props){
           </Row>
           :
           <>
-          {!isActiveSpinner && subscriptions.length<=0?
+          {!isActiveSpinner && data.length<=0?
                 <Row>
                 <Col md="12" style={{textAlign:"center"}}>
                 <h4>No Rejected Campaigns</h4> 
@@ -105,24 +108,36 @@ function RejectedSubscriptions (props){
                     </tr>
                   </thead>
                   <tbody>
-                  {subscriptions.map((value,index)=>(
+                  {data.map((value,index)=>(
                     <tr>
                       <th scope="row">{index +1}</th>
-                      <td>{value.id}</td>
+                      <td>{value.generated_id}</td>
                       <td>{value.title}</td>
                       <td>{value.rate_card_title}</td>
-                      <td>{value.time}</td>
+                      <td>{value.date}</td>
                       <td style={{textAlign:"center"}}>
-                      <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id)}><i className="fa fa-eye"/></Button>
+                      <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id, value.title, value.ad_duration.file_path)}><i className="fa fa-eye"/></Button>
                       </td>
                     </tr>
                     ))}
                   </tbody>
                 </Table>
               </CardBody>
-              <CardFooter>
+              <CardBody>
+              <Pagination
+                totalItemsCount={meta&&meta.total}
+                activePage={meta&&meta.current_page}
+                itemsCountPerPage={meta&&meta.per_page}
+                onChange={(pageNumber)=>getSubscription(pageNumber)}
+                itemClass="page-item"
+                linkClass="page-link"
+                firstPageText="First"
+                lastPageText = "Last"
+                />
+              </CardBody>
+              {/* <CardFooter>
                 Showing 1 to 5 of Entries
-              </CardFooter>   
+              </CardFooter>    */}
             </Card>  
             </Col>
           </Row>

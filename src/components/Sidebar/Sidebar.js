@@ -54,16 +54,30 @@ class Sidebar extends React.Component {
     profileCollapse:false,
     volumeCollapse:false,
     paymentCollapse:false,
-    published:localStorage.getItem('published'),
+    published:false,
     modal:false,
     message:"",
     messageModal:false,
-    trackerCollapse:false
+    trackerCollapse:false,
+    logo:""
   };
   constructor(props) {
     super(props);
     this.activeRoute.bind(this);
   }
+
+  componentDidMount(){
+    axios.get(`${domain}/api/company-profile`,{
+      headers:{ 'Authorization':`Bearer ${user}`}
+          }
+          )
+          .then(res=>{
+          console.log(res.data)
+            this.setState({published:res.data.isPublished, logo:res.data.logo});
+        })
+  }
+
+  
   // verifies if routeName is the one active (in browser input)
   activeRoute(routeName) {
     return this.props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
@@ -495,7 +509,7 @@ class Sidebar extends React.Component {
       }
     })
     .catch(error=>{
-      console.log(error.response.data)
+      console.log(error)
     })
   }
   
@@ -518,7 +532,7 @@ class Sidebar extends React.Component {
       }
     })
     .catch(error=>{
-      console.log(error.response.data)
+      console.log(error)
     })
   }
 
@@ -564,34 +578,19 @@ class Sidebar extends React.Component {
           ) : null}
           {/* User */}
           <Nav className="align-items-center d-md-none">
-           {/*  <UncontrolledDropdown nav>
-              <DropdownToggle nav className="nav-link-icon">
-                <i className="ni ni-bell-55" />
-              </DropdownToggle>
-              <DropdownMenu
-                aria-labelledby="navbar-default_dropdown_1"
-                className="dropdown-menu-arrow"
-                right
-              >
-                <DropdownItem>Action</DropdownItem>
-                <DropdownItem>Another action</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>Something else here</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown> */}
+              <RateConsumer>
+                {value=>(
             <UncontrolledDropdown nav>
               <DropdownToggle nav>
                 <Media className="align-items-center">
                   <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
-                      src="#"
+                      src={`https://uploads.kokrokooad.com/${this.state.logo}`}
                     />
                   </span>
                 </Media>
               </DropdownToggle>
-              <RateConsumer>
-                {value=>(
               <DropdownMenu className="dropdown-menu-arrow" right>
                 <DropdownItem className="noti-title" header tag="div">
                   <h6 className="text-overflow m-0">Welcome!</h6>
@@ -617,27 +616,29 @@ class Sidebar extends React.Component {
                   <span>Logout</span>
                 </DropdownItem>
               </DropdownMenu>
-            )}
-            </RateConsumer>
             </UncontrolledDropdown>
             
+            )}
+            </RateConsumer>
           </Nav>
             <Modal isOpen={this.state.modal}>
-            <ModalBody>
+            <ModalHeader>
               Do you want to Unpublish Company?
-            </ModalBody>
+            </ModalHeader>
             <ModalFooter>
               <Button color="danger" onClick={()=>{this.handleUnPublish()}}>Yes</Button>
               <Button color="info" onClick={()=>this.setState({moda:false})}>No</Button>
             </ModalFooter>
             </Modal>
             <Modal isOpen={this.state.messageModal}>
-            <ModalHeader style={{borderBottom:"1px solid rgb(64 78 103 / 30%)"}}>
-              Message
+            <ModalHeader>
+              {this.state.message}
             </ModalHeader>
-              <ModalBody style={{textAlign:"center"}}>
-                {this.state.message}
-              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" onClick={()=>this.setState({messageModal:false})}>
+                  Cancel
+                </Button>
+              </ModalFooter>
 
             </Modal>
           {/* Collapse */}
@@ -745,14 +746,14 @@ class Sidebar extends React.Component {
                 {this.createVolumeRoutes(routes)}
                 </Collapse> 
 
-                <NavItem onClick={this.togglePaymentCollapse}>
+               {/*  <NavItem onClick={this.togglePaymentCollapse}>
                 <NavLink style={{fontSize:"14px", fontWeight:600, cursor:"pointer",color:"white"}}>
                 <i className="fa fa-money"/>Payment
                 </NavLink>
               </NavItem>
               <Collapse isOpen={this.state.paymentCollapse}>
                 {this.createPaymentRoutes(routes)}
-                </Collapse> 
+                </Collapse>  */}
 
 
               {/* <NavItem onClick={this.toggleReportCollapse}>

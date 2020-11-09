@@ -26,11 +26,8 @@ import {
   Container,
   Row,
   Col,
-  UncontrolledTooltip,
   Input,
-  Button,
-  CardTitle,
-  Nav,NavItem,NavLink,TabContent,TabPane,Form,FormGroup,Label
+  Button,Form,FormGroup,Label, ModalFooter,ModalHeader,Modal
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -38,6 +35,7 @@ import LoadingOverlay from "react-loading-overlay";
 import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";/* 
 import history from "../../history.js"; */
+import { RateConsumer } from "../../context.js";
 
 let user = localStorage.getItem("access_token");
 var domain = "https://media.test.backend.kokrokooad.com";
@@ -47,6 +45,8 @@ function CreateRateCard(props) {
     const [rate_card_title, setTitle] = React.useState("");
     const [service_description,setDescription] = React.useState("");
     const [file_types,setFile_types] = React.useState([]);
+    const [modal,setModal] = React.useState(false);
+    const [alertmessage, setMessage] = React.useState("")
 
 
     const pushType=(value,checked)=>{
@@ -69,7 +69,8 @@ function CreateRateCard(props) {
         console.log(e);
         console.log("file_types:",file_types)
         if(file_types.length <=0 ){
-            alert("choose file type");
+            setModal(true)
+            setMessage("Please Choose A File Type")
             setIsActive(false)
 
         }
@@ -90,8 +91,16 @@ function CreateRateCard(props) {
             }
         })
         .catch(error=>{
+            if(error.response.data.status ==="Forbidden"){
+                setModal(true);
+                setMessage("Access Denied");
+                setIsActive(false)
+            }else{
             console.log(error.response.data);
+            setModal(true)
+            setMessage(error.response.data.errors.rate_card_title)
             setIsActive(false)
+            }
         })
     }
 }
@@ -117,6 +126,8 @@ function CreateRateCard(props) {
 
             <CardBody>
             <Row>
+            <RateConsumer>
+            {value=>(
                 <Col md="12">
                     <Form role="form" onSubmit={handlTitleSubmit}>
                     <FormGroup>
@@ -127,6 +138,8 @@ function CreateRateCard(props) {
                     <Input type="textarea" placeholder="Enter Description" value={service_description} onChange={e=>setDescription(e.target.value)} required/>
                     </FormGroup>
                     <Label>File Type</Label>
+                    {value.media_type !== "Print"?
+                    <>
                     <FormGroup check>
                         <Label check>
                         <Input type="checkbox" value="video" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
@@ -139,6 +152,10 @@ function CreateRateCard(props) {
                         <h3 style={{fontWeight:600, fontSize:"14px"}}>Audio</h3>
                         </Label>
                     </FormGroup>
+                    </>
+                    :
+                    <></>
+                    }
                     <FormGroup check>
                         <Label check>
                         <Input type="checkbox" value="application" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
@@ -160,13 +177,23 @@ function CreateRateCard(props) {
                     Next
                     </Button>
                     </Form>
-                </Col>    
+                </Col>  
+                )}
+                </RateConsumer>  
                 </Row>
             </CardBody>    
             </Card>    
             </Col>
             </Row>
         </Container>
+        <Modal isOpen={modal}>
+            <ModalHeader>
+                {alertmessage}
+            </ModalHeader>
+            <ModalFooter>
+                <Button color="danger" onClick={()=>setModal(false)}>Cancel</Button>
+            </ModalFooter>
+        </Modal>
         </LoadingOverlay>
       </>
     );

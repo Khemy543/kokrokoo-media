@@ -12,7 +12,7 @@ let user =localStorage.getItem('access_token');
 var domain = "https://media.test.backend.kokrokooad.com";
 function Transactions(props) {
 const [transactions, setTransactions] = React.useState([])
-const [isActive, setIsActive] = React.useState(false)
+const [isActive, setIsActive] = React.useState(true)
 
   React.useEffect(()=>{
     getTransactions();

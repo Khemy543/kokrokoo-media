@@ -25,7 +25,6 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
-  Table,
   FormGroup,
   Label,
   Input,
@@ -33,7 +32,10 @@ import {
   Row,
   Col,
   Spinner,
-  Form
+  Form,
+  ModalHeader,
+  ModalFooter,
+  Modal
 } from "reactstrap";
 
 
@@ -48,6 +50,7 @@ const [messages, setMessages] = React.useState([]);
 const [isActiveSpinner, setIsActiveSpinner] = React.useState(true)
 const [rejection_message, setRejectionMessage] = React.useState("");
 const [messageData,setMessageData]=  React.useState([])
+const [modal, setModal] = React.useState(false)
   React.useEffect(()=>{
     console.log(props.location)
     setIsActiveSpinner(true)
@@ -87,9 +90,14 @@ const [messageData,setMessageData]=  React.useState([])
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);
+      setModal(true);
+      setTimeout(
+        function(){
+          props.history.push("/media/pending-subscription")
+        },1500)
     })
     .catch(error=>{
-      console.log(error.response.data)
+      console.log(error)
     })
   }
   
@@ -151,6 +159,14 @@ const [messageData,setMessageData]=  React.useState([])
           </Row>
         }
         </Container>
+        <Modal isOpen={modal}>
+          <ModalHeader>
+            <h3>Campiagn Rejected!!</h3>
+          </ModalHeader>
+          <ModalFooter>
+            <Button color="danger" onClick={()=>setModal(false)}>Close</Button>
+          </ModalFooter>
+        </Modal>
       </>
     );
   }

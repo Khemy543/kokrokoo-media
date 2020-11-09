@@ -1,4 +1,5 @@
 import React from "react";
+import NavigationPrompt from "react-router-navigation-prompt";
 // reactstrap components
 import {
   Card,
@@ -6,7 +7,7 @@ import {
   Container,
   Row,
   Col, CardHeader, Nav, NavItem, NavLink,
-  TabContent,TabPane,Input,Button
+  TabContent,TabPane,Input,Button,Spinner,ModalHeader,ModalFooter,Modal,CardFooter
 } from "reactstrap";
 // core components
 import classnames from 'classnames';
@@ -23,6 +24,8 @@ class Preview extends React.Component{
 
   state={
     isActive:false,
+    isActiveSpinner:true,
+    allow:true,
     activeTab:"1",
     days:[],
     data:[],
@@ -37,7 +40,7 @@ class Preview extends React.Component{
   }
 
   componentDidMount(){
-    this.setState({isActive:true});
+    this.setState({isActiveSpinner:true});
     axios.get(`${domain}/api/fetch-days-and-units`)
     .then(res=>{
         console.log(res.data)
@@ -54,10 +57,10 @@ class Preview extends React.Component{
           let selectedDetaisl = tempData.find(item=> item.day.id === 1);
           console.log(selectedDetaisl);
           if(selectedDetaisl !== undefined){
-          this.setState({details:selectedDetaisl[0], isActive:false})
+          this.setState({details:selectedDetaisl[0], isActiveSpinner:false})
           }
           else{
-            this.setState({details:[], isActive:false})
+            this.setState({details:[], isActiveSpinner:false})
           }
         }
       })
@@ -120,6 +123,51 @@ class Preview extends React.Component{
     }
   }
 
+  handleComplete=()=>{
+    console.log("completing...")
+    axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/complete/create`,null,
+    { headers: { 'Authorization': `Bearer ${user}`}})
+    .then(res=>{
+      console.log(res.data);
+      this.setState({allow:false})
+      this.props.history.push('/media/view-ratecards')
+    })
+    .catch(error=>{
+      console.log(error.response.data)
+    })
+  }
+
+
+  handleDeleteRatecard=()=>{
+    axios.delete(`${domain}/api/ratecard/${this.props.location.state.title_id}/delete`,
+    {headers:{ 'Authorization':`Bearer ${user}`}})
+    .then(res=>{
+        console.log(res.data);
+        this.setState({allow:false})
+    })
+}
+
+handleSubmit=(id)=>{
+console.log(this.state.details)
+  /* axios.patch(`${domain}/api/ratecard/${id}/update`,
+  {start_time:selected.start_time, end_time:selected.end_time, no_of_spots:selected.no_of_spots,day_id:selected.day.id, durations:selected.duration},
+  { headers: { 'Authorization': `Bearer ${user}`}})
+  .then(res=>{
+    console.log(res.data);
+    if(res.data.status === "saved"){
+      this.setState({
+        isActive:false,
+        alertMessage:"Changes Saved",
+        modal:true
+      })
+    }
+  })
+  .catch(error=>{
+    console.log(error);
+    this.setState({isActive:false})
+  }) */
+}
+
   render(){
   return (
       <>
@@ -127,9 +175,32 @@ class Preview extends React.Component{
         active={this.state.isActive}
         spinner={<FadeLoader color={'#4071e1'} />}
       >
+      <NavigationPrompt when={this.state.allow} 
+        afterConfirm={()=>this.handleDeleteRatecard()}
+        disableNative={true}
+        >
+        {({ onConfirm, onCancel }) => (
+            <Modal isOpen={this.state.allow}>
+                <ModalHeader>
+                You have unsaved changes, are you sure you want to leave?
+                </ModalHeader>
+                <ModalFooter>
+                    <Button color="danger" onClick={onConfirm}>Yes</Button>
+                    <Button color="info" onClick={onCancel}>No</Button>
+                </ModalFooter>
+            </Modal>
+        )}
+        </NavigationPrompt>;
         <Header />
         <Container className=" mt--8" fluid>
-
+        {this.state.isActiveSpinner?
+          <Row>
+            <Col md="12" style={{textAlign:"center"}}>
+             <h4>Please Wait <Spinner size="sm" style={{marginLeft:"5px"}}/></h4> 
+            </Col>
+          </Row>
+          :
+          <>
           <Row>
             <Col md="12">
               <Card className="shadow">
@@ -145,7 +216,7 @@ class Preview extends React.Component{
                             {this.state.days.map(value => (
                               <NavItem key={value.id}>
                                 <NavLink
-                                  style={{ cursor: "pointer", textTransform: "uppercase" }}
+                                  style={{cursor:"pointer",textTransform:"uppercase",fontSize:"14px", fontWeight:"bold"}}
                                   className={classnames({ active: this.state.activeTab === `${value.id}` })}
                                   onClick={() => { this.toggle(`${value.id}`); this.getDetails(value.id)}}
                                 >
@@ -160,18 +231,26 @@ class Preview extends React.Component{
                       <TabContent activeTab={this.state.activeTab}>
                         <TabPane tabId={this.state.activeTab}>
                           <Container>
+                          {this.state.details.length<=0?
+                          <Row>
+                            <Col md="6" className="mr-auto ml-auto" style={{textAlign:"center"}}>
+                              <h3>No Data Saved For This Day</h3>
+                            </Col>
+                          </Row>
+                          :
+                          <>
                           <Row>
                             <Col md="3">
-                            <h3>Size</h3>
+                            <h3  id="boldstyle">Size</h3>
                             </Col>
                             <Col md="3">
-                            <h3>Cost</h3>
+                            <h3  id="boldstyle">Cost</h3>
                             </Col>
                             <Col md="3">
-                            <h3>Page Section</h3>
+                            <h3  id="boldstyle">Page Section</h3>
                             </Col>
                             <Col md="2">
-                            <h3 style={{textAlign:"center"}}>Delete</h3>
+                            <h3 id="boldstyle" style={{textAlign:"center"}}>Delete</h3>
                             </Col>
                             <Col md="1">
                             <Button
@@ -204,12 +283,15 @@ class Preview extends React.Component{
                             </Col>
                           </Row>
                           ))}
+                          </>
+                            }
                           <Row>
                             <Col md="5">
                               <Button
                               color="info"
+                              onClick={()=>this.handleSubmit()}
                               >
-                                Edit
+                                Save Changes
                               </Button>
                             </Col>
                           </Row>
@@ -220,10 +302,38 @@ class Preview extends React.Component{
                             
                 </Col>    
                 </Row>
-            </CardBody>    
+            </CardBody>   
+            <CardFooter>
+            <Button
+                    style={{float:"right"}}
+                    onClick={()=>{
+                      this.setState({allow:false});
+                      setTimeout(
+                    function(){
+                        
+                      this.props.history.push("/media/print-rate-details",{title_id:this.props.location.state.title_id, rate_title:this.state.title})
+                    }
+                    .bind(this),
+                    500
+                )}}
+                    color="info"
+                    >
+                    Add New Segment
+                    </Button>
+
+                    <Button
+                    style={{float:"right", marginRight:"10px"}}
+                    onClick={()=>this.handleComplete()}
+                    color="success"
+                    >
+                   Complete
+                    </Button>
+            </CardFooter> 
             </Card>    
             </Col>
             </Row>
+            </>
+        }
         </Container>
         </LoadingOverlay>
       </>

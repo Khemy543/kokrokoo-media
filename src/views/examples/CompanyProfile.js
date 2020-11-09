@@ -35,11 +35,12 @@ class CompanyProfile extends React.Component {
     company_name:"",
     business_cert:"", 
     address:"",
-    regions:[],
-    languages:[],
+    regions:"",
+    languages:"",
     logo:"",
     media_house:"",
     media_type:"",
+    media_type_id:null,
     operation_cert:"",
     purpose:"", 
     website:"",
@@ -48,7 +49,7 @@ class CompanyProfile extends React.Component {
     country:"Ghana",
     newBusinessCert:"",
     newOperationalCert:"",
-    company_email:"companyemail@email.com"
+    company_email:""
 
     /* bank_name:"",
     bank_branch:"",
@@ -69,17 +70,19 @@ componentDidMount(){
           this.setState({
             company_id:res.data.id,
             company_name:res.data.company_name,
+            company_email:res.data.company_email,
             business_cert:`https://uploads.kokrokooad.com/${res.data.business_cert}`, 
             address:res.data.address,
             logo:res.data.logo,
             media_house:res.data.media_house,
-            media_type:res.data.media_type,
+            media_type:res.data.media_type.mediaType,
+            media_type_id:res.data.media_type.id,
             purpose:res.data.purpose,
             operation_cert:`https://uploads.kokrokooad.com/${res.data.operation_cert}`,
             purpose:res.data.purpose, 
             website:res.data.website,
-            languages:res.data.languages,
-            regions:res.data.region,
+            languages:res.data.languages.toString(),
+            regions:res.data.region.toString(),
             isActive:false,
             imagePreviewUrl:`https://uploads.kokrokooad.com/${res.data.logo}`
           })
@@ -120,8 +123,8 @@ toggleModal=()=>this.setState({modal:!this.state.modal});
 
     handleSubmitCompany=(e)=>{
       e.preventDefault()
-        let tempLanguages = this.state.languages.split(",");/* 
-        let tempRegions = this.state.regions.split(","); */
+        let tempLanguages = this.state.languages.split(",");
+        let tempRegions = this.state.regions.split(",");
        
         console.log(tempLanguages)
 
@@ -129,11 +132,10 @@ toggleModal=()=>this.setState({modal:!this.state.modal});
             {
               company_name:this.state.company_name,
               address:this.state.address,
-              region:this.state.regions,
+              region:tempRegions,
               company_email:this.state.company_email,
-              languagues:tempLanguages,
+              language:tempLanguages,
               media_house:this.state.media_house,
-              media_type:this.state.media_type,
               purpose:this.state.purpose, 
               website:this.state.website,
               country:"Ghana"
@@ -145,8 +147,10 @@ toggleModal=()=>this.setState({modal:!this.state.modal});
             })
             .catch(error=>{
                 console.log(error.response.data)
-                if(error.response){
-                    console.log(error.response.data);
+                if(error.response.data.status ==="Forbidden"){
+                  this.setState({isActive:false, modal:true,message:"Access Denied"})
+                }
+                else{
                     this.setState({
                         modal:true, isActive:false, message:error.response.data.errors.company_name || error.response.data.errors.media_house || error.response.data.errors.website
                         || error.response.data.errors.company_email || error.response.data.errors.region || error.response.data.errors.languagues
@@ -366,9 +370,8 @@ pushLanguages = (value,checked)=>{
                         </label>
                         <Input
                         className="form-control-alternative"
-                          value={this.state.media_type}
+                          value={this.state.media_type_id}
                           type="select"
-                          onChange={e=>this.setState({media_type:e.target.value})}
                           disabled
                         >
                           {this.state.media.map(value=>(<option value={value.id} key={value.id}>{value.mediaType}</option>))}

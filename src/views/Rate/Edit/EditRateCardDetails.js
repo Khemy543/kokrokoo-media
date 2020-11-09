@@ -178,7 +178,7 @@ class EditRateCardDetails extends React.Component{
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
         console.log(tempSlot)
-        selectedIndex.unit = value;
+        selectedIndex.unit_id = value;
         return(this.setState({newSlot:tempSlot}))
 
       }
@@ -326,7 +326,7 @@ class EditRateCardDetails extends React.Component{
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
         console.log(tempSlot)
-        selectedIndex.unit = value;
+        selectedIndex.unit_id = value;
         return(this.setState({newSlotTues:tempSlot}))
 
       }
@@ -474,7 +474,7 @@ class EditRateCardDetails extends React.Component{
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
         console.log(tempSlot)
-        selectedIndex.unit = value;
+        selectedIndex.unit_id = value;
         return(this.setState({newSlotWed:tempSlot}))
 
       }
@@ -615,7 +615,7 @@ class EditRateCardDetails extends React.Component{
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
         console.log(tempSlot)
-        selectedIndex.unit = value;
+        selectedIndex.unit_id = value;
         return(this.setState({newSlotThurs:tempSlot}))
 
       }
@@ -755,7 +755,7 @@ class EditRateCardDetails extends React.Component{
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
         console.log(tempSlot)
-        selectedIndex.unit = value;
+        selectedIndex.unit_id = value;
         return(this.setState({newSlotFri:tempSlot}))
 
       }
@@ -897,7 +897,7 @@ class EditRateCardDetails extends React.Component{
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
         console.log(tempSlot)
-        selectedIndex.unit = value;
+        selectedIndex.unit_id = value;
         return(this.setState({newSlotSat:tempSlot}))
 
       }
@@ -1038,7 +1038,7 @@ class EditRateCardDetails extends React.Component{
         const index = tempSlot.indexOf(selected);
         const selectedIndex = tempSlot[index];
         console.log(tempSlot)
-        selectedIndex.unit = value;
+        selectedIndex.unit_id = value;
         return(this.setState({newSlotSun:tempSlot}))
 
       }
@@ -1260,10 +1260,10 @@ class EditRateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col>
-                        <Label id="boldstyle">Number of Slots</Label>
+                        <Label id="boldstyle">Number of Spots</Label>
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumber} onChange={e=>this.setState({slotNumber:e.target.value})}/>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={this.state.slotNumber} onChange={e=>this.setState({slotNumber:e.target.value})}/>
                         </Col>
                         </Row>    
                         </Col>
@@ -1365,10 +1365,10 @@ class EditRateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col  id="boldstyle">
-                        Number of Slots : 
+                        Number of Spots : 
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumberTues} onChange={e=>this.setState({slotNumberTues:e.target.value})}/>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={this.state.slotNumberTues} onChange={e=>this.setState({slotNumberTues:e.target.value})}/>
                         </Col>
                         </Row>    
                         </Col>
@@ -1469,10 +1469,10 @@ class EditRateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col  id="boldstyle">
-                        Number of Slots : 
+                        Number of Spots : 
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumberWed} onChange={e=>this.setState({slotNumberWed:e.target.value})}/>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={this.state.slotNumberWed} onChange={e=>this.setState({slotNumberWed:e.target.value})}/>
                         </Col>
                         </Row>    
                         </Col>
@@ -1573,10 +1573,10 @@ class EditRateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col id="boldstyle">
-                        Number of Slots : 
+                        Number of Spots : 
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumberThurs} onChange={e=>this.setState({slotNumberThurs:e.target.value})}/>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={this.state.slotNumberThurs} onChange={e=>this.setState({slotNumberThurs:e.target.value})}/>
                         </Col>
                         </Row>    
                         </Col>
@@ -1677,10 +1677,10 @@ class EditRateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col id="boldstyle">
-                        Number of Slots : 
+                        Number of Spots : 
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumberFri} onChange={e=>this.setState({slotNumberFri:e.target.value})}/>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={this.state.slotNumberFri} onChange={e=>this.setState({slotNumberFri:e.target.value})}/>
                         </Col>
                         </Row>    
                         </Col>
@@ -1781,10 +1781,10 @@ class EditRateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col id="boldstyle">
-                        Number of Slots : 
+                        Number of Spots : 
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumberSat} onChange={e=>this.setState({slotNumberSat:e.target.value})}/>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={this.state.slotNumberSat} onChange={e=>this.setState({slotNumberSat:e.target.value})}/>
                         </Col>
                         </Row>    
                         </Col>
@@ -1885,10 +1885,10 @@ class EditRateCardDetails extends React.Component{
                         <Col md="6">
                         <Row>
                         <Col id="boldstyle">
-                        Number of Slots : 
+                        Number of Spots : 
                         </Col>
                         <Col>
-                        <Input type="number" min="0" placeholder="number of slots" value={this.state.slotNumberSun} onChange={e=>this.setState({slotNumberSun:e.target.value})}/>
+                        <Input type="number" min="0" placeholder="Number of Spots" value={this.state.slotNumberSun} onChange={e=>this.setState({slotNumberSun:e.target.value})}/>
                         </Col>
                         </Row>    
                         </Col>

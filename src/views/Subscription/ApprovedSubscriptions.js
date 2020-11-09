@@ -38,30 +38,37 @@ import {
 
 import Header from "components/Headers/Header.js";
 import axios from "axios";
+import Pagination from "react-js-pagination";
 
 let user = localStorage.getItem("access_token");
 var domain = "https://media.test.backend.kokrokooad.com";
 
 function ApprovedSubscriptions (props){
-  const [subscriptions, setSubscription] = React.useState([]);
   const [isActiveSpinner, setIsActiveSpinner] = React.useState(true);
+  const [data , setData] = React.useState([]);
+  const [meta, setMeta] = React.useState([]);
 
   React.useEffect(()=>{
+   getSubscrtiptions();
+  },[])
+
+  function getSubscrtiptions(pageNumber=1){
     setIsActiveSpinner(true)
-    axios.get(`${domain}/api/approved-subscriptions`,
+    axios.get(`${domain}/api/approved-subscriptions?page=${pageNumber}`,
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);
-      setSubscription(res.data)
+      setData(res.data.data)
+      setMeta(res.data.meta)
       setIsActiveSpinner(false)
     })
     .catch(error=>{
       console.log(error)
     })
-  },[])
+  }
 
-  const getDetails=(id, title)=>{
-    props.history.push("/media/approved-details",{id:id, title:title})
+  const getDetails=(id, title, file_path)=>{
+    props.history.push("/media/approved-details",{id:id, title:title, file_path})
   }
 
     return (
@@ -77,7 +84,7 @@ function ApprovedSubscriptions (props){
           </Row>
           :
           <>
-           {!isActiveSpinner && subscriptions.length<=0?
+           {!isActiveSpinner && data.length<=0?
                 <Row>
                 <Col md="12" style={{textAlign:"center"}}>
                 <h4>No Approved Campaigns</h4> 
@@ -104,21 +111,33 @@ function ApprovedSubscriptions (props){
                     </tr>
                   </thead>
                   <tbody>
-                  {subscriptions.map((value,index)=>(
+                  {data.map((value,index)=>(
                     <tr>
                       <th scope="row">{index +1}</th>
-                      <td>{value.id}</td>
+                      <td>{value.generated_id}</td>
                       <td>{value.title}</td>
                       <td>{value.rate_card_title}</td>
-                      <td>{value.time}</td>
+                      <td>{value.date}</td>
                       <td style={{textAlign:"center"}}>
-                      <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id,value.title)}><i className="fa fa-eye"/></Button>
+                      <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id,value.title, value.ad_duration.file_path)}><i className="fa fa-eye"/></Button>
                       </td>
                     </tr>
                     ))}
                   </tbody>
                 </Table>
               </CardBody>  
+              <CardBody>
+              <Pagination
+                totalItemsCount={meta&&meta.total}
+                activePage={meta&&meta.current_page}
+                itemsCountPerPage={meta&&meta.per_page}
+                onChange={(pageNumber)=>getSubscrtiptions(pageNumber)}
+                itemClass="page-item"
+                linkClass="page-link"
+                firstPageText="First"
+                lastPageText = "Last"
+                />
+              </CardBody>
             </Card>  
             </Col>
           </Row>

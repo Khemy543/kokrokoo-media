@@ -34,12 +34,11 @@ import {
 
 import Header from "components/Headers/Header.js";
 import axios from "axios";
-import ApprovedSubscriptions from "./ApprovedSubscriptions";
 
 let user = localStorage.getItem("access_token");
 var domain = "https://media.test.backend.kokrokooad.com";
 
-function ApprovedDetails (props){
+function RejectedDetails (props){
 const [subscription, setSubscription] = React.useState([]);
 const  [title, setTitle] = React.useState("");
 const [file, setFile] = React.useState("");
@@ -97,7 +96,7 @@ const [total, setTotal] = React.useState(0);
   }/* 
   response.headers["content-disposition"].split("filename=")[1] */
 
-/*   const handleApprove=(id)=>{
+  const handleApprove=(id)=>{
     axios.post(`${domain}/api/approve/${id}/subscriptions`,null,
     { headers: { 'Authorization': `Bearer ${user}` } }
     )
@@ -109,7 +108,7 @@ const [total, setTotal] = React.useState(0);
     .catch(error=>{
       console.log(error.response.data)
     })
-  } */
+  }
     return (
       <>
         <Header />
@@ -183,7 +182,7 @@ const [total, setTotal] = React.useState(0);
                     </a>
                   </div>
               </CardBody>
-             {/*  <CardFooter >
+              <CardFooter >
               <div style={{float:"right"}}>
               <Button
               color="info"
@@ -191,17 +190,17 @@ const [total, setTotal] = React.useState(0);
               >
                 Approve
               </Button>
-              <Button
+             {/*  <Button
               color="danger"
               onClick={()=>props.history.push("/media/rejected-messages",{id:props.location.state.id})}
               >
                 Reject
-              </Button>
+              </Button> */}
               </div>
-              </CardFooter>    */}
+              </CardFooter>   
             </Card>  
             </Col>
-           {/*  <Modal isOpen={modal}>
+            <Modal isOpen={modal}>
               <ModalBody>
                 <h3 style={{fontSize:"15px", fontWeight:600}}>Approve Campaign?</h3>
               </ModalBody>
@@ -217,7 +216,7 @@ const [total, setTotal] = React.useState(0);
                   No
                 </Button>
               </ModalFooter>
-            </Modal> */}
+            </Modal>
           </Row>
         }
         </Container>
@@ -225,4 +224,4 @@ const [total, setTotal] = React.useState(0);
     );
   }
 
-export default ApprovedDetails;
+export default RejectedDetails;
