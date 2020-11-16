@@ -37,7 +37,7 @@ import axios from "axios";
 import ApprovedSubscriptions from "./ApprovedSubscriptions";
 
 let user = localStorage.getItem("access_token");
-var domain = "https://media.test.backend.kokrokooad.com";
+var domain = "https://media-backend.kokrokooad.com";
 
 function CompletedDetails (props){
 const [subscription, setSubscription] = React.useState([]);
@@ -73,7 +73,17 @@ const [total, setTotal] = React.useState(0);
   
   const handleSubmit=(e)=>{
     e.preventDefault();
-    console.log(e)
+    console.log(e);
+    let formData = new FormData();
+    formData.append('transmission_cert',file)
+    axios.post(`${domain}/api/subscription/uplaod/${props.location.state.id}/transmission-cert`,
+    formData,{ headers: { 'Authorization': `Bearer ${user}` } })
+    .then(res=>{
+      console.log(res.data)
+    })
+    .catch(error=>{
+      console.log(error.response.data)
+    })
   }
   
     return (

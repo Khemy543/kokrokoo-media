@@ -26,7 +26,7 @@ const RateContext = React.createContext();
 
   
   let user = localStorage.getItem("access_token");
-  var domain = "https://media.test.backend.kokrokooad.com";
+  var domain = "https://media-backend.kokrokooad.com";
 
 class RateProvider extends React.Component{
 

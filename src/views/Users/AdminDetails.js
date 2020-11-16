@@ -26,7 +26,7 @@ import Pagination from "react-js-pagination";
 //require("bootstrap/less/bootstrap.less");
 
 let user = localStorage.getItem("access_token");
-var domain = "https://media.test.backend.kokrokooad.com";
+var domain = "https://media-backend.kokrokooad.com";
 
 
 class AdminDetails extends React.Component{

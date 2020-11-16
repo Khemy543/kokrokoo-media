@@ -42,7 +42,7 @@ import axios from "axios";
 import Pagination from "react-js-pagination";
 
 let user = localStorage.getItem("access_token");
-var domain = "https://media.test.backend.kokrokooad.com";
+var domain = "https://media-backend.kokrokooad.com";
 
 function CompletedCampaigns (props){
   const [subscriptions, setSubscription] = React.useState([]);
@@ -56,7 +56,7 @@ function CompletedCampaigns (props){
 
   function getSubscriptions(pageNumber=1){
     setIsActiveSpinner(true)
-    axios.get(`${domain}/api/completed-subscriptions?page=${pageNumber}`,
+    axios.get(`${domain}/api/subscriptions/completed/subscription?page=${pageNumber}`,
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);

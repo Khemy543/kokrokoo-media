@@ -40,7 +40,7 @@ import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";/* 
 import history from "../../history.js"; */
 let user = localStorage.getItem("access_token");
-var domain = "https://media.test.backend.kokrokooad.com";
+var domain = "https://media-backend.kokrokooad.com";
 
 class PrintRateDetails extends React.Component {
     

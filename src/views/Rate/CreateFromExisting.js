@@ -22,7 +22,7 @@ import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
 let user = localStorage.getItem("access_token");
-var domain = "https://media.test.backend.kokrokooad.com";
+var domain = "https://media-backend.kokrokooad.com";
 
 function CreateFromExisting(props) {
     const [isActive, setIsActive] = React.useState(false);
@@ -81,6 +81,14 @@ function CreateFromExisting(props) {
           </Row>
           :
           <>
+          {!isActiveSpinner && titles.length<=0?
+            <Row>
+                <Col md="12" style={{textAlign:"center"}}>
+                <h4>You Have No Existing Ratecards</h4> 
+                </Col>
+              </Row>
+              :
+          <>
           <Row>
             <Col md="10" sm="12" lg="10" xl="10" xs="12">
             <p style={{fontSize:"13px", fontWeight:500}}
@@ -111,6 +119,8 @@ function CreateFromExisting(props) {
             </Card>    
             </Col>
             </Row>
+          </>
+        }
           </>
         }
 
