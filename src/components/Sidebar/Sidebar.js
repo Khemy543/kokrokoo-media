@@ -40,7 +40,7 @@ import {
 import {RateConsumer} from "../../context.js";
 
 let user = localStorage.getItem('access_token')
-var domain = "https://media-backend.kokrokooad.com";
+var domain = "https://media.test.backend.kokrokooad.com";
 
 class Sidebar extends React.Component {
   state = {

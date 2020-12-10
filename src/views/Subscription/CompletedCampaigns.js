@@ -42,7 +42,7 @@ import axios from "axios";
 import Pagination from "react-js-pagination";
 
 let user = localStorage.getItem("access_token");
-var domain = "https://media-backend.kokrokooad.com";
+var domain = "https://media.test.backend.kokrokooad.com";
 
 function CompletedCampaigns (props){
   const [subscriptions, setSubscription] = React.useState([]);
@@ -69,8 +69,8 @@ function CompletedCampaigns (props){
     })
   }
 
-  const getDetails=(id)=>{
-    props.history.push("/media/completed-details",{id:id})
+  const getDetails=(id,payment_amount)=>{
+    props.history.push("/media/completed-details",{id:id, payment_amount})
   }
 
     return (
@@ -121,7 +121,7 @@ function CompletedCampaigns (props){
                       <td>{value.rate_card_title}</td>
                       <td>{value.date}</td>
                       <td style={{textAlign:"center"}}>
-                      <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id)}><i className="fa fa-eye"/></Button>
+                      <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id, value.payment_amount)}><i className="fa fa-eye"/></Button>
                       </td>
                     </tr>
                     ))}

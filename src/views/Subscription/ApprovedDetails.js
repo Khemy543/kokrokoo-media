@@ -37,7 +37,7 @@ import axios from "axios";
 import ApprovedSubscriptions from "./ApprovedSubscriptions";
 
 let user = localStorage.getItem("access_token");
-var domain = "https://media-backend.kokrokooad.com";
+var domain = "https://media.test.backend.kokrokooad.com";
 
 function ApprovedDetails (props){
 const [subscription, setSubscription] = React.useState([]);
@@ -94,22 +94,8 @@ const [total, setTotal] = React.useState(0);
     .catch(error=>{
       console.log(error.response.data)
     })
-  }/* 
-  response.headers["content-disposition"].split("filename=")[1] */
+  }
 
-/*   const handleApprove=(id)=>{
-    axios.post(`${domain}/api/approve/${id}/subscriptions`,null,
-    { headers: { 'Authorization': `Bearer ${user}` } }
-    )
-    .then(res=>{
-      console.log(res.data)
-      setModal(false)
-      props.history.push("/media/approved-subscription")
-    })
-    .catch(error=>{
-      console.log(error.response.data)
-    })
-  } */
     return (
       <>
         <Header />
@@ -133,8 +119,10 @@ const [total, setTotal] = React.useState(0);
                 <h4 style={{textTransform:"uppercase"}}>{title}</h4>
                 </Col>
                 <Col>
-                  <h3>Total Campaign Amount : <span style={{color:"red"}}>GH¢ {total}.00</span></h3>
-                </Col>
+              <h4>Total Amount : <span style={{color:"red"}}>GH¢ {props.location.state.payment_amount.campaign_total_amount_without_discount}</span></h4>
+              <h4>Total Amount Including Discount : <span style={{color:"red"}}>GH¢ {props.location.state.payment_amount.campaign_total_amount_with_discount}</span></h4>
+              <h4>Total Amount Including Tax : <span style={{color:"red"}}>GH¢ {props.location.state.payment_amount.campaign_grand_total_with_tax}</span></h4>
+              </Col>
               </Row>
              
               </CardHeader>
@@ -142,7 +130,7 @@ const [total, setTotal] = React.useState(0);
                 {subscription.map((item,key)=>(
                   <Row style={{marginBottom:"20px"}}>
                     <Col md="12">
-                    <h3>Total Amount  : {item.total_amount}</h3>
+                    <h3>Daily Amount  : {item.total_amount}</h3>
                     <p style={{marginBottom:"0px", fontSize:"14px",fontWeight:600}}>{item.selected_date} - {item.day.day}</p>
                     <Table  bordered>
                     <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
@@ -163,7 +151,7 @@ const [total, setTotal] = React.useState(0);
                           <td>{value.duration.rate}</td>
                           <td>{value.selected_spots}</td>
                           <td>{value.ratecard.start_time} - {value.ratecard.end_time}</td>
-                          <td>{Number(value.duration.rate) * value.selected_spots}.00</td>
+                          <td>{Number(value.duration.rate) * value.selected_spots}</td>
                         </tr>
                         ))}
                       </tbody>

@@ -14,7 +14,7 @@ import{
     Button, Alert, Input, FormGroup,InputGroup,InputGroupAddon,InputGroupText
 } from "reactstrap";
 
-var domain = "https://media-backend.kokrokooad.com";
+var domain = "https://media.test.backend.kokrokooad.com";
 export default function PasswordReset(props){
     const [message, setMessage] = React.useState("");
     const [visible, setVisible] = React.useState(false);

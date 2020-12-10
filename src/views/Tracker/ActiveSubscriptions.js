@@ -40,7 +40,7 @@ import Header from "components/Headers/Header.js";
 import axios from "axios";
 
 let user = localStorage.getItem("access_token");
-var domain = "https://media-backend.kokrokooad.com";
+var domain = "https://media.test.backend.kokrokooad.com";
 
 function ActiveSubscriptions (props){
   const [subscriptions, setSubscription] = React.useState([]);

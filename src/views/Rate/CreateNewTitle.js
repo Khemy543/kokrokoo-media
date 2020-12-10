@@ -40,7 +40,7 @@ import axios from "axios";/*
 import history from "../../history.js"; */
 
 let user = localStorage.getItem("access_token");
-var domain = "https://media-backend.kokrokooad.com";
+var domain = "https://media.test.backend.kokrokooad.com";
 
 function CreateNewTitle(props) {
     const [isActive, setIsActive] = React.useState(false);

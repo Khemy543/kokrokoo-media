@@ -38,7 +38,7 @@ import axios from "axios";
 import Header from "components/Headers/Header.js";
 
 let user = localStorage.getItem("access_token");
-var domain = "https://media-backend.kokrokooad.com";
+var domain = "https://media.test.backend.kokrokooad.com";
 
 
 function Index (props){

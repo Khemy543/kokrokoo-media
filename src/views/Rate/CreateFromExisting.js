@@ -22,7 +22,7 @@ import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
 
 let user = localStorage.getItem("access_token");
-var domain = "https://media-backend.kokrokooad.com";
+var domain = "https://media.test.backend.kokrokooad.com";
 
 function CreateFromExisting(props) {
     const [isActive, setIsActive] = React.useState(false);

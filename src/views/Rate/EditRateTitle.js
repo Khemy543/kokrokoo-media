@@ -41,7 +41,7 @@ import history from "../../history.js"; */
 import { RateConsumer } from "../../context.js";
 
 let user = localStorage.getItem("access_token");
-var domain = "https://media-backend.kokrokooad.com";
+var domain = "https://media.test.backend.kokrokooad.com";
 
 function EditRateTitle(props) {
     const [isActive, setIsActive] = React.useState(false);

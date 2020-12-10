@@ -37,7 +37,7 @@ import axios from "axios";
 import ApprovedSubscriptions from "./ApprovedSubscriptions";
 
 let user = localStorage.getItem("access_token");
-var domain = "https://media-backend.kokrokooad.com";
+var domain = "https://media.test.backend.kokrokooad.com";
 
 function SubscriptionDetails (props){
 const [subscription, setSubscription] = React.useState([]);
@@ -65,7 +65,7 @@ const [total, setTotal] = React.useState(0);
       setTotal(total)
     })
     .catch(error=>{
-      console.log(error)
+      console.log(error.response.data)
     })
 
     
@@ -134,7 +134,8 @@ const [total, setTotal] = React.useState(0);
                 <h4 style={{textTransform:"uppercase"}}>{title}</h4>
                 </Col>
                 <Col>
-                  <h3>Total Campaign Amount : <span style={{color:"red"}}>GH¢ {total}.00</span></h3>
+                <h3>Total Amount : <span style={{color:"red"}}>GH¢ {props.location.state.payment_amount.campaign_total_amount_without_discount}</span></h3>
+                <h3>Total Amount Including Discount : <span style={{color:"red"}}>GH¢ {props.location.state.payment_amount.campaign_total_amount_with_discount}</span></h3>
                 </Col>
               </Row>
              
@@ -143,7 +144,7 @@ const [total, setTotal] = React.useState(0);
                 {subscription.map((item,key)=>(
                   <Row style={{marginBottom:"20px"}}>
                     <Col md="12">
-                    <h3>Total Amount  : {item.total_amount}</h3>
+                    <h3>Daily  Amount  : {item.total_amount}</h3>
                     <p style={{marginBottom:"0px", fontSize:"14px",fontWeight:600}}>{item.selected_date} - {item.day.day}</p>
                     <p style={{marginTop:"0px", fontSize:"14px", fontWeight:600}}>Roll over {item.no_of_weeks} week(s)</p>
                     <Table  bordered>

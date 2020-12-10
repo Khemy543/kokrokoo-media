@@ -19,7 +19,7 @@ import axios from 'axios';
 import classnames from 'classnames';
 
 let user = localStorage.getItem("access_token");
-var domain = "https://media-backend.kokrokooad.com";
+var domain = "https://media.test.backend.kokrokooad.com";
 function RegistrationPayment(props) {
 const [isActive, setIsActive] = React.useState(false);
 const [firstname, setFirstname] = React.useState("");
