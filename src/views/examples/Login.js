@@ -56,7 +56,7 @@ function Login(props){
     axios.post(`${domain}/oauth/token`,{
       grant_type: "password",
       client_id: 1,
-      client_secret:"xnndmAhuvCznjKafXildO2zaIp1Yv4OpqnKHIEEK",
+      client_secret:"6wbQEcqNmWCSkY13sUZLCMRKBQwzEIHZss8Nr5ln",
       username: username,
       password: password,
       provider: "users",

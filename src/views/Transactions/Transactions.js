@@ -11,8 +11,9 @@ import Pagination from "react-js-pagination";
 let user =localStorage.getItem('access_token');
 var domain = "https://media.test.backend.kokrokooad.com";
 function Transactions(props) {
-const [transactions, setTransactions] = React.useState([])
-const [isActive, setIsActive] = React.useState(true)
+const [transactions, setTransactions] = React.useState([]);
+const [isActive, setIsActive] = React.useState(true);
+const [data, setData] = React.useState([]);
 
   React.useEffect(()=>{
     getTransactions();
@@ -20,11 +21,12 @@ const [isActive, setIsActive] = React.useState(true)
 
   function getTransactions(pageNumber=1){
     setIsActive(true)
-    axios.get(`${domain}/api/payment/transactions?page=${pageNumber}`,
+    axios.get(`${domain}/api/all-subscriptions?page=${pageNumber}`,
     {headers:{ 'Authorization':`Bearer ${user}`}})
     .then(res=>{
         console.log(res.data);
         setTransactions(res.data);
+        setData(res.data.data)
         setIsActive(false)
     })
     .catch(error=>{
@@ -34,17 +36,6 @@ const [isActive, setIsActive] = React.useState(true)
     })
 }
 
-const handleGetCart=(id,date)=>{
-  axios.get(`${domain}/api/get/${id}/invoice`,
-  {headers:{ 'Authorization':`Bearer ${user}`}})
-  .then(res=>{
-    console.log(res.data)
-    props.history.push("/client/transactions-details",{cart:res.data,generated_invoice_id:id,created_at:date})
-  })
-  .catch(error=>{
-    console.log(error)
-  })
-}
 
   const {meta} = transactions
     return (
@@ -78,27 +69,27 @@ const handleGetCart=(id,date)=>{
                 <thead style={{backgroundColor:"#01a9ac",color:"black"}}>
                 <tr>
                   <th>#</th>
-                  <th>Invoice Id</th>
+                  <th>Id</th>
                   <th>Currency</th>
                   <th>Total(Exclusive Of Tax)</th>
                   <th>Gross Total (Tax Inclusive)</th>
                   <th>Status</th>
-                  <th>Reference</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-              {transactions.map((value,key)=>(
+              {data.map((value,key)=>(
               <tr>
                     <td>{key+1}</td>
-                    <td>{value.invoice_id}</td>
+                    <td>{value.generated_id}</td>
                     <td>{value.currency}</td>
-                    <td>{value.total_amount_without_charges}</td>
-                    <td>{value.grand_total_amount}</td>
-                    <td>{value.transaction_status}</td>
-                    <td>{value.transaction_reference}</td>
+                    <td>{value.payment_amount.campaign_total_amount_with_discount}</td>
+                    <td>{value.payment_amount.campaign_grand_total_with_tax}</td>
+                    <td>{value.status}</td>
                     <td><Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}}
-                    onClick={()=>handleGetCart(value.invoice_id, value.transaction_reference)}
+                    onClick={()=>props.history('/media/transaction-details',{
+                      id:value.id, payment_amount:value.payment_amount
+                    })}
                     ><i className="fa fa-eye"/></Button></td>
                     
               </tr>

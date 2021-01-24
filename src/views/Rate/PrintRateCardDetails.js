@@ -30,7 +30,7 @@ import {
   Input,
   Button,
   CardTitle,
-  Nav,NavItem,NavLink,TabContent,TabPane,Label,Spinner,Modal,ModalHeader,ModalFooter
+  Nav,NavItem,NavLink,TabContent,TabPane,Label,Spinner,Modal,ModalHeader,ModalFooter,FormGroup
 } from "reactstrap";
 import classnames from 'classnames';
 // core components
@@ -51,6 +51,13 @@ class PrintRateDetails extends React.Component {
         activeTab:"1",
         allow:true,
         modal:false,
+        replicateMonday:[],
+        replicateTuesday:[],
+        replicateWednesday:[],
+        replicateThursday:[],
+        replicateFriday:[],
+        replicateSaturday:[],
+        replicateSunday:[],
 
         newSlot:[],
         slotValue:2,
@@ -116,6 +123,63 @@ class PrintRateDetails extends React.Component {
     toggle = tab => {
         if(this.state.activeTab !== tab) this.setState({activeTab:tab});
       }
+
+
+      pushTypeMonday=(value,check)=>{
+        let array = this.state.replicateMonday;
+        if(check){
+            array.push(value)
+        };
+        this.setState({replicateMonday : array})
+    }
+
+    pushTypeTuesday=(value,check)=>{
+        let array = this.state.replicateTuesday;
+        if(check){
+            array.push(value)
+        };
+        this.setState({replicateTuesday : array})
+    }
+
+    pushTypeWednesday=(value,check)=>{
+        let array = this.state.replicateWednesday;
+        if(check){
+            array.push(value)
+        };
+        this.setState({replicateWednesday : array})
+    }
+
+    pushTypeThursday=(value,check)=>{
+        let array = this.state.replicateThursday;
+        if(check){
+            array.push(value)
+        };
+        this.setState({replicateThursday : array})
+    }
+
+    pushTypeFriday=(value,check)=>{
+        let array = this.state.replicateFriday;
+        if(check){
+            array.push(value)
+        };
+        this.setState({replicateFriday : array})
+    }
+
+    pushTypeSaturday=(value,check)=>{
+        let array = this.state.replicateSaturday;
+        if(check){
+            array.push(value)
+        };
+        this.setState({replicateSaturday : array})
+    }
+
+    pushTypeSunday=(value,check)=>{
+        let array = this.state.replicateSunday;
+        if(check){
+            array.push(value)
+        };
+        this.setState({replicateSunday : array})
+    }
 
       AddSlotMonday=()=>{
         var tempSlot = [...this.state.newSlot];
@@ -870,6 +934,16 @@ class PrintRateDetails extends React.Component {
                         </Row>
                     ))}
                     <Row style={{marginTop:"20px"}}>
+                    <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeMonday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="danger"
@@ -933,6 +1007,16 @@ class PrintRateDetails extends React.Component {
                        </Row>
                    ))}
                    <Row style={{marginTop:"20px"}}>
+                   <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeTuesday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="danger"
@@ -997,6 +1081,16 @@ class PrintRateDetails extends React.Component {
                        </Row>
                    ))}
                    <Row style={{marginTop:"20px"}}>
+                   <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeWednesday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="danger"
@@ -1061,6 +1155,16 @@ class PrintRateDetails extends React.Component {
                        </Row>
                    ))}
                    <Row style={{marginTop:"20px"}}>
+                   <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeThursday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="danger"
@@ -1125,6 +1229,16 @@ class PrintRateDetails extends React.Component {
                        </Row>
                    ))}
                    <Row style={{marginTop:"20px"}}>
+                   <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeFriday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="danger"
@@ -1189,6 +1303,16 @@ class PrintRateDetails extends React.Component {
                        </Row>
                    ))}
                    <Row style={{marginTop:"20px"}}>
+                   <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeSaturday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="danger"
@@ -1253,6 +1377,16 @@ class PrintRateDetails extends React.Component {
                        </Row>
                    ))}
                    <Row style={{marginTop:"20px"}}>
+                   <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeSunday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="danger"

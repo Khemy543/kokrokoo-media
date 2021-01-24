@@ -66,6 +66,7 @@
     "react-router-navigation-prompt": "^1.8.13",
     "react-scripts": "^3.4.4",
     "react-spinners": "^0.9.0",
+    "react-to-print": "^2.12.0",
     "reactstrap": "8.4.1"
   },
   "devDependencies": {

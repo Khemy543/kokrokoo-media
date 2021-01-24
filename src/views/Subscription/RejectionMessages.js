@@ -49,7 +49,7 @@ function RejectionMessages (props){
 const [messages, setMessages] = React.useState([]);
 const [isActiveSpinner, setIsActiveSpinner] = React.useState(true)
 const [rejection_message, setRejectionMessage] = React.useState("");
-const [messageData,setMessageData]=  React.useState([])
+const [messageData,setMessageData]=  React.useState(1)
 const [modal, setModal] = React.useState(false)
   React.useEffect(()=>{
     console.log(props.location)
@@ -68,23 +68,10 @@ const [modal, setModal] = React.useState(false)
     
   },[])
 
-  const handlePush=(checked,id)=>{
-    let tempMessages = messageData;
-    if(checked === true){
-      tempMessages.push(id)
-      console.log(tempMessages)
-    }
-    else{
-      let index = tempMessages.indexOf(id);
-      if(index!==-1){
-          tempMessages.splice(index,1);
-         console.log(tempMessages)
-      }
-    }
-  }
 
   const handelSubmit=(e)=>{
-    e.preventDefault()
+    console.log(messageData)
+    e.preventDefault();
     axios.post(`${domain}/api/reject/${props.location.state.id}/subscriptions`,
     {message_id:messageData, message:rejection_message},
     { headers: { 'Authorization': `Bearer ${user}` } })
@@ -127,12 +114,13 @@ const [modal, setModal] = React.useState(false)
                 {messages.map((value)=>(
                     <FormGroup check key={value.id} style={{marginBottom:"5px"}}>
                         <Label check>
-                        <Input type="checkbox" value={value.message} onChange={(e)=>handlePush(e.target.checked,value.id)}/>{' '}
+                        <Input type="radio" name="rejection_messages" value={value.id} onChange={(e)=>setMessageData(e.target.value)}/>{' '}
                         <p style={{fontSize:"14px", fontWeight:600}}>{value.message}</p>
                         </Label>
                     </FormGroup>
                 ))}
-
+                
+                {messageData === "5"?
                 <Row style={{marginTop:"15px"}}>
                     
                     <Col md="8">
@@ -145,6 +133,9 @@ const [modal, setModal] = React.useState(false)
                     />
                     </Col>
                 </Row>
+                :
+                <></>
+                }
               </CardBody>
               <CardFooter>
                     <Button
