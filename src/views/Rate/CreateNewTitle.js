@@ -126,6 +126,8 @@ function CreateNewTitle(props) {
                     <Input type="textarea" placeholder="Enter Description" value={service_description} onChange={e=>setDescription(e.target.value)} required/>
                     </FormGroup>
                     <Label>File Type</Label>
+                    {localStorage.getItem('media_type') != "Print"?
+                    <>
                     <FormGroup check>
                         <Label check>
                         <Input type="checkbox" value="video" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}
@@ -138,6 +140,8 @@ function CreateNewTitle(props) {
                         <h3 style={{fontWeight:600, fontSize:"14px"}}>Audio</h3>
                         </Label>
                     </FormGroup>
+                    </>
+                    :<></>}
                     <FormGroup check>
                         <Label check>
                         <Input type="checkbox" value="application" onChange={(e)=>pushType(e.target.value,e.target.checked)}/>{' '}

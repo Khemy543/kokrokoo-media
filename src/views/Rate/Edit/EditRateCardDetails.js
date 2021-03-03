@@ -1,7 +1,5 @@
 
 import React from "react";
-import  { Prompt } from 'react-router-dom';
-import NavigationPrompt from "react-router-navigation-prompt";
 // reactstrap components
 import {
   Card,
@@ -112,7 +110,14 @@ class EditRateCardDetails extends React.Component{
         EndTimeSun:"",
         slotNumberSun:"",
         oldTImeFramesSun:[],
-        timeCheckSun:false
+        timeCheckSun:false,
+        replicateMonday:[],
+        replicateTuesday:[],
+        replicateWednesday:[],
+        replicateThursday:[],
+        replicateFriday:[],
+        replicateSaturday:[],
+        replicateSunday:[],
     }
 
     componentDidMount(){
@@ -140,6 +145,92 @@ class EditRateCardDetails extends React.Component{
     toggle = tab => {
         if(this.state.activeTab !== tab) this.setState({activeTab:tab});
       }
+
+      pushTypeMonday=(value,check)=>{
+        let array = this.state.replicateMonday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateMonday : array})
+    }
+
+    pushTypeTuesday=(value,check)=>{
+        let array = this.state.replicateTuesday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateTuesday : array})
+    }
+
+    pushTypeWednesday=(value,check)=>{
+        let array = this.state.replicateWednesday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateWednesday : array})
+    }
+
+    pushTypeThursday=(value,check)=>{
+        let array = this.state.replicateThursday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateThursday : array})
+    }
+
+    pushTypeFriday=(value,check)=>{
+        let array = this.state.replicateFriday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateFriday : array})
+    }
+
+    pushTypeSaturday=(value,check)=>{
+        let array = this.state.replicateSaturday;
+        if(check){
+            array.push(value)
+        };
+        this.setState({replicateSaturday : array})
+    }
+
+    pushTypeSunday=(value,check)=>{
+        let array = this.state.replicateSunday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateSunday : array})
+    }
 
     AddSlotMonday=()=>{
         var tempSlot = [...this.state.newSlot];
@@ -213,7 +304,7 @@ class EditRateCardDetails extends React.Component{
         tempSlot.unshift({id:1,duration:this.state.duration,unit_id:this.state.unit,rate:this.state.rate});
          console.log(tempSlot);
          axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-         {start_time:this.state.startTime, end_time:this.state.EndTime, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumber,rate_card_title:this.state.title},
+         {start_time:this.state.startTime, end_time:this.state.EndTime,other_days:this.state.replicateMonday, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumber,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log(res.data);
@@ -258,7 +349,7 @@ class EditRateCardDetails extends React.Component{
             tempSlot.unshift({id:1,duration:this.state.duration,unit_id:this.state.unit,rate:this.state.rate});
              console.log(tempSlot);
              axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-             {start_time:this.state.startTime, end_time:this.state.EndTime, day_id:1, durations:tempSlot, no_of_spots:this.state.slotNumber,rate_card_title:this.state.title},
+             {start_time:this.state.startTime, end_time:this.state.EndTime, day_id:1, other_days:this.state.replicateMonday, durations:tempSlot, no_of_spots:this.state.slotNumber,rate_card_title:this.state.title},
              {headers:{ 'Authorization':`Bearer ${user}`}}) 
              .then(res=>{
                  console.log(res.data);
@@ -359,7 +450,7 @@ class EditRateCardDetails extends React.Component{
         tempSlot.unshift({id:1,duration:this.state.durationTues,unit_id:this.state.unitTues,rate:this.state.rateTues});
          console.log(tempSlot);
          axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-         {start_time:this.state.startTimeTues, end_time:this.state.EndTimeTues, day_id:2, durations:tempSlot, no_of_spots:this.state.slotNumberTues,rate_card_title:this.state.title},
+         {start_time:this.state.startTimeTues, other_days:this.state.replicateTuesday, end_time:this.state.EndTimeTues, day_id:2, durations:tempSlot, no_of_spots:this.state.slotNumberTues,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log(res.data);
@@ -404,7 +495,7 @@ class EditRateCardDetails extends React.Component{
                 tempSlot.unshift({id:1,duration:this.state.durationTues,unit_id:this.state.unitTues,rate:this.state.rateTues});
                  console.log(tempSlot);
                  axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-                 {start_time:this.state.startTimeTues, end_time:this.state.EndTimeTues, day_id:2, durations:tempSlot, no_of_spots:this.state.slotNumberTues,rate_card_title:this.state.title},
+                 {start_time:this.state.startTimeTues, end_time:this.state.EndTimeTues, other_days:this.state.replicateTuesday, day_id:2, durations:tempSlot, no_of_spots:this.state.slotNumberTues,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
                      console.log(res.data);
@@ -507,7 +598,7 @@ class EditRateCardDetails extends React.Component{
         tempSlot.unshift({id:1,duration:this.state.durationWed,unit_id:this.state.unitWed,rate:this.state.rateWed});
          console.log(tempSlot);
          axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-         {start_time:this.state.startTimeWed, end_time:this.state.EndTimeWed, day_id:3, durations:tempSlot, no_of_spots:this.state.slotNumberWed,rate_card_title:this.state.title},
+         {start_time:this.state.startTimeWed, other_days:this.state.replicateWednesday, end_time:this.state.EndTimeWed, day_id:3, durations:tempSlot, no_of_spots:this.state.slotNumberWed,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
@@ -550,7 +641,7 @@ class EditRateCardDetails extends React.Component{
                 tempSlot.unshift({id:1,duration:this.state.durationWed,unit_id:this.state.unitWed,rate:this.state.rateWed});
                  console.log(tempSlot);
                  axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-                 {start_time:this.state.startTimeWed, end_time:this.state.EndTimeWed, day_id:3, durations:tempSlot, no_of_spots:this.state.slotNumberWed,rate_card_title:this.state.title},
+                 {start_time:this.state.startTimeWed, end_time:this.state.EndTimeWed, day_id:3, other_days:this.state.replicateWednesday, durations:tempSlot, no_of_spots:this.state.slotNumberWed,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
                      console.log("data:",res.data);
@@ -648,7 +739,7 @@ class EditRateCardDetails extends React.Component{
         tempSlot.unshift({id:1,duration:this.state.durationThurs,unit_id:this.state.unitThurs,rate:this.state.rateThurs});
          console.log(tempSlot);
          axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-         {start_time:this.state.startTimeThurs, end_time:this.state.EndTimeThurs, day_id:4, durations:tempSlot, no_of_spots:this.state.slotNumberThurs,rate_card_title:this.state.title},
+         {start_time:this.state.startTimeThurs, end_time:this.state.EndTimeThurs, other_days:this.state.replicateThursday, day_id:4, durations:tempSlot, no_of_spots:this.state.slotNumberThurs,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
@@ -691,7 +782,7 @@ class EditRateCardDetails extends React.Component{
                 tempSlot.unshift({id:1,duration:this.state.durationThurs,unit_id:this.state.unitThurs,rate:this.state.rateThurs});
                  console.log(tempSlot);
                  axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-                 {start_time:this.state.startTimeThurs, end_time:this.state.EndTimeThurs, day_id:4, durations:tempSlot, no_of_spots:this.state.slotNumberThurs,rate_card_title:this.state.title},
+                 {start_time:this.state.startTimeThurs, end_time:this.state.EndTimeThurs, day_id:4, other_days:this.state.replicateThursday, durations:tempSlot, no_of_spots:this.state.slotNumberThurs,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
                      console.log("data:",res.data);
@@ -788,7 +879,7 @@ class EditRateCardDetails extends React.Component{
         tempSlot.unshift({id:1,duration:this.state.durationFri,unit_id:this.state.unitFri,rate:this.state.rateFri});
          console.log(tempSlot);
          axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-         {start_time:this.state.startTimeFri, end_time:this.state.EndTimeFri, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberFri,rate_card_title:this.state.title},
+         {start_time:this.state.startTimeFri, other_days:this.state.replicateFriday, end_time:this.state.EndTimeFri, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberFri,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
@@ -832,7 +923,7 @@ class EditRateCardDetails extends React.Component{
                 tempSlot.unshift({id:1,duration:this.state.durationFri,unit_id:this.state.unitFri,rate:this.state.rateFri});
                  console.log(tempSlot);
                  axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-                 {start_time:this.state.startTimeFri, end_time:this.state.EndTimeFri, day_id:5, durations:tempSlot, no_of_spots:this.state.slotNumberFri,rate_card_title:this.state.title},
+                 {start_time:this.state.startTimeFri, end_time:this.state.EndTimeFri, day_id:5, durations:tempSlot, other_days:this.state.replicateFriday, no_of_spots:this.state.slotNumberFri,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
                      console.log("data:",res.data);
@@ -930,7 +1021,7 @@ class EditRateCardDetails extends React.Component{
         tempSlot.unshift({id:1,duration:this.state.durationSat,unit_id:this.state.unitSat,rate:this.state.rateSat});
          console.log(tempSlot);
          axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-         {start_time:this.state.startTimeSat, end_time:this.state.EndTimeSat, day_id:6, durations:tempSlot, no_of_spots:this.state.slotNumberSat,rate_card_title:this.state.title},
+         {start_time:this.state.startTimeSat, other_days:this.state.replicateSaturday, end_time:this.state.EndTimeSat, day_id:6, durations:tempSlot, no_of_spots:this.state.slotNumberSat,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
@@ -974,7 +1065,7 @@ class EditRateCardDetails extends React.Component{
                 tempSlot.unshift({id:1,duration:this.state.durationSat,unit_id:this.state.unitSat,rate:this.state.rateSat});
                  console.log(tempSlot);
                  axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-                 {start_time:this.state.startTimeSat, end_time:this.state.EndTimeSat, day_id:6, durations:tempSlot, no_of_spots:this.state.slotNumberSat,rate_card_title:this.state.title},
+                 {start_time:this.state.startTimeSat, end_time:this.state.EndTimeSat, day_id:6, durations:tempSlot, other_days:this.state.replicateSaturday, no_of_spots:this.state.slotNumberSat,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
                      console.log("data:",res.data);
@@ -1071,7 +1162,7 @@ class EditRateCardDetails extends React.Component{
         tempSlot.unshift({id:1,duration:this.state.durationSun,unit_id:this.state.unitSun,rate:this.state.rateSun});
          console.log(tempSlot);
          axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-         {start_time:this.state.startTimeSun, end_time:this.state.EndTimeSun, day_id:7, durations:tempSlot, no_of_spots:this.state.slotNumberSun,rate_card_title:this.state.title},
+         {start_time:this.state.startTimeSun, end_time:this.state.EndTimeSun, other_days:this.state.replicateSunday, day_id:7, durations:tempSlot, no_of_spots:this.state.slotNumberSun,rate_card_title:this.state.title},
          {headers:{ 'Authorization':`Bearer ${user}`}}) 
          .then(res=>{
              console.log("data:",res.data);
@@ -1115,7 +1206,7 @@ class EditRateCardDetails extends React.Component{
                 tempSlot.unshift({id:1,duration:this.state.durationSun,unit_id:this.state.unitSun,rate:this.state.rateSun});
                  console.log(tempSlot);
                  axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-                 {start_time:this.state.startTimeSun, end_time:this.state.EndTimeSun, day_id:7, durations:tempSlot, no_of_spots:this.state.slotNumberSun,rate_card_title:this.state.title},
+                 {start_time:this.state.startTimeSun, end_time:this.state.EndTimeSun, day_id:7, durations:tempSlot, other_days:this.state.replicateSunday, no_of_spots:this.state.slotNumberSun,rate_card_title:this.state.title},
                  {headers:{ 'Authorization':`Bearer ${user}`}}) 
                  .then(res=>{
                      console.log("data:",res.data);
@@ -1315,6 +1406,16 @@ class EditRateCardDetails extends React.Component{
                     ))}
 
                     <Row style={{marginTop:"20px"}}>
+                    <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeMonday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="info"
@@ -1420,6 +1521,16 @@ class EditRateCardDetails extends React.Component{
                    ))}
 
                    <Row style={{marginTop:"20px"}}>
+                   <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeTuesday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="info"
@@ -1524,6 +1635,16 @@ class EditRateCardDetails extends React.Component{
                     ))}
 
                     <Row style={{marginTop:"20px"}}>
+                    <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeWednesday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="info"
@@ -1628,6 +1749,16 @@ class EditRateCardDetails extends React.Component{
                     ))}
 
                     <Row style={{marginTop:"20px"}}>
+                    <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeThursday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="info"
@@ -1732,6 +1863,16 @@ class EditRateCardDetails extends React.Component{
                     ))}
 
                     <Row style={{marginTop:"20px"}}>
+                    <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeFriday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="info"
@@ -1836,6 +1977,16 @@ class EditRateCardDetails extends React.Component{
                     ))}
 
                     <Row style={{marginTop:"20px"}}>
+                    <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeSaturday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="info"
@@ -1940,6 +2091,16 @@ class EditRateCardDetails extends React.Component{
                     ))}
 
                     <Row style={{marginTop:"20px"}}>
+                    <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeSunday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="info"

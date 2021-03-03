@@ -93,6 +93,13 @@ class EditPrintDetails extends React.Component {
         sizeSun:"",
         rateSun:"",
         page_sectionSun:"First Page",
+        replicateMonday:[],
+        replicateTuesday:[],
+        replicateWednesday:[],
+        replicateThursday:[],
+        replicateFriday:[],
+        replicateSaturday:[],
+        replicateSunday:[],
     }
 
     componentDidMount(){
@@ -115,6 +122,98 @@ class EditPrintDetails extends React.Component {
     toggle = tab => {
         if(this.state.activeTab !== tab) this.setState({activeTab:tab});
       }
+
+      pushTypeMonday=(value,check)=>{
+        let array = this.state.replicateMonday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        console.log(array)
+        this.setState({replicateMonday : array})
+    }
+
+    pushTypeTuesday=(value,check)=>{
+        let array = this.state.replicateTuesday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateTuesday : array})
+    }
+
+    pushTypeWednesday=(value,check)=>{
+        let array = this.state.replicateWednesday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateWednesday : array})
+    }
+
+    pushTypeThursday=(value,check)=>{
+        let array = this.state.replicateThursday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateThursday : array})
+    }
+
+    pushTypeFriday=(value,check)=>{
+        let array = this.state.replicateFriday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateFriday : array})
+    }
+
+    pushTypeSaturday=(value,check)=>{
+        let array = this.state.replicateSaturday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateSaturday : array})
+    }
+
+    pushTypeSunday=(value,check)=>{
+        let array = this.state.replicateSunday;
+        if(check){
+            array.push(value)
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
+        this.setState({replicateSunday : array})
+    }
 
       AddSlotMonday=()=>{
         var tempSlot = [...this.state.newSlot];
@@ -184,7 +283,7 @@ class EditPrintDetails extends React.Component {
          tempSlot.unshift({id:1,size:this.state.size,cost:this.state.rate,page_section:this.state.page_section});
           console.log(tempSlot);
           axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-          {day_id:1, details:tempSlot, rate_card_title:this.state.title},
+          {day_id:1, details:tempSlot, other_days:this.state.replicateMonday, rate_card_title:this.state.title},
           {headers:{ 'Authorization':`Bearer ${user}`}}) 
           .then(res=>{
               console.log(res.data);
@@ -274,7 +373,7 @@ class EditPrintDetails extends React.Component {
              tempSlot.unshift({id:1,size:this.state.sizeTues,cost:this.state.rateTues,page_section:this.state.page_sectionTues});
               console.log(tempSlot);
               axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-              {day_id:2, details:tempSlot,rate_card_title:this.state.title},
+              {day_id:2, details:tempSlot, other_days:this.state.replicateTuesday,rate_card_title:this.state.title},
               {headers:{ 'Authorization':`Bearer ${user}`}}) 
               .then(res=>{
                   console.log(res.data);
@@ -364,7 +463,7 @@ class EditPrintDetails extends React.Component {
                  tempSlot.unshift({id:1,size:this.state.sizeWed,cost:this.state.rateWed, page_section:this.state.page_sectionWed});
                   console.log(tempSlot);
                   axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-                  {day_id:3, details:tempSlot,rate_card_title:this.state.title},
+                  {day_id:3, details:tempSlot, other_days:this.state.replicateWednesday, rate_card_title:this.state.title},
                   {headers:{ 'Authorization':`Bearer ${user}`}}) 
                   .then(res=>{
                       console.log(res.data);
@@ -450,10 +549,10 @@ class EditPrintDetails extends React.Component {
                     console.log("start submitting");
                     this.setState({isActive:true});
                      let tempSlot = [...this.state.newSlotThurs];
-                     tempSlot.unshift({id:1,size:this.state.sizeThurs,cost:this.state.rateThurs,page_section:this.state.page_sectionThurs});
+                     tempSlot.unshift({id:1,size:this.state.sizeThurs, cost:this.state.rateThurs,page_section:this.state.page_sectionThurs});
                       console.log(tempSlot);
                       axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-                      {day_id:4, details:tempSlot,rate_card_title:this.state.title},
+                      {day_id:4, details:tempSlot,rate_card_title:this.state.title, other_days:this.state.replicateThursday},
                       {headers:{ 'Authorization':`Bearer ${user}`}}) 
                       .then(res=>{
                           console.log(res.data);
@@ -542,7 +641,7 @@ class EditPrintDetails extends React.Component {
                          tempSlot.unshift({id:1,size:this.state.sizeFri,cost:this.state.rateFri, page_section:this.state.page_sectionFri});
                           console.log(tempSlot);
                           axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-                          {day_id:5, details:tempSlot,rate_card_title:this.state.title},
+                          {day_id:5, details:tempSlot,rate_card_title:this.state.title, other_days:this.state.replicateFriday},
                           {headers:{ 'Authorization':`Bearer ${user}`}}) 
                           .then(res=>{
                               console.log(res.data);
@@ -631,7 +730,7 @@ class EditPrintDetails extends React.Component {
                              tempSlot.unshift({id:1,size:this.state.sizeSat,cost:this.state.rateSat, page_section:this.state.page_sectionSat});
                               console.log(tempSlot);
                               axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-                              {day_id:6, details:tempSlot,rate_card_title:this.state.title},
+                              {day_id:6, details:tempSlot,rate_card_title:this.state.title, other_days:this.state.replicateSaturday},
                               {headers:{ 'Authorization':`Bearer ${user}`}}) 
                               .then(res=>{
                                   console.log(res.data);
@@ -721,7 +820,7 @@ class EditPrintDetails extends React.Component {
                                  tempSlot.unshift({id:1,size:this.state.sizeSun,cost:this.state.rateSun, page_section:this.state.page_sectionSun});
                                   console.log(tempSlot);
                                   axios.post(`${domain}/api/ratecard/${this.props.location.state.title_id}/add-details`,
-                                  {day_id:7, details:tempSlot,rate_card_title:this.state.title},
+                                  {day_id:7, details:tempSlot,rate_card_title:this.state.title, other_days:this.state.replicateSunday},
                                   {headers:{ 'Authorization':`Bearer ${user}`}}) 
                                   .then(res=>{
                                       console.log(res.data);
@@ -845,6 +944,16 @@ class EditPrintDetails extends React.Component {
                         </Row>
                     ))}
                     <Row style={{marginTop:"20px"}}>
+                    <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeMonday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                         <Col md="6"sm="6"lg="6"xs="6">
                             <Button
                             color="danger"
@@ -908,6 +1017,16 @@ class EditPrintDetails extends React.Component {
                        </Row>
                    ))}
                    <Row style={{marginTop:"20px"}}>
+                   <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeTuesday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="danger"
@@ -972,6 +1091,16 @@ class EditPrintDetails extends React.Component {
                        </Row>
                    ))}
                    <Row style={{marginTop:"20px"}}>
+                   <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeWednesday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="danger"
@@ -1036,6 +1165,16 @@ class EditPrintDetails extends React.Component {
                        </Row>
                    ))}
                    <Row style={{marginTop:"20px"}}>
+                   <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeThursday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="danger"
@@ -1100,6 +1239,16 @@ class EditPrintDetails extends React.Component {
                        </Row>
                    ))}
                    <Row style={{marginTop:"20px"}}>
+                   <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeFriday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="danger"
@@ -1164,6 +1313,16 @@ class EditPrintDetails extends React.Component {
                        </Row>
                    ))}
                    <Row style={{marginTop:"20px"}}>
+                   <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeSaturday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="danger"
@@ -1228,6 +1387,16 @@ class EditPrintDetails extends React.Component {
                        </Row>
                    ))}
                    <Row style={{marginTop:"20px"}}>
+                   <Col md="6" sm='6' lg="6" xs="6">
+                        {this.state.days.map((value,key)=>(
+                            <FormGroup check>
+                                <Label check>
+                                <Input type="checkbox" value={value.id} onChange={(e)=>this.pushTypeSunday(e.target.value,e.target.checked)} disabled={value.id == this.state.activeTab}/>{' '}
+                                <h3 style={{fontWeight:600, fontSize:"14px"}}>{value.day}</h3>
+                                </Label>
+                            </FormGroup>
+                            ))}
+                        </Col>
                        <Col md="6"sm="6"lg="6"xs="6">
                            <Button
                            color="danger"

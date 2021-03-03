@@ -125,6 +125,27 @@ class EditPrint extends React.Component{
     }
   }
 
+  handleSubmit=(id)=>{
+    console.log(this.state.details)
+      /* axios.patch(`${domain}/api/ratecard/${id}/update`,
+      {start_time:selected.start_time, end_time:selected.end_time, no_of_spots:selected.no_of_spots,day_id:selected.day.id, durations:selected.duration},
+      { headers: { 'Authorization': `Bearer ${user}`}})
+      .then(res=>{
+        console.log(res.data);
+        if(res.data.status === "saved"){
+          this.setState({
+            isActive:false,
+            alertMessage:"Changes Saved",
+            modal:true
+          })
+        }
+      })
+      .catch(error=>{
+        console.log(error);
+        this.setState({isActive:false})
+      }) */
+    }
+
   render(){
   return (
       <>
@@ -230,6 +251,7 @@ class EditPrint extends React.Component{
                             <Col md="5">
                               <Button
                               color="info"
+                              onClick={()=>this.handleSubmit()}
                               >
                                 Save Changes
                               </Button>

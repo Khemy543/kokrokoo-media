@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -117,18 +100,6 @@ handleUnPublish=()=>{
             >
               {this.props.brandText}
             </div>
-            {/* <Form className="navbar-search navbar form-inline mr-3 d-none d-md-flex ml-lg-auto" style={{color:"rgba(50, 50, 93, 0.62)"}}>
-              <FormGroup className="mb-0" style={{color:"rgba(50, 50, 93, 0.62)"}}>
-                <InputGroup className="input-group-alternative" style={{color:"rgba(50, 50, 93, 0.62)"}}>
-                  <InputGroupAddon addonType="prepend" style={{color:"rgba(50, 50, 93, 0.62)"}}>
-                    <InputGroupText style={{color:"rgba(50, 50, 93, 0.62)"}}>
-                      <i className="fa fa-search" style={{color:"rgba(50, 50, 93, 0.62)"}}/>
-                    </InputGroupText>
-                  </InputGroupAddon>
-                  <Input placeholder="Search" type="text" style={{color:"rgba(50, 50, 93, 0.62)"}}/>
-                </InputGroup>
-              </FormGroup>
-            </Form> */}
             <Nav className="align-items-center d-none d-md-flex" navbar>
               <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
@@ -183,7 +154,7 @@ handleUnPublish=()=>{
             </ModalHeader>
             <ModalFooter>
               <Button color="danger" onClick={()=>{this.handleUnPublish()}}>Yes</Button>
-              <Button color="info" onClick={()=>this.setState({moda:false})}>No</Button>
+              <Button color="info" onClick={()=>this.setState({modal:false})}>No</Button>
             </ModalFooter>
             </Modal>
             <Modal isOpen={this.state.messageModal}>

@@ -34,6 +34,7 @@ import {
   Row,
   Col, Spinner
 } from "reactstrap";
+import Pagination from "react-js-pagination";
 
 
 import Header from "components/Headers/Header.js";
@@ -45,25 +46,32 @@ var domain = "https://media.test.backend.kokrokooad.com";
 function ActiveSubscriptions (props){
   const [subscriptions, setSubscription] = React.useState([]);
   const [isActiveSpinner, setIsActiveSpinner] = React.useState(true)
+  const [data, setData]  = React.useState([]);
 
   React.useEffect(()=>{
+    getSubscriptions()
+  },[]);
+
+  function getSubscriptions(pageNumber = 1){
     setIsActiveSpinner(true)
-    axios.get(`${domain}/api/active-subscriptions`,
+    axios.get(`${domain}/api/active-subscriptions?page=${pageNumber}`,
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
       console.log(res.data);
-      setSubscription(res.data)
+      setSubscription(res.data);
+      setData(res.data.data);
       setIsActiveSpinner(false)
     })
     .catch(error=>{
       console.log(error.response.data)
     })
-  },[])
+  }
 
   const getDetails=(id)=>{
     props.history.push("/media/approved-details",{id:id})
   }
 
+  const {meta} = subscriptions
     return (
       <>
         <Header />
@@ -77,7 +85,7 @@ function ActiveSubscriptions (props){
           </Row>
           :
           <>
-           {!isActiveSpinner && subscriptions.length<=0?
+           {!isActiveSpinner && data.length<=0?
                 <Row>
                 <Col md="12" style={{textAlign:"center"}}>
                 <h4>No Live Campaigns</h4> 
@@ -101,7 +109,7 @@ function ActiveSubscriptions (props){
                     </tr>
                   </thead>
                   <tbody>
-                  {subscriptions.map((value,index)=>(
+                  {data.map((value,index)=>(
                     <tr>
                       <th scope="row">{index +1}</th>
                       <td>{value.id}</td>
@@ -116,6 +124,18 @@ function ActiveSubscriptions (props){
                   </tbody>
                 </Table>
               </CardBody> 
+              <CardBody>
+              <Pagination
+                totalItemsCount={meta&&meta.total}
+                activePage={meta&&meta.current_page}
+                itemsCountPerPage={meta&&meta.per_page}
+                onChange={(pageNumber)=>getSubscriptions(pageNumber)}
+                itemClass="page-item"
+                linkClass="page-link"
+                firstPageText="First"
+                lastPageText = "Last"
+                />
+              </CardBody>
             </Card>  
             </Col>
           </Row>

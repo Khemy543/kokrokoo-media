@@ -28,7 +28,7 @@ import {
   Table,
   Container,
   Row,
-  Col,Spinner, Modal,ModalBody,ModalFooter, Input
+  Col,Spinner, Modal,ModalHeader,ModalFooter, Input,Progress
 } from "reactstrap";
 
 
@@ -45,7 +45,8 @@ const  [title, setTitle] = React.useState("");
 const [file, setFile] = React.useState("");
 const [isActiveSpinner, setIsActiveSpinner] = React.useState(false)
 const [modal, setModal] = React.useState(false);
-const [total, setTotal] = React.useState(0);
+const [change, setChange] = React.useState(false)
+const [percentage, setPercentage] = React.useState(0)
 
 
   React.useEffect(()=>{
@@ -59,10 +60,6 @@ const [total, setTotal] = React.useState(0);
       setSubscription(res.data)
       setTitle(props.location.state.title)
       setIsActiveSpinner(false)
-      for(var i=0; i<res.data.length; i++){
-        total = total + Number(res.data[i].total_amount)
-      }
-      setTotal(total)
     })
     .catch(error=>{
       console.log(error)
@@ -73,16 +70,38 @@ const [total, setTotal] = React.useState(0);
   
   const handleSubmit=(e)=>{
     e.preventDefault();
-    console.log(e);
     let formData = new FormData();
-    formData.append('transmission_cert',file)
-    axios.post(`${domain}/api/subscription/uplaod/${props.location.state.id}/transmission-cert`,
-    formData,{ headers: { 'Authorization': `Bearer ${user}` } })
+    formData.append('transmission_cert',file);
+    axios({
+      method:'post',
+      headers:{
+          "Authorization":`Bearer ${user}`,
+          "Content-Type":"mutipart/form-data"
+      },
+      data:formData,
+      url:`${domain}/api/subscription/uplaod/${props.location.state.id}/transmission-cert`,
+      onUploadProgress: (progressEvent) => {
+          const {loaded , total} = progressEvent;
+          let percentage = Math.floor(loaded * 100 / total);
+          setModal(true)
+          if(percentage<100){
+              setPercentage(percentage);
+          }
+          else{
+              setPercentage(100)
+          }
+    }})
     .then(res=>{
-      console.log(res.data)
+      console.log(res.data);
+      setChange(true);
+      setTimeout(
+        function(){
+          setModal(false)
+        }.bind(this),1500)
     })
     .catch(error=>{
-      console.log(error.response.data)
+      console.log(error);
+      setModal(false)
     })
   }
   
@@ -151,12 +170,13 @@ const [total, setTotal] = React.useState(0);
                   ))}
                   <div>
                   <form onSubmit={handleSubmit}>
-                  <label>Upload Transmission Certificate</label>
+                  <label style={{fontWeight:600}}>Upload Transmission Certificate</label>
                   <br/>
                   <Input 
                       type="file"
                       onChange={e=>setFile(e.target.files[0])}
                   />
+                  <br/>
                     <Button
                     color="info"
                     type="submit"
@@ -171,6 +191,18 @@ const [total, setTotal] = React.useState(0);
           </Row>
         }
         </Container>
+        <Modal isOpen={modal}>
+          {!change?
+            <ModalHeader style={{textAlign:"center", display:"block"}}>
+              Uploading Transmission Certificate
+            <Progress value={percentage} style={{marginTop:"10px"}}/>
+            </ModalHeader>
+            :
+            <ModalHeader style={{textAlign:"center", display:"block"}}>
+                Saved
+            </ModalHeader>
+          }
+        </Modal>
       </>
     );
   }

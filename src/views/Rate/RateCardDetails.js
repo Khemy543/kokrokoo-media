@@ -215,7 +215,12 @@ class RateCardDetails extends React.Component{
         let array = this.state.replicateMonday;
         if(check){
             array.push(value)
-        };
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
         this.setState({replicateMonday : array})
     }
 
@@ -223,7 +228,12 @@ class RateCardDetails extends React.Component{
         let array = this.state.replicateTuesday;
         if(check){
             array.push(value)
-        };
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
         this.setState({replicateTuesday : array})
     }
 
@@ -239,7 +249,12 @@ class RateCardDetails extends React.Component{
         let array = this.state.replicateThursday;
         if(check){
             array.push(value)
-        };
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
         this.setState({replicateThursday : array})
     }
 
@@ -247,7 +262,12 @@ class RateCardDetails extends React.Component{
         let array = this.state.replicateFriday;
         if(check){
             array.push(value)
-        };
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
         this.setState({replicateFriday : array})
     }
 
@@ -255,7 +275,12 @@ class RateCardDetails extends React.Component{
         let array = this.state.replicateSaturday;
         if(check){
             array.push(value)
-        };
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
         this.setState({replicateSaturday : array})
     }
 
@@ -263,7 +288,12 @@ class RateCardDetails extends React.Component{
         let array = this.state.replicateSunday;
         if(check){
             array.push(value)
-        };
+        }else{
+            let index = array.indexOf(value);
+            if(index !== -1){
+                array.splice(index,1);
+            }
+        }
         this.setState({replicateSunday : array})
     }
 

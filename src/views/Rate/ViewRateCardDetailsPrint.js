@@ -157,7 +157,7 @@ class ViewRateCardDetailsPrint extends React.Component{
                                 :
                                 <>
                             <Row>
-                            <Col>
+                            <Col style={{overflowX:"scroll"}}>
                                 <Table bordered>
                                     <tbody>
                                         <tr>
@@ -200,7 +200,7 @@ class ViewRateCardDetailsPrint extends React.Component{
             <Col>
             <Button
             color="danger"
-            
+            onClick={()=>this.props.history.push('/media/view-ratecards')}
             >
             Back
             </Button>
