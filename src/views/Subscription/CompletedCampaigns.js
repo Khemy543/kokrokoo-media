@@ -91,7 +91,7 @@ function CompletedCampaigns (props){
                       <th>Campaign ID</th>
                       <th>Campaign Title</th>
                       <th>Rate Card</th>
-                      <th>Created Date</th>
+                      <th>Date Created</th>
                       <th>Action</th>
                     </tr>
                   </thead>

@@ -50,7 +50,9 @@ const [messages, setMessages] = React.useState([]);
 const [isActiveSpinner, setIsActiveSpinner] = React.useState(true)
 const [rejection_message, setRejectionMessage] = React.useState("");
 const [messageData,setMessageData]=  React.useState(1)
-const [modal, setModal] = React.useState(false)
+const [modal, setModal] = React.useState(false);
+const [message, setMessage] = React.useState('')
+
   React.useEffect(()=>{
     console.log(props.location)
     setIsActiveSpinner(true)
@@ -76,12 +78,17 @@ const [modal, setModal] = React.useState(false)
     {message_id:messageData, message:rejection_message},
     { headers: { 'Authorization': `Bearer ${user}` } })
     .then(res=>{
-      console.log(res.data);
+      if(res.data.status === 'success'){
+      setMessage('Campiagn Rejected!!')
       setModal(true);
       setTimeout(
         function(){
           props.history.push("/media/pending-subscription")
         },1500)
+      }else{
+        setMessage(res.data.message)
+        setModal(true)
+      }
     })
     .catch(error=>{
       console.log(error)
@@ -152,10 +159,10 @@ const [modal, setModal] = React.useState(false)
         </Container>
         <Modal isOpen={modal}>
           <ModalHeader>
-            <h3>Campiagn Rejected!!</h3>
+            <h3 style={{textTransform:"capitalize"}}>{message}</h3>
           </ModalHeader>
           <ModalFooter>
-            <Button color="danger" onClick={()=>setModal(false)}>Close</Button>
+            <Button color="danger" onClick={()=>props.history.push('/media/pending-subscription')}>Cancel</Button>
           </ModalFooter>
         </Modal>
       </>

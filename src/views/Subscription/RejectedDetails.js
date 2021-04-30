@@ -96,7 +96,7 @@ const [total, setTotal] = React.useState(0);
   }/* 
   response.headers["content-disposition"].split("filename=")[1] */
 
-  const handleApprove=(id)=>{
+ /*  const handleApprove=(id)=>{
     axios.post(`${domain}/api/approve/${id}/subscriptions`,null,
     { headers: { 'Authorization': `Bearer ${user}` } }
     )
@@ -108,7 +108,7 @@ const [total, setTotal] = React.useState(0);
     .catch(error=>{
       console.log(error.response.data)
     })
-  }
+  } */
     return (
       <>
         <Header />
@@ -144,6 +144,7 @@ const [total, setTotal] = React.useState(0);
                     <Col md="12">
                     <h3>Daily Amount  : {item.total_amount}</h3>
                     <p style={{marginBottom:"0px", fontSize:"14px",fontWeight:600}}>{item.selected_date} - {item.day.day}</p>
+                    {item.details[0].ratecard.isAPrintCard != 1?
                     <Table  bordered>
                     <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
                       <tr>
@@ -168,6 +169,28 @@ const [total, setTotal] = React.useState(0);
                         ))}
                       </tbody>
                   </Table>
+                  :
+                  <Table  bordered>
+                    <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
+                      <tr>
+                      <td>#</td>
+                      <td>Size</td>
+                      <td>Page Section</td>
+                      <td>Amount</td>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {item.details.map((value,index)=>(
+                        <tr>
+                          <td>{index + 1}</td>
+                          <td>{value.ratecard.size}</td>
+                          <td>{value.ratecard.page_section}</td>
+                          <td>{value.ratecard.cost}</td>
+                        </tr>
+                        ))}
+                      </tbody>
+                  </Table>
+                  }
                     </Col>
                   </Row>
                 
@@ -185,12 +208,12 @@ const [total, setTotal] = React.useState(0);
               </CardBody>
               <CardFooter >
               <div style={{float:"right"}}>
-              <Button
+              {/* <Button
               color="info"
               onClick={()=>setModal(true)}
               >
                 Approve
-              </Button>
+              </Button> */}
              {/*  <Button
               color="danger"
               onClick={()=>props.history.push("/media/rejected-messages",{id:props.location.state.id})}
@@ -201,7 +224,7 @@ const [total, setTotal] = React.useState(0);
               </CardFooter>   
             </Card>  
             </Col>
-            <Modal isOpen={modal}>
+            {/* <Modal isOpen={modal}>
               <ModalBody>
                 <h3 style={{fontSize:"15px", fontWeight:600}}>Approve Campaign?</h3>
               </ModalBody>
@@ -217,7 +240,7 @@ const [total, setTotal] = React.useState(0);
                   No
                 </Button>
               </ModalFooter>
-            </Modal>
+            </Modal> */}
           </Row>
         }
         </Container>

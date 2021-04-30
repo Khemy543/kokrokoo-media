@@ -53,11 +53,13 @@ class AuthNavbar extends React.Component {
         <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
           <Container fluid>
           <NavbarBrand className="pt-0">
+            <a href="https://demo.kokrokooad.com">
               <img
                 alt="#"
                 className="navbar-brand-img"
                 src={require("../../assets/img/brand/kokro-yellow.png")}
               />
+            </a>
             </NavbarBrand>
           </Container>
         </Navbar>

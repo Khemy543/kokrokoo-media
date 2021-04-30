@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
@@ -140,6 +123,7 @@ const [percentage, setPercentage] = React.useState(0)
                     <Col md="12">
                     <h3>Daily Amount  : {item.total_amount}</h3>
                     <p style={{marginBottom:"0px", fontSize:"14px",fontWeight:600}}>{item.selected_date} - {item.day.day}</p>
+                    {item.details[0].ratecard.isAPrintCard != 1?
                     <Table  bordered>
                     <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
                       <tr>
@@ -164,6 +148,28 @@ const [percentage, setPercentage] = React.useState(0)
                         ))}
                       </tbody>
                   </Table>
+                    :
+                  <Table  bordered>
+                    <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
+                      <tr>
+                      <td>#</td>
+                      <td>Size</td>
+                      <td>Page Section</td>
+                      <td>Amount</td>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {item.details.map((value,index)=>(
+                        <tr>
+                          <td>{index + 1}</td>
+                          <td>{value.ratecard.size}</td>
+                          <td>{value.ratecard.page_section}</td>
+                          <td>{value.ratecard.cost}</td>
+                        </tr>
+                        ))}
+                      </tbody>
+                  </Table>
+                }
                     </Col>
                   </Row>
                 

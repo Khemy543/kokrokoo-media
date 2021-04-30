@@ -66,8 +66,7 @@ function CreateNewTitle(props) {
     const handlTitleSubmit=(e)=>{
         e.preventDefault();
         setIsActive(true)
-        console.log(e);
-        console.log("file_types:",file_types)
+        console.log(props);
         if(file_types.length <=0 ){
             alert("choose file type");
             setIsActive(false)

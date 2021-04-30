@@ -67,10 +67,6 @@ function ActiveSubscriptions (props){
     })
   }
 
-  const getDetails=(id)=>{
-    props.history.push("/media/approved-details",{id:id})
-  }
-
   const {meta} = subscriptions
     return (
       <>
@@ -103,22 +99,20 @@ function ActiveSubscriptions (props){
                       <th>#</th>
                       <th>Campaign ID</th>
                       <th>Campaign Title</th>
-                      <th>Rate Card</th>
+                      <th>RateCard service</th>
+                      <th>Production Date</th>
                       <th>Status</th>
-                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                   {data.map((value,index)=>(
                     <tr>
                       <th scope="row">{index +1}</th>
-                      <td>{value.id}</td>
-                      <td>{value.title}</td>
+                      <td>{value.campaign_title_generated_id}</td>
+                      <td>{value.campaign_title}</td>
                       <td>{value.rate_card_title}</td>
+                      <td>{value.selected_date}</td>
                       <td>{value.status}</td>
-                      <td style={{textAlign:"center"}}>
-                      <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id)}><i className="fa fa-eye"/></Button>
-                      </td>
                     </tr>
                     ))}
                   </tbody>

@@ -85,12 +85,13 @@ const [total, setTotal] = React.useState(0);
           <Row>
             <Col className="mb-5 mb-xl-0" lg="12">
             <Card>
-              <CardBody>
+              <CardBody style={{overflowX:"auto"}}>
                 {subscription.map((item,key)=>(
                   <Row style={{marginBottom:"20px"}}>
                     <Col md="12">
                     <h3>Daily Amount  : {item.total_amount}</h3>
                     <p style={{marginBottom:"0px", fontSize:"14px",fontWeight:600}}>{item.selected_date} - {item.day.day}</p>
+                    {item.details[0].ratecard.isAPrintCard != 1?
                     <Table  bordered>
                     <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
                       <tr>
@@ -113,8 +114,37 @@ const [total, setTotal] = React.useState(0);
                           <td>{Number(value.duration.rate) * value.selected_spots}.00</td>
                         </tr>
                         ))}
+                        {/* <tr>
+                          <td colSpan="6">
+                            Total Amount : {thing.total_amount.campaign_total_amount_without_discount}<br/>
+                            Discount : {thing.total_amount.discount_amount}<br/>
+                            Total Amount With Discount : {thing.total_amount.campaign_total_amount_with_discount}
+                          </td>
+                        </tr> */}
                       </tbody>
                   </Table>
+                  :
+                  <Table  bordered>
+                    <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
+                      <tr>
+                      <td>#</td>
+                      <td>Size</td>
+                      <td>Page Section</td>
+                      <td>Amount</td>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {item.details.map((value,index)=>(
+                        <tr>
+                          <td>{index + 1}</td>
+                          <td>{value.ratecard.size}</td>
+                          <td>{value.ratecard.page_section}</td>
+                          <td>{value.ratecard.cost}</td>
+                        </tr>
+                        ))}
+                      </tbody>
+                  </Table>
+                  }
                     </Col>
                   </Row>
                 
@@ -124,12 +154,12 @@ const [total, setTotal] = React.useState(0);
               <CardBody>
                   <Row>
                     <Col md="8">
-                        <p style={{fontSize:"14px", fontWeight:600}}>Total Before Tax: GHS {props.location.state.payment_amount.campaign_total_amount_with_discount}</p>
+                        <p style={{fontSize:"14px", fontWeight:600}}>Service Amount: GHS {props.location.state.payment_amount.campaign_total_amount_with_discount}</p>
+                        <p style={{fontSize:"14px", fontWeight:600}}>Discounted Service Amount: GHS {props.location.state.payment_amount.campaign_total_amount_with_discount}</p>
                         <p style={{fontSize:"14px", fontWeight:600}}>VAT (12.5%) : GHS {(props.location.state.payment_amount.campaign_total_amount_with_discount * 0.125).toFixed(2)}</p>
-                        <p style={{fontSize:"14px", fontWeight:600}}>Total After VAT : GHS {(props.location.state.payment_amount.campaign_total_amount_with_discount * 1.125).toFixed(2)}</p>
-                        <p style={{fontSize:"14px", fontWeight:600}}>GetFund (2.5%) : GHS {(props.location.state.payment_amount.campaign_total_amount_with_discount * 1.125 * 0.025).toFixed(2)}</p>
-                        <p style={{fontSize:"14px", fontWeight:600}}>NHIL (2.5%) : GHS {(props.location.state.payment_amount.campaign_total_amount_with_discount * 1.125 * 0.025).toFixed(2)}</p>
-                        <p style={{fontSize:"14px", fontWeight:600}}>Total After Tax: GHS {(props.location.state.payment_amount.campaign_total_amount_with_discount * 1.125 * 1.05).toFixed(2)}</p>
+                        <p style={{fontSize:"14px", fontWeight:600}}>Subtotal : GHS {(props.location.state.payment_amount.campaign_total_amount_with_discount * 1.125).toFixed(2)}</p>
+                        <p style={{fontSize:"14px", fontWeight:600}}>GetFund + NHIL (5%) : GHS {(props.location.state.payment_amount.campaign_total_amount_with_discount * 1.125 * 0.025).toFixed(2)}</p>
+                        <p style={{fontSize:"14px", fontWeight:600}}>Total Sales Amount: GHS {(props.location.state.payment_amount.campaign_total_amount_with_discount * 1.125 * 1.05).toFixed(2)}</p>
                     </Col>
                   </Row>
                 </CardBody>

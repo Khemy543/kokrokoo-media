@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
@@ -46,30 +29,30 @@ const [file, setFile] = React.useState("");
 const [isActiveSpinner, setIsActiveSpinner] = React.useState(true)
 const [modal, setModal] = React.useState(false);
 const [total, setTotal] = React.useState(0);
+const [alert, setAlert] = React.useState(false);
+const [message, setMessage] = React.useState('')
 
 
-  React.useEffect(()=>{
-    setIsActiveSpinner(true)
-    //subscription details
-    let total = 0;
-    axios.get(`${domain}/api/subscription/${props.location.state.id}/details`,
-    { headers: { 'Authorization': `Bearer ${user}` } })
-    .then(res=>{
-      console.log(res.data);
-      setSubscription(res.data)
-      setTitle(props.location.state.title)
-      setIsActiveSpinner(false)
-      for(var i=0; i<res.data.length; i++){
-        total = total + Number(res.data[i].total_amount)
-      }
-      setTotal(total)
-    })
-    .catch(error=>{
-      console.log(error.response.data)
-    })
+React.useEffect(()=>{
+  setIsActiveSpinner(true)
+  let total = 0;
+  axios.get(`${domain}/api/subscription/${props.location.state.id}/details`,
+  { headers: { 'Authorization': `Bearer ${user}` } })
+  .then(res=>{
+    setSubscription(res.data)
+    setTitle(props.location.state.title)
+    setIsActiveSpinner(false)
+    for(var i=0; i<res.data.length; i++){
+      total = total + Number(res.data[i].total_amount)
+    }
+    setTotal(total)
+  })
+  .catch(error=>{
+    console.log(error)
+  })
 
-    
-  },[])
+  
+},[])
   
   const downloadFile=()=>{
     //fetch add file
@@ -80,10 +63,7 @@ const [total, setTotal] = React.useState(0);
         'responseType': 'blob'
       } 
     })
-    .then(res=>{/* 
-      console.log(res);
-      console.log(props.location.state.title)
-      console.log(res.headers) */
+    .then(res=>{
       console.log(res)
       const downloadUrl = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement('a');
@@ -103,9 +83,13 @@ const [total, setTotal] = React.useState(0);
     { headers: { 'Authorization': `Bearer ${user}` } }
     )
     .then(res=>{
-      console.log(res.data)
-      setModal(false)
-      props.history.push("/media/approved-subscription")
+      if(res.data.status === 'success'){
+        setModal(false);
+        props.history.push("/media/approved-subscription")
+      }else{
+        setMessage(res.data.message)
+        setAlert(true)
+      }
     })
     .catch(error=>{
       console.log(error.response.data)
@@ -146,7 +130,7 @@ const [total, setTotal] = React.useState(0);
                     <Col md="12">
                     <h3>Daily  Amount  : {item.total_amount}</h3>
                     <p style={{marginBottom:"0px", fontSize:"14px",fontWeight:600}}>{item.selected_date} - {item.day.day}</p>
-                    <p style={{marginTop:"0px", fontSize:"14px", fontWeight:600}}>Roll over {item.no_of_weeks} week(s)</p>
+                    {item.details[0].ratecard.isAPrintCard != 1?
                     <Table  bordered>
                     <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
                       <tr>
@@ -171,6 +155,28 @@ const [total, setTotal] = React.useState(0);
                         ))}
                       </tbody>
                   </Table>
+                  :
+                  <Table  bordered>
+                    <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
+                      <tr>
+                      <td>#</td>
+                      <td>Size</td>
+                      <td>Page Section</td>
+                      <td>Amount</td>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {item.details.map((value,index)=>(
+                        <tr>
+                          <td>{index + 1}</td>
+                          <td>{value.ratecard.size}</td>
+                          <td>{value.ratecard.page_section}</td>
+                          <td>{value.ratecard.cost}</td>
+                        </tr>
+                        ))}
+                      </tbody>
+                  </Table>
+                  }
                     </Col>
                   </Row>
                 
@@ -217,6 +223,17 @@ const [total, setTotal] = React.useState(0);
                 onClick={()=>setModal(false)}
                 >
                   No
+                </Button>
+              </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={alert}>
+              <ModalBody>
+                <h3 style={{fontSize:"15px", fontWeight:600, textTransform:"capitalize"}}>{message}</h3>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" onClick={()=>props.history.push('/media/pending-subscription')}>
+                  Cancel
                 </Button>
               </ModalFooter>
             </Modal>

@@ -132,6 +132,7 @@ const [total, setTotal] = React.useState(0);
                     <Col md="12">
                     <h3>Daily Amount  : {item.total_amount}</h3>
                     <p style={{marginBottom:"0px", fontSize:"14px",fontWeight:600}}>{item.selected_date} - {item.day.day}</p>
+                    {item.details[0].ratecard.isAPrintCard != 1?
                     <Table  bordered>
                     <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
                       <tr>
@@ -156,6 +157,28 @@ const [total, setTotal] = React.useState(0);
                         ))}
                       </tbody>
                   </Table>
+                  :
+                  <Table  bordered>
+                    <thead style={{backgroundColor:"#01a9ac",color:"black",height:""}}>
+                      <tr>
+                      <td>#</td>
+                      <td>Size</td>
+                      <td>Page Section</td>
+                      <td>Amount</td>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {item.details.map((value,index)=>(
+                        <tr>
+                          <td>{index + 1}</td>
+                          <td>{value.ratecard.size}</td>
+                          <td>{value.ratecard.page_section}</td>
+                          <td>{value.ratecard.cost}</td>
+                        </tr>
+                        ))}
+                      </tbody>
+                  </Table>
+                  }
                     </Col>
                   </Row>
                 

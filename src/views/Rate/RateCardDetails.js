@@ -329,26 +329,17 @@ class RateCardDetails extends React.Component{
              }
          })
          .catch(error=>{
-             console.log(error.response.data)
+             if(error.response.status == 422){
+                 this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
+             }else{
+                this.setState({modal:true, alertmessage:"All Fields Are Required "})
+             }
+             this.setState({isActive:false})
          })
  
        }
        else{
-           var checker;
-           for(var i =0; i<this.state.oldTImeFrames.length; i++){
-               if(this.state.startTime < this.state.oldTImeFrames[i].end_time && this.state.EndTime>this.state.oldTImeFrames[i].start_time){
-                    this.setState({isActive:false, alertmessage:"Selected Time Intersects With A Saved Time", modal:true})
-                    checker = false;
-                    break;
-               }
-               else{
-                   checker = true;
-                   continue;
-                
-               }
-           }
-
-           if(checker === true && this.state.startTime<this.state.EndTime){
+           if(this.state.startTime<this.state.EndTime){
             let tempSlot = [...this.state.newSlot];
             tempSlot.unshift({id:1,duration:this.state.duration,unit_id:this.state.unit,rate:this.state.rate});
              console.log(tempSlot);
@@ -375,7 +366,13 @@ class RateCardDetails extends React.Component{
                  }
              })
              .catch(error=>{
-                 console.log(error.response.data)
+                 
+             if(error.response.status == 422){
+                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
+            }else{
+               this.setState({modal:true, alertmessage:"All Fields Are Required "})
+            }
+                 this.setState({isActive:false})
              })
            }
            else{
@@ -480,24 +477,16 @@ class RateCardDetails extends React.Component{
          })
          .catch(error=>{
              console.log(error)
+             if(error.response.status == 422){
+                 this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
+             }else{
+                this.setState({modal:true, alertmessage:"All Fields Are Required "})
+             }
+             this.setState({isActive:false})
          })
         }
         else{
-            var checker;
-            for(var i =0; i<this.state.oldTImeFramesTues.length; i++){
-                if(this.state.startTimeTues < this.state.oldTImeFramesTues[i].end_time){
-                     this.setState({isActive:false, alertmessage:"Selected Time Intersects With A Saved Time", modal:true})
-                     checker = false;
-                     break;
-                }
-                else{
-                    checker = true;
-                    continue;
-                 
-                }
-            }
- 
-            if(checker === true && this.state.startTimeTues<this.state.EndTimeTues){
+            if(this.state.startTimeTues<this.state.EndTimeTues){
                 let tempSlot = [...this.state.newSlotTues];
                 tempSlot.unshift({id:1,duration:this.state.durationTues,unit_id:this.state.unitTues,rate:this.state.rateTues});
                  console.log(tempSlot);
@@ -524,6 +513,12 @@ class RateCardDetails extends React.Component{
                  })
                  .catch(error=>{
                      console.log(error)
+                     if(error.response.status == 422){
+                         this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
+                     }else{
+                        this.setState({modal:true, alertmessage:"All Fields Are Required "})
+                     }
+                     this.setState({isActive:false})
                  })
             }
             else{
@@ -626,25 +621,17 @@ class RateCardDetails extends React.Component{
              }
          })
          .catch(error=>{
-             console.log(error.response.data)
+             
+            if(error.response.status == 422){
+                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
+            }else{
+               this.setState({modal:true, alertmessage:"All Fields Are Required "})
+            }
+             this.setState({isActive:false})
          })
         }
         else{
-            var checker;
-            for(var i =0; i<this.state.oldTImeFramesWed.length; i++){
-                if(this.state.startTimeWed < this.state.oldTImeFramesWed[i].end_time){
-                     this.setState({isActive:false, alertmessage:"Selected Time Intersects With A Saved Time", modal:true})
-                     checker = false;
-                     break;
-                }
-                else{
-                    checker = true;
-                    continue;
-                 
-                }
-            }
- 
-            if(checker === true && this.state.startTimeWed<this.state.EndTimeWed){
+            if(this.state.startTimeWed<this.state.EndTimeWed){
                 let tempSlot = [...this.state.newSlotWed];
                 tempSlot.unshift({id:1,duration:this.state.durationWed,unit_id:this.state.unitWed,rate:this.state.rateWed});
                  console.log(tempSlot);
@@ -670,7 +657,13 @@ class RateCardDetails extends React.Component{
                      }
                  })
                  .catch(error=>{
-                     console.log(error.response.data)
+                     
+             if(error.response.status == 422){
+                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
+            }else{
+               this.setState({modal:true, alertmessage:"All Fields Are Required "})
+            }
+                     this.setState({isActive:false})
                  })
             }
 
@@ -768,25 +761,17 @@ class RateCardDetails extends React.Component{
              }
          })
          .catch(error=>{
-             console.log(error.response.data)
+             
+            if(error.response.status == 422){
+                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
+            }else{
+               this.setState({modal:true, alertmessage:"All Fields Are Required "})
+            }
+             this.setState({isActive:false})
          })
         }
         else{
-            var checker;
-            for(var i =0; i<this.state.oldTImeFramesThurs.length; i++){
-                if(this.state.startTimeThurs < this.state.oldTImeFramesThurs[i].end_time){
-                     this.setState({isActive:false, alertmessage:"Selected Time Intersects With A Saved Time", modal:true})
-                     checker = false;
-                     break;
-                }
-                else{
-                    checker = true;
-                    continue;
-                 
-                }
-            }
- 
-            if(checker === true && this.state.startTimeThurs<this.state.EndTimeThurs){
+            if(this.state.startTimeThurs<this.state.EndTimeThurs){
                 let tempSlot = [...this.state.newSlotThurs];
                 tempSlot.unshift({id:1,duration:this.state.durationThurs,unit_id:this.state.unitThurs,rate:this.state.rateThurs});
                  console.log(tempSlot);
@@ -812,7 +797,13 @@ class RateCardDetails extends React.Component{
                      }
                  })
                  .catch(error=>{
-                     console.log(error.response.data)
+                     
+             if(error.response.status == 422){
+                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
+            }else{
+               this.setState({modal:true, alertmessage:"All Fields Are Required "})
+            }
+                     this.setState({isActive:false})
                  })
             }
         }
@@ -910,25 +901,17 @@ class RateCardDetails extends React.Component{
              }
          })
          .catch(error=>{
-             console.log(error.response.data)
+             
+            if(error.response.status == 422){
+                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
+            }else{
+               this.setState({modal:true, alertmessage:"All Fields Are Required "})
+            }
+             this.setState({isActive:false})
          })
         }
         else{
-            var checker;
-            for(var i =0; i<this.state.oldTImeFramesFri.length; i++){
-                if(this.state.startTimeFri < this.state.oldTImeFramesFri[i].end_time){
-                     this.setState({isActive:false, alertmessage:"Selected Time Intersects With A Saved Time", modal:true})
-                     checker = false;
-                     break;
-                }
-                else{
-                    checker = true;
-                    continue;
-                 
-                }
-            }
- 
-            if(checker === true && this.state.startTimeFri<this.state.EndTimeFri){
+            if(this.state.startTimeFri<this.state.EndTimeFri){
                 let tempSlot = [...this.state.newSlotFri];
                 tempSlot.unshift({id:1,duration:this.state.durationFri,unit_id:this.state.unitFri,rate:this.state.rateFri});
                  console.log(tempSlot);
@@ -955,6 +938,12 @@ class RateCardDetails extends React.Component{
                  })
                  .catch(error=>{
                      console.log(error)
+                     if(error.response.status == 422){
+                         this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
+                     }else{
+                        this.setState({modal:true, alertmessage:"All Fields Are Required "})
+                     }
+                     this.setState({isActive:false})
                  })
             }
 
@@ -1053,25 +1042,17 @@ class RateCardDetails extends React.Component{
              }
          })
          .catch(error=>{
-             console.log(error.response.data)
+             
+            if(error.response.status == 422){
+                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
+            }else{
+               this.setState({modal:true, alertmessage:"All Fields Are Required "})
+            }
+             this.setState({isActive:false})
          })
         }
         else{
-            var checker;
-            for(var i =0; i<this.state.oldTImeFramesSat.length; i++){
-                if(this.state.startTimeSat < this.state.oldTImeFramesSat[i].end_time){
-                     this.setState({isActive:false, alertmessage:"Selected Time Intersects With A Saved Time", modal:true})
-                     checker = false;
-                     break;
-                }
-                else{
-                    checker = true;
-                    continue;
-                 
-                }
-            }
- 
-            if(checker === true && this.state.startTimeSat<this.state.EndTimeSat){
+            if(this.state.startTimeSat<this.state.EndTimeSat){
                 let tempSlot = [...this.state.newSlotSat];
                 tempSlot.unshift({id:1,duration:this.state.durationSat,unit_id:this.state.unitSat,rate:this.state.rateSat});
                  console.log(tempSlot);
@@ -1097,7 +1078,13 @@ class RateCardDetails extends React.Component{
                      }
                  })
                  .catch(error=>{
-                     console.log(error.response.data)
+                     
+             if(error.response.status == 422){
+                this.setState({modal:true, alertmessage:error.response.data.errors.no_of_spots})
+            }else{
+               this.setState({modal:true, alertmessage:"All Fields Are Required "})
+            }
+                     this.setState({isActive:false})
                  })
             }
         }
@@ -1195,25 +1182,12 @@ class RateCardDetails extends React.Component{
              }
          })
          .catch(error=>{
-             console.log(error.response.data)
+             
+             this.setState({isActive:false})
          })
         }
         else{
-            var checker;
-            for(var i =0; i<this.state.oldTImeFramesSun.length; i++){
-                if(this.state.startTimeSun < this.state.oldTImeFramesSun[i].end_time){
-                     this.setState({isActive:false, alertmessage:"Selected Time Intersects With A Saved Time", modal:true})
-                     checker = false;
-                     break;
-                }
-                else{
-                    checker = true;
-                    continue;
-                 
-                }
-            }
- 
-            if(checker === true && this.state.startTimeSun<this.state.EndTimeSun){
+            if(this.state.startTimeSun<this.state.EndTimeSun){
                 let tempSlot = [...this.state.newSlotSun];
                 tempSlot.unshift({id:1,duration:this.state.durationSun,unit_id:this.state.unitSun,rate:this.state.rateSun});
                  console.log(tempSlot);
@@ -1240,6 +1214,7 @@ class RateCardDetails extends React.Component{
                  })
                  .catch(error=>{
                      console.log(error)
+                     this.setState({isActive:false})
                  })
             }
         }
@@ -2157,7 +2132,7 @@ class RateCardDetails extends React.Component{
            
         </Container>
         <Modal isOpen={this.state.modal}>
-            <ModalHeader>
+            <ModalHeader style={{textTransform:"capitalize"}}>
                {this.state.alertmessage}
             </ModalHeader>
             <ModalFooter>

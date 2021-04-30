@@ -82,12 +82,12 @@ const [data, setData] = React.useState([]);
               <tr>
                     <td>{key+1}</td>
                     <td>{value.generated_id}</td>
-                    <td>{value.currency}</td>
+                    <td>GHS</td>
                     <td>{value.payment_amount.campaign_total_amount_with_discount}</td>
                     <td>{value.payment_amount.campaign_grand_total_with_tax}</td>
                     <td>{value.status}</td>
                     <td><Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}}
-                    onClick={()=>props.history('/media/transaction-details',{
+                    onClick={()=>props.history.push('/media/transaction-details',{
                       id:value.id, payment_amount:value.payment_amount
                     })}
                     ><i className="fa fa-eye"/></Button></td>

@@ -28,7 +28,7 @@ function CreateFromExisting(props) {
     const [isActive, setIsActive] = React.useState(false);
     const [isActiveSpinner, setIsActiveSpinner] = React.useState(false);
     const [titles, setTitles] = React.useState([]);
-    const [id,setId] = React.useState(1);
+    const [id,setId] = React.useState(null);
     const [modal, setModal] = React.useState(false);
     const [message, setMessage] = React.useState("")
 
@@ -40,6 +40,9 @@ function CreateFromExisting(props) {
         .then(res=>{
             console.log(res.data);
             setTitles(res.data.existing_titles);
+            if(res.data.existing_titles.length > 0){
+              setId(res.data.existing_titles[0].id)
+            }
             setIsActiveSpinner(false)
         })
         .catch(error=>{

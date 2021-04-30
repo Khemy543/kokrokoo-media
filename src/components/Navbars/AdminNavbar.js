@@ -36,7 +36,8 @@ state={
     modal:false,
     message:"",
     messageModal:false,
-    logo:""
+    logo:"",
+    adminPublish:0
   }
 
 componentDidMount(){
@@ -54,7 +55,7 @@ componentDidMount(){
         })
         .then(res=>{
         console.log(res.data)
-          this.setState({published:res.data.isPublished, logo:res.data.logo});
+          this.setState({published:res.data.isPublished, logo:res.data.logo, adminPublish:res.data.published_by_admin});
           
       })
 }
@@ -84,7 +85,10 @@ handleUnPublish=()=>{
     }
   })
   .catch(error=>{
-    console.log(error.response.data)
+    console.log(error)
+    if(error.response && error.response.status && error.response.status === 403){
+        this.setState({message:"Unauthorized to use this service"})
+    }
   })
 }
   
@@ -127,7 +131,7 @@ handleUnPublish=()=>{
                     <i className="ni ni-single-02" />
                     <span>My profile</span>
                   </DropdownItem>
-                  {this.state.published === 0?
+                  {this.state.adminPublish ===1 && this.state.published === 0?
                   <DropdownItem onClick={()=>{this.handlePublish()}}>
                     <i className="fa fa-bell-o" />
                     <span>Publish</span>

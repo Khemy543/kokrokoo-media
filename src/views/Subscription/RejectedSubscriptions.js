@@ -103,7 +103,8 @@ function RejectedSubscriptions (props){
                       <th>Campaign ID</th>
                       <th>Campaign Title</th>
                       <th>Rate Card</th>
-                      <th>Created Date</th>
+                      <th>Rejection Message</th>
+                      <th>Date Created</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -114,6 +115,14 @@ function RejectedSubscriptions (props){
                       <td>{value.generated_id}</td>
                       <td>{value.title}</td>
                       <td>{value.rate_card_title}</td>
+                      {value[0].rejected_message.id == 5?
+                      <td>
+                        {value[0].other_message}
+                      </td>
+                      :
+                      <td>
+                        {value[0].rejected_message.message}
+                      </td>}
                       <td>{value.date}</td>
                       <td style={{textAlign:"center"}}>
                       <Button color="info" style={{borderRadius:"100%", padding:"2px 5px 2px 5px"}} onClick={()=>getDetails(value.id, value.title, value.ad_duration.file_path, value.payment_amount)}><i className="fa fa-eye"/></Button>

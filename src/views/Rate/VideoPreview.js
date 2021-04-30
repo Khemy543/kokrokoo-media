@@ -343,7 +343,7 @@ class VideoPreview extends React.Component{
                         <Col md="12">
                         <Row>
                         <Col>
-                        <Label id="boldstyle">Number of Spots</Label>
+                        <Label id="boldstyle">Maximum Number Of Spots</Label>
                         <Input type="number" min="0" placeholder="Number of Spots" value={value.no_of_spots} onChange={e=>this.handleSpotChange(value.id,e.target.value)}/>
                         </Col>
                         <Col>

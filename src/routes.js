@@ -284,7 +284,7 @@ var routes = [
     layout: "/media"
   }, 
   {
-    path: "/transactions-details",
+    path: "/transaction-details",
     name: "Transactions",
     header:"transactions",
     invisible:true,

@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
@@ -22,13 +5,7 @@ import classnames from "classnames";
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
-  NavItem,
-  NavLink,
-  Nav,
-  Progress,
-  Table,
   Container,
   Row,
   Col,CardFooter
@@ -64,7 +41,7 @@ const [statData, setStatData] = React.useState([])
       })
   },[])
 
-  const {active, expired, approved, pending, rejected} = statData;
+  const {active, expired, approved, pending, rejected, completed} = statData;
     return (
       <>
         <Header />
@@ -123,7 +100,7 @@ const [statData, setStatData] = React.useState([])
                 <CardBody style={{padding:"5px 10px 5px 10px"}}>
                   <Row>
                     <Col style={{color:"white"}}>
-                    <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-star mr-2"/>{expired}</h1>
+                    <h1 style={{fontSize:"24px",color:"white"}}><i className="fa fa-star mr-2"/>{completed}</h1>
                     <p style={{fontSize:"14px", fontWeight:600, textTransform:"uppercase"}}>Completed Campaigns</p>
                     </Col>
                   </Row>  
