@@ -49,12 +49,12 @@ class CompanyProfile extends React.Component {
     country:"Ghana",
     newBusinessCert:"",
     newOperationalCert:"",
-    company_email:""
+    company_email:"",
 
-    /* bank_name:"",
+    bank_name:"",
     bank_branch:"",
     account_name:"",
-    account_number:"" */
+    account_number:""
   }
 
   
@@ -91,7 +91,7 @@ componentDidMount(){
         console.log(error.response.data)
         });
 
-       /*  axios.get(`${domain}/api/super-admin/get-bank/details`,{
+        axios.get(`${domain}/api/super-admin/get-bank/details`,{
         headers:{ 'Authorization':`Bearer ${user}`}
         }
         )
@@ -106,7 +106,7 @@ componentDidMount(){
 
         }).catch(error=>{
         console.log(error.response.data)
-        }); */
+        });
 
         axios.get("https://backend.kokrokooad.com/api/media-types")
         .then(res=>{
@@ -206,7 +206,7 @@ _handleImageChange(e) {
 
   reader.readAsDataURL(file)
 }
-/* handleBankEdit=(e)=>{
+handleBankEdit=(e)=>{
     e.preventDefault();
     axios.patch(`${domain}/api/super-admin/update-bank/details`,{
         bank_name:this.state.bank_name,
@@ -217,11 +217,14 @@ _handleImageChange(e) {
     { headers:{ 'Authorization':`Bearer ${user}`}})
     .then(res=>{
       console.log(res.data);
+      this.setState({
+        modal:true, message:"Profile Updated"
+      })
     })
     .catch(error=>{
       console.log(error.response.data)
     })
-} */
+}
 
 pushType = (value,checked)=>{
   let tempRegions = this.state.regions;
@@ -467,7 +470,7 @@ pushLanguages = (value,checked)=>{
                         </label>
                         <Input
                           className="form-control-alternative"
-                          value={this.state.languages}
+                          value={this.state.languages.replace(/,$/,"")}
                           id="input-last-name"
                           placeholder="Languages"
                           type="textarea"
@@ -562,7 +565,7 @@ pushLanguages = (value,checked)=>{
             </Col>
           </Row>
 
-         {/*  <Row>
+          <Row>
             <Col className="order-xl-1 mt-3" xl="10">
               <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
@@ -666,7 +669,7 @@ pushLanguages = (value,checked)=>{
                 </CardBody>
                 </Card>
             </Col>
-          </Row> */}
+          </Row>
           
         </Container>
         <Modal isOpen={this.state.modal}>

@@ -83,6 +83,7 @@ const [message, setMessage] = React.useState('')
       setModal(true);
       setTimeout(
         function(){
+          setModal(false)
           props.history.push("/media/pending-subscription")
         },1500)
       }else{
@@ -162,7 +163,10 @@ const [message, setMessage] = React.useState('')
             <h3 style={{textTransform:"capitalize"}}>{message}</h3>
           </ModalHeader>
           <ModalFooter>
-            <Button color="danger" onClick={()=>props.history.push('/media/pending-subscription')}>Cancel</Button>
+            <Button color="danger" onClick={()=>{
+              setModal(false)
+              props.history.push('/media/pending-subscription')}
+              }>Cancel</Button>
           </ModalFooter>
         </Modal>
       </>

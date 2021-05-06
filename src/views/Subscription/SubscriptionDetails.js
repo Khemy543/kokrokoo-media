@@ -92,7 +92,7 @@ React.useEffect(()=>{
       }
     })
     .catch(error=>{
-      console.log(error.response.data)
+      console.log(error)
     })
   }
     return (
@@ -232,7 +232,10 @@ React.useEffect(()=>{
                 <h3 style={{fontSize:"15px", fontWeight:600, textTransform:"capitalize"}}>{message}</h3>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" onClick={()=>props.history.push('/media/pending-subscription')}>
+                <Button color="danger" onClick={()=>{
+                  setAlert(false)
+                  props.history.push('/media/pending-subscription')}
+                  }>
                   Cancel
                 </Button>
               </ModalFooter>
